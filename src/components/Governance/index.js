@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Container, Segment, Header, Statistic } from 'semantic-ui-react';
 
-export function T1() {
+export function Governance() {
 
-  const [page] = useState({ pageName: 'page 1', members: 'none', status: '-' })
+  const [page] = useState({ pageName: 'page 2', members: '-', status: '-' })
 
   return (
     <Container>

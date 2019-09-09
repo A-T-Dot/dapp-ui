@@ -3,7 +3,7 @@ import { Menu } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import logo from '../castor.svg';
 
-export function NavBar() {
+export function NavBar () {
   const [activeItem, setActiveItem] = useState('');
 
   const handleItemClick = (e, { name }) => {
@@ -19,29 +19,29 @@ export function NavBar() {
       <Menu.Item>
         <img src={logo} alt='logo' />
       </Menu.Item>
-      <Menu.Item as={Link} to='/t1'
-        name='t1'
+      <Menu.Item as={Link} to='/content'
+        name='content'
         color='blue'
-        active={activeItem === 't1'}
+        active={activeItem === 'content'}
         onClick={handleItemClick}
       >
-        t1
+        My Content
       </Menu.Item>
-      <Menu.Item as={Link} to='/t2'
-        name='t2'
+      <Menu.Item as={Link} to='/governance'
+        name='governance'
         color='blue'
-        active={activeItem === 't2'}
+        active={activeItem === 'governance'}
         onClick={handleItemClick}
       >
-        t2
+        Governance
       </Menu.Item>
-      <Menu.Item as={Link} to='/t3'
-        name='t3'
+      <Menu.Item as={Link} to='/discover'
+        name='discover'
         color='blue'
-        active={activeItem === 't3'}
+        active={activeItem === 'discover'}
         onClick={handleItemClick}
       >
-        t3
+        Discover
       </Menu.Item>
     </Menu>
   )
