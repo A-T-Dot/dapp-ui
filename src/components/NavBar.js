@@ -26,7 +26,7 @@ export function NavBar() {
         onClick={handleItemClick}
       >
         t1
-        </Menu.Item>
+      </Menu.Item>
       <Menu.Item as={Link} to='/t2'
         name='t2'
         color='blue'
@@ -34,7 +34,15 @@ export function NavBar() {
         onClick={handleItemClick}
       >
         t2
-        </Menu.Item>
+      </Menu.Item>
+      <Menu.Item as={Link} to='/t3'
+        name='t3'
+        color='blue'
+        active={activeItem === 't3'}
+        onClick={handleItemClick}
+      >
+        t3
+      </Menu.Item>
     </Menu>
   )
 }
