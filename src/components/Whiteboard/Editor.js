@@ -5,15 +5,18 @@ import {
   Button
 } from "semantic-ui-react";
 import Draggable from "react-draggable";
+import LinkTo from "react-lineto";
 
 function DraggableNode(props) {
+  let { dragHandlers, node } = props;
+
   return (
     <Draggable
       bounds="parent"
-      {...props.dragHandlers}
+      {...dragHandlers}
       defaultPosition={{ x: 30, y: 30 }}
     >
-      <Card>
+      <Card className={`n${node.id}`}>
         <Card.Content>
           <Image
             floated="right"
@@ -47,8 +50,15 @@ export default class Editor extends React.Component {
     super(props);
     this.state = {
       activeDrags: 0,
-      nodes: [1, 2,3],
+      nodes: [{id: 1}, {id: 2}, {id: 3}],
+      mount: false
     };
+  }
+
+  componentDidMount() {
+    this.setState({
+      mount: true
+    });
   }
 
   onStart = () => {
@@ -69,13 +79,13 @@ export default class Editor extends React.Component {
     return (
       <div
         className="bg-grid"
-        style={{ height: "3000px", width: "3000px" }}
+        style={{ height: "3000px", width: "3000px", position: "relative" }}
         onClick={this.bgClicked}
       >
         { this.state.nodes.map(node => {
-          return <DraggableNode {...dragHandlers}/>
+          return <DraggableNode {...dragHandlers} node={node}/>
         })}
-
+        {this.state.mount && <LinkTo from="n1" to="n2" within="bg-grid"/>}
       </div>
     );
   }
