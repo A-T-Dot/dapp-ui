@@ -20,9 +20,10 @@ code {
 }
 
 .bg-grid {
-  background: #000000;
+  background: RGB(246, 248, 250);
   background-image: linear-gradient(rgba(118, 118, 118) .1em, transparent .1em), linear-gradient(90deg, rgba(118, 118, 118) .1em, transparent .1em);
   background-size: 3em 3em;
+  padding: 10px;
 }
 
 .react-draggable, .cursor {
