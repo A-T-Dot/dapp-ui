@@ -51,14 +51,7 @@ export default class Editor extends React.Component {
     this.state = {
       activeDrags: 0,
       nodes: [{id: 1}, {id: 2}, {id: 3}],
-      mount: false
     };
-  }
-
-  componentDidMount() {
-    this.setState({
-      mount: true
-    });
   }
 
   onStart = () => {
@@ -85,7 +78,7 @@ export default class Editor extends React.Component {
         { this.state.nodes.map(node => {
           return <DraggableNode {...dragHandlers} node={node}/>
         })}
-        {this.state.mount && <LinkTo from="n1" to="n2" within="bg-grid"/>}
+        <LinkTo from="n1" to="n2" within="bg-grid" delay={true}/>
       </div>
     );
   }
