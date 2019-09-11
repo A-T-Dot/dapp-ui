@@ -58,6 +58,11 @@ export default class Editor extends React.Component {
     this.setState({ activeDrags: ++this.state.activeDrags });
   };
 
+  onDrag = () => {
+    // TODO: don't rerender the whole page, update only those changed
+    this.setState({ state: this.state });
+  }
+
   onStop = () => {
     this.setState({ activeDrags: --this.state.activeDrags });
   };
@@ -67,7 +72,7 @@ export default class Editor extends React.Component {
   }
 
   render() {
-    const dragHandlers = { onStart: this.onStart, onStop: this.onStop };
+    const dragHandlers = { onStart: this.onStart, onStop: this.onStop, onDrag: this.onDrag };
 
     return (
       <div
@@ -75,10 +80,18 @@ export default class Editor extends React.Component {
         style={{ height: "3000px", width: "3000px", position: "relative" }}
         onClick={this.bgClicked}
       >
-        { this.state.nodes.map(node => {
-          return <DraggableNode {...dragHandlers} node={node}/>
+        {this.state.nodes.map(node => {
+          return (
+            <DraggableNode
+              key={node.id}
+              dragHandlers={dragHandlers}
+              node={node}
+            />
+          );
         })}
-        <LinkTo from="n1" to="n2" within="bg-grid" delay={true}/>
+
+        <LinkTo from="n1" to="n2" within="bg-grid" borderColor="black" delay={true} />
+        <LinkTo from="n2" to="n3" within="bg-grid" borderColor="black" delay={true} />
       </div>
     );
   }
