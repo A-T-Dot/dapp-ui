@@ -8,15 +8,15 @@ import Draggable from "react-draggable";
 import LinkTo from "react-lineto";
 
 function DraggableNode(props) {
-  let { dragHandlers, node } = props;
+  let { dragHandlers, node, padding } = props;
 
   return (
     <Draggable
       bounds="parent"
       {...dragHandlers}
-      defaultPosition={{ x: 30, y: 30 }}
+      defaultPosition={{ x: node.x, y: node.y }}
     >
-      <Card className={`n${node.id}`}>
+      <Card className={`n${node.id}`} style={{margin: '0em', top: padding, left: padding, position: 'absolute'}}>
         <Card.Content>
           <Image
             floated="right"
@@ -50,7 +50,7 @@ export default class Editor extends React.Component {
     super(props);
     this.state = {
       activeDrags: 0,
-      nodes: [{id: 1}, {id: 2}, {id: 3}],
+      nodes: [{id: 1, x: 10, y: 10}, {id: 2, x: 200, y: 200}, {id: 3, x: 500, y:500}],
     };
   }
 
@@ -58,9 +58,10 @@ export default class Editor extends React.Component {
     this.setState({ activeDrags: ++this.state.activeDrags });
   };
 
-  onDrag = () => {
+  onDrag = (e, data) => {
     // TODO: don't rerender the whole page, update only those changed
     this.setState({ state: this.state });
+    console.log(data);
   }
 
   onStop = () => {
@@ -73,15 +74,17 @@ export default class Editor extends React.Component {
     let x = clientX - rect.left;
     let y = clientY - rect.top;
     
+    console.log(x,y);
   }
 
   render() {
     const dragHandlers = { onStart: this.onStart, onStop: this.onStop, onDrag: this.onDrag };
+    let padding = '10px';
 
     return (
       <div
         className="bg-grid"
-        style={{ height: "3000px", width: "3000px", position: "relative" }}
+        style={{ height: "3000px", width: "3000px", padding }}
         onClick={this.bgClicked}
       >
         {this.state.nodes.map(node => {
@@ -90,12 +93,24 @@ export default class Editor extends React.Component {
               key={node.id}
               dragHandlers={dragHandlers}
               node={node}
+              padding={padding}
             />
           );
         })}
-
-        <LinkTo from="n1" to="n2" within="bg-grid" borderColor="black" delay={true} />
-        <LinkTo from="n2" to="n3" within="bg-grid" borderColor="black" delay={true} />
+        <LinkTo
+          from="n1"
+          to="n2"
+          within="bg-grid"
+          borderColor="black"
+          delay={true}
+        />
+        <LinkTo
+          from="n2"
+          to="n3"
+          within="bg-grid"
+          borderColor="black"
+          delay={true}
+        />
       </div>
     );
   }
