@@ -67,8 +67,12 @@ export default class Editor extends React.Component {
     this.setState({ activeDrags: --this.state.activeDrags });
   };
 
-  bgClicked() {
-    console.log("bg clicked");
+  bgClicked(e) {
+    let { clientX, clientY, target } = e
+    let rect = target.getBoundingClientRect();
+    let x = clientX - rect.left;
+    let y = clientY - rect.top;
+    
   }
 
   render() {
