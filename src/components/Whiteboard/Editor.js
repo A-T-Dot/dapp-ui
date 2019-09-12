@@ -15,13 +15,22 @@ function DraggableNode(props) {
       bounds="parent"
       {...dragHandlers}
       defaultPosition={{ x: node.x, y: node.y }}
+      handle='.handle'
     >
-      <Card className={`n${node.id}`} style={{margin: '0em', top: padding, left: padding, position: 'absolute'}}>
+      <Card
+        className={`n${node.id}`}
+        style={{
+          margin: "0em",
+          top: padding,
+          left: padding,
+          position: "absolute"
+        }}
+      >
+        <Card.Content header={node.name} className='handle move'/>
         <Card.Content>
-          <Card.Header>{node.id}</Card.Header>
-          <Card.Meta>Friends of Elliot</Card.Meta>
-          <Card.Description>
-            Steve wants to add you to the group <strong>best friends</strong>
+          <Card.Meta className='break-word'>{node.id}</Card.Meta>
+          <Card.Description className='break-word'>
+            QmPxGdk9e6p1ZgMRvN6QuQGApZ5b8MPHg5EYkkkj3DSGqQ
           </Card.Description>
         </Card.Content>
         <Card.Content extra>
@@ -45,7 +54,16 @@ export default class Editor extends React.Component {
     super(props);
     this.state = {
       activeDrags: 0,
-      nodes: [{id: 1, x: 10, y: 10}, {id: 2, x: 200, y: 200}, {id: 3, x: 500, y:500}],
+      nodes: [
+        {
+          id: 1,
+          x: 10,
+          y: 10,
+          name: "bob.mp4"
+        },
+        { id: 2, x: 200, y: 200, name: "bob.txt" },
+        { id: 3, x: 500, y: 500, name: "hello.txt" }
+      ]
     };
   }
 
@@ -90,7 +108,7 @@ export default class Editor extends React.Component {
 
     return (
       <div
-        className={`bg-grid${chosenNode ? ' pointer' : ''}`}
+        className={`bg-grid${chosenNode ? " pointer" : ""}`}
         style={{ height: "3000px", width: "3000px", padding: `${padding}px` }}
         onClick={this.bgClicked}
       >
@@ -106,14 +124,18 @@ export default class Editor extends React.Component {
         })}
         <LinkTo
           from="n1"
+          fromAnchor="bottom center"
           to="n2"
+          toAnchor="top center"
           within="bg-grid"
           borderColor="black"
           delay={true}
         />
         <LinkTo
           from="n2"
+          fromAnchor="bottom center"
           to="n3"
+          toAnchor="top center"
           within="bg-grid"
           borderColor="black"
           delay={true}
