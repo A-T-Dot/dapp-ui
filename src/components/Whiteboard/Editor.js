@@ -18,12 +18,7 @@ function DraggableNode(props) {
     >
       <Card className={`n${node.id}`} style={{margin: '0em', top: padding, left: padding, position: 'absolute'}}>
         <Card.Content>
-          <Image
-            floated="right"
-            size="mini"
-            src="https://react.semantic-ui.com/images/avatar/large/steve.jpg"
-          />
-          <Card.Header>Steve Sanders</Card.Header>
+          <Card.Header>{node.id}</Card.Header>
           <Card.Meta>Friends of Elliot</Card.Meta>
           <Card.Description>
             Steve wants to add you to the group <strong>best friends</strong>
@@ -61,36 +56,48 @@ export default class Editor extends React.Component {
   onDrag = (e, data) => {
     // TODO: don't rerender the whole page, update only those changed
     this.setState({ state: this.state });
-    console.log(data);
+    // console.log(data);
   }
 
   onStop = () => {
     this.setState({ activeDrags: --this.state.activeDrags });
   };
 
-  bgClicked(e) {
+  bgClicked = (e) => {
+
     let { clientX, clientY, target } = e
-    let rect = target.getBoundingClientRect();
-    let x = clientX - rect.left;
-    let y = clientY - rect.top;
-    
-    console.log(x,y);
+    let { padding, clearChosen, chosenNode } = this.props;
+
+    if(target.classList.contains("bg-grid")) {
+
+      let rect = target.getBoundingClientRect();
+      let x = Math.round(clientX - rect.left) - padding;
+      let y = Math.round(clientY - rect.top) - padding;
+
+      if(chosenNode) {
+        this.setState({nodes: [...this.state.nodes, {id: chosenNode, x, y}]})
+      }
+      console.log(x, y);
+    }
+
+    clearChosen();
+
   }
 
   render() {
     const dragHandlers = { onStart: this.onStart, onStop: this.onStop, onDrag: this.onDrag };
-    let padding = '10px';
+    let { padding, chosenNode } = this.props;
 
     return (
       <div
-        className="bg-grid"
-        style={{ height: "3000px", width: "3000px", padding }}
+        className={`bg-grid${chosenNode ? ' pointer' : ''}`}
+        style={{ height: "3000px", width: "3000px", padding: `${padding}px` }}
         onClick={this.bgClicked}
       >
-        {this.state.nodes.map(node => {
+        {this.state.nodes.map((node, index) => {
           return (
             <DraggableNode
-              key={node.id}
+              key={index}
               dragHandlers={dragHandlers}
               node={node}
               padding={padding}

@@ -7,16 +7,14 @@ import {
 export default class Sidebar extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      chosen: null
-    }
+
     this.handleClick = this.handleClick.bind(this);
   }
 
   handleClick(nodeId) {
-    this.setState({
-      chosen: nodeId
-    })
+    let { onChoose } = this.props;
+    onChoose(nodeId);
+
   }
 
   render() {

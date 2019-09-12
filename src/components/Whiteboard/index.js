@@ -8,20 +8,23 @@ export class Whiteboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeDrags: 0
+      chosenNode: null
     };
   }
 
-  onStart = () => {
-    this.setState({activeDrags: ++this.state.activeDrags});
-  };
+  chooseNode = (node) => {
+    this.setState({
+      chosenNode: node
+    });
+    console.log(node);
+  }
 
-  onStop = () => {
-    this.setState({activeDrags: --this.state.activeDrags});
-  };
+  clearChosen = () => {
+    this.setState({chosenNode: null});
+  }
+
   render() {
-    const dragHandlers = { onStart: this.onStart, onStop: this.onStop };
-
+    let { chosenNode } = this.state;
 
     return (
       <Grid style={{ height: "80vh" }}>
@@ -30,7 +33,7 @@ export class Whiteboard extends React.Component {
             width={3}
             style={{ maxHeight: "100%", overflow: "auto" }}
           >
-            <Sidebar/>
+            <Sidebar onChoose={this.chooseNode}/>
           </Grid.Column>
           <Grid.Column
             width={10}
@@ -41,7 +44,7 @@ export class Whiteboard extends React.Component {
               padding: "0px"
             }}
           >
-            <Editor/>
+            <Editor chosenNode={chosenNode} clearChosen={this.clearChosen} padding={10}/>
           </Grid.Column>
           <Grid.Column
             width={3}

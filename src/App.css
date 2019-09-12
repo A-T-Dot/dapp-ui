@@ -28,3 +28,7 @@ code {
 .react-draggable, .cursor {
   cursor: move;
 }
+
+.pointer {
+  cursor: pointer;
+}
