@@ -62,3 +62,8 @@ code {
 .whiteboard .sidebar .cards {
   width: 100%;
 }
+
+.node-explorer {
+  background: #fafafa;
+  margin: 20px auto;
+}

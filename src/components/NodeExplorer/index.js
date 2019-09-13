@@ -8,7 +8,7 @@ const graphConfig = {
   "directed": false,
   "focusAnimationDuration": 0.75,
   "focusZoom": 2,
-  "height": 400,
+  "height": 600,
   "highlightDegree": 1,
   "highlightOpacity": 1,
   "linkHighlightBehavior": false,
@@ -18,7 +18,7 @@ const graphConfig = {
   "panAndZoom": false,
   "staticGraph": false,
   "staticGraphWithDragAndDrop": false,
-  "width": 800,
+  "width": 1120,
   "d3": {
     "alphaTarget": 0.05,
     "gravity": -100,
@@ -26,7 +26,7 @@ const graphConfig = {
     "linkStrength": 1
   },
   "node": {
-    "color": "#d3d3d3",
+    "color": "#2185d0",
     "fontColor": "black",
     "fontSize": 8,
     "fontWeight": "normal",
@@ -46,11 +46,11 @@ const graphConfig = {
     "symbolType": "circle"
   },
   "link": {
-    "color": "#d3d3d3",
+    "color": "#555",
     "fontColor": "black",
     "fontSize": 8,
     "fontWeight": "normal",
-    "highlightColor": "#d3d3d3",
+    "highlightColor": "#555",
     "highlightFontSize": 8,
     "highlightFontWeight": "normal",
     "labelProperty": "label",
@@ -58,7 +58,7 @@ const graphConfig = {
     "opacity": 1,
     "renderLabel": false,
     "semanticStrokeWidth": false,
-    "strokeWidth": 1.5
+    "strokeWidth": 1
   }
 };
 
@@ -163,30 +163,29 @@ export function NodeExplorer (props) {
 
   }, []);
 
-  console.log(graphData)
-
   return (
     <Container>
       <Header size='large'>
         Node Explorer
       </Header>
       node id: {current.index}
-      <Graph
-        style={{ background: '#ccc' }}
-        id="graph-id"
-        data={graphData}
-        config={graphConfig}
-        onClickNode={onClickNode}
-        onRightClickNode={onRightClickNode}
-        onClickGraph={onClickGraph}
-        onClickLink={onClickLink}
-        onRightClickLink={onRightClickLink}
-        onMouseOverNode={onMouseOverNode}
-        onMouseOutNode={onMouseOutNode}
-        onMouseOverLink={onMouseOverLink}
-        onMouseOutLink={onMouseOutLink}
-        onNodePositionChange={onNodePositionChange}
-      />
+      <div className="node-explorer">
+        <Graph
+          id="graph-id"
+          data={graphData}
+          config={graphConfig}
+          onClickNode={onClickNode}
+          onRightClickNode={onRightClickNode}
+          onClickGraph={onClickGraph}
+          onClickLink={onClickLink}
+          onRightClickLink={onRightClickLink}
+          onMouseOverNode={onMouseOverNode}
+          onMouseOutNode={onMouseOutNode}
+          onMouseOverLink={onMouseOverLink}
+          onMouseOutLink={onMouseOutLink}
+          onNodePositionChange={onNodePositionChange}
+        />
+      </div>
 
     </Container>
   )
