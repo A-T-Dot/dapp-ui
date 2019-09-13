@@ -2,6 +2,11 @@
 
 A.T.Dot dapp ui.
 
+### TODO
+#### Editor
+- prevent duplicate links
+- add arrow head to line links with css
+- add features to remove and delete links
 ## Usage
 
 In the project directory, you can run:
