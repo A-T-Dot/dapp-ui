@@ -71,16 +71,15 @@ export default class Editor extends React.Component {
       nodes: [
         {
           id: 1,
-          x: 10,
+          x: 200,
           y: 10,
           name: "bob.mp4"
         },
-        { id: 2, x: 200, y: 200, name: "bob.txt" },
+        { id: 2, x: 100, y: 400, name: "bob.txt" },
         { id: 3, x: 500, y: 500, name: "hello.txt" }
       ],
       links: [
         { source: 1, target: 2},
-        { source: 2, target: 3}
       ],
       activeLink: null
     };
