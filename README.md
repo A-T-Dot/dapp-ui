@@ -2,6 +2,10 @@
 
 A.T.Dot dapp ui.
 
+### TODO
+#### Editor
+- prevent duplicate links
+
 ## Usage
 
 In the project directory, you can run:

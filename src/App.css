@@ -38,6 +38,11 @@ code {
 .pointer {
   cursor: pointer;
 }
+
+.default-cursor {
+  cursor: default;
+}
+
 .break-word {
   overflow-wrap: break-word;
 }

@@ -9,7 +9,7 @@ import Draggable from "react-draggable";
 import LinkTo from "react-lineto";
 
 function DraggableNode(props) {
-  let { dragHandlers, node, padding, onLinkClicked, onCardClicked } = props;
+  let { dragHandlers, node, padding, onLinkClicked, onCardClicked, isLinking } = props;
 
   return (
     <Draggable
@@ -26,20 +26,30 @@ function DraggableNode(props) {
           left: padding,
           position: "absolute"
         }}
-        onClick={(e) => {onCardClicked(e, node.id)}}
+        onClick={e => {
+          onCardClicked(e, node.id);
+        }}
       >
-        <Card.Content header={node.name} className="handle move" />
-        <Card.Content>
+        <Card.Content
+          header={node.name}
+          className={`handle ${isLinking ? "pointer" : "move"}`}
+        />
+        <Card.Content className={isLinking ? "pointer" : "default-cursor"}>
           <Card.Meta className="break-word">{node.id}</Card.Meta>
           <Card.Description className="break-word">
             description here
           </Card.Description>
         </Card.Content>
-        <Card.Content extra>
+        <Card.Content
+          extra
+          className={isLinking ? "pointer" : "default-cursor"}
+        >
           <Button
             primary
             animated="vertical"
-            onClick={(e, data) => {onLinkClicked(e, node.id);}}
+            onClick={(e, data) => {
+              onLinkClicked(e, node.id);
+            }}
           >
             <Button.Content hidden>Link</Button.Content>
             <Button.Content visible>
@@ -87,6 +97,8 @@ export default class Editor extends React.Component {
   }
 
   onStop = () => {
+    // TODO: don't rerender the whole page, update only those changed
+    this.setState({ state: this.state });
     this.setState({ activeDrags: --this.state.activeDrags });
   };
 
@@ -130,7 +142,7 @@ export default class Editor extends React.Component {
     e.stopPropagation();
     clearChosen();
 
-    if(activeLink) {
+    if(activeLink && activeLink != nodeId) {
       this.setState({
         activeLink: null,
         links: [...this.state.links, { source: activeLink, target: nodeId }]
@@ -143,7 +155,7 @@ export default class Editor extends React.Component {
   render() {
     const dragHandlers = { onStart: this.onStart, onStop: this.onStop, onDrag: this.onDrag };
     let { padding, chosenNode } = this.props;
-    let { nodes, links } = this.state;
+    let { nodes, links, activeLink } = this.state;
     return (
       <div
         className={`bg-grid${chosenNode ? " pointer" : ""}`}
@@ -159,6 +171,7 @@ export default class Editor extends React.Component {
               padding={padding}
               onLinkClicked={this.onLinkClicked}
               onCardClicked={this.onCardClicked}
+              isLinking={!!activeLink}
             />
           );
         })}
