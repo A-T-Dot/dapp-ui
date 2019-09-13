@@ -19,6 +19,12 @@ code {
   color: #ff1864;
 }
 
+
+
+.whiteboard .grid {
+  height: calc(100vh - (56.92px))
+}
+
 .bg-grid {
   background: RGB(246, 248, 250);
   background-image: linear-gradient(rgba(118, 118, 118) .1em, transparent .1em), linear-gradient(90deg, rgba(118, 118, 118) .1em, transparent .1em);
@@ -36,7 +42,7 @@ code {
   overflow-wrap: break-word;
 }
 
-.sidebar {
+.whiteboard .sidebar {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -44,11 +50,10 @@ code {
 
 }
 
-
-.sidebar .search {
+.whiteboard .sidebar .search {
   margin-bottom: 1rem;
   margin-top: 1rem;
 }
-.sidebar .cards {
+.whiteboard .sidebar .cards {
   width: 100%;
 }

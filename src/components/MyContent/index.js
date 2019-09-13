@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from "react-router-dom";
 import { Container, Segment, Header, List, Button, Grid } from 'semantic-ui-react';
 import { ModalUpload } from '../Modals/Upload';
 import { ModalPropose } from '../Modals/Propose';
@@ -54,7 +55,7 @@ export function MyContent () {
           </Grid.Column>
           <Grid.Column floated='right' textAlign='right' width={8}>
             <Button basic onClick={handlModalOpen.bind(this, 'upload', 0)}>Upload File</Button>
-            <Button primary>New Whiteboard</Button>
+            <Button primary as={Link} to='whiteboard'>New Whiteboard</Button>
           </Grid.Column>
         </Grid>
       </Header>
