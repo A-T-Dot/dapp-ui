@@ -28,10 +28,10 @@ export class Whiteboard extends React.Component {
 
     return (
       <Grid style={{ height: "80vh" }}>
-        <Grid.Row columns={3} style={{ height: "100%", padding: "0px" }}>
+        <Grid.Row columns={3} style={{ height: "100%", padding: '0px'}}>
           <Grid.Column
             width={3}
-            style={{ maxHeight: "100%", overflow: "auto" }}
+            style={{ maxHeight: "100%", overflow: "auto", paddingRight: '0px' }}
           >
             <Sidebar onChoose={this.chooseNode}/>
           </Grid.Column>

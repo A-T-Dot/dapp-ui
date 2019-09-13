@@ -19,14 +19,14 @@ export default class Sidebar extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
-        <Search style={{ marginBottom: "1rem" }} />
-        <Card.Group itemsPerRow={1} centered>
+      <div className="sidebar">
+        <Search />
+        <Card.Group centered>
           <Card fluid header="Option 1" onClick={() => this.handleClick(1)} />
           <Card fluid header="Option 2" onClick={() => this.handleClick(2)} />
-          <Card fluid header="Option 3" onClick={() => this.handleClick(3)} />
         </Card.Group>
-      </React.Fragment>
+          {/* <Card fluid header="Option 3" onClick={() => this.handleClick(3)} /> */}
+      </div>
     );
   }
 }
