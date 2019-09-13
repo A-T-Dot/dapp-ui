@@ -93,7 +93,7 @@ export default class Editor extends React.Component {
       let y = Math.round(clientY - rect.top) - padding;
 
       if(chosenNode) {
-        this.setState({nodes: [...this.state.nodes, {id: chosenNode, x, y}]})
+        this.setState({nodes: [...this.state.nodes, {id: chosenNode.id, name: chosenNode.name,x, y}]})
       }
       console.log(x, y);
     }
