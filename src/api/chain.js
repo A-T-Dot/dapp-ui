@@ -8,14 +8,14 @@ let tcrApi = null;
 // https://github.com/substrate-developer-hub/substrate-tcr
 // https://github.com/substrate-developer-hub/substrate-tcr-ui/blob/master/src/services/tcrService.js
 
-const init = async (wsp, callback, subscribe) => {
+const init = async (wsp, callback) => {
   const provider = new WsProvider(wsp);
   api = await ApiPromise.create(provider);
 
-  api.rpc.system.chain();
-  api.rpc.chain.subscribeNewHeads(header => {
-    subscribe(header);
-  });
+  // api.rpc.system.chain();
+  // api.rpc.chain.subscribeNewHeads(header => {
+  //   subscribe(header);
+  // });
 
   tcrApi = await ApiPromise.create({
     types: {
@@ -133,7 +133,7 @@ async function _createApiWithTypes () {
   });
 }
 
-window.CASTOR = {
+export default {
   init,
   getBalance,
   getBalances,

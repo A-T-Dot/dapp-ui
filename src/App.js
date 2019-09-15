@@ -9,6 +9,8 @@ import { TCXDetail } from './components/Governance/tcxDetail';
 import { NodeExplorer } from './components/NodeExplorer';
 import { Discover } from "./components/Discover";
 import { Whiteboard } from "./components/Whiteboard";
+import chain from "./api/chain";
+import api from "./api";
 
 import './App.css';
 
@@ -19,6 +21,23 @@ function App () {
     let result = JSON.parse(data);
     setWsData(result);
   }
+
+  const CASTOR_PROVIDER = 'ws://127.0.0.1:9944';
+  // const CASTOR_PROVIDER = 'wss://polkadot:9944';
+  chain.init(CASTOR_PROVIDER, run);
+  function run (api) {
+    console.log('CASTOR Start.', api);
+    chain.getBalance(
+      '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+      function (balance) {
+        console.log(balance);
+      }
+    );
+  }
+
+  api.get('/call').then(res => {
+    console.log(res)
+  })
 
   return (
     <div className="App">
