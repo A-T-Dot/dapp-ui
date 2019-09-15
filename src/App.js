@@ -1,4 +1,5 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
+import Websocket from 'react-websocket';
 import { Route, Switch } from 'react-router-dom';
 import { NavBar } from './components/NavBar';
 import { MyContent } from './components/MyContent';
@@ -11,7 +12,14 @@ import { Whiteboard } from "./components/Whiteboard";
 
 import './App.css';
 
-function App() {
+function App () {
+  const [wsData, setWsData] = useState({ data: '' });
+
+  const handleData = (data) => {
+    let result = JSON.parse(data);
+    setWsData(result);
+  }
+
   return (
     <div className="App">
       <Switch>
@@ -26,6 +34,9 @@ function App() {
           <Route exact path="/discover" component={Discover} />
         </Fragment>
       </Switch>
+      <Websocket url='ws://localhost:7000/ws'
+        onMessage={handleData} />
+      WS Data: {wsData.data}
     </div>
   );
 }
