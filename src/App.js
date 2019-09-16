@@ -14,6 +14,28 @@ import api from "./api";
 
 import './App.css';
 
+const CASTOR_PROVIDER = 'ws://127.0.0.1:9944';
+// const CASTOR_PROVIDER = 'wss://polkadot:9944';
+chain.init(CASTOR_PROVIDER, run);
+function run () {
+  // chain.getBalance(
+  //   '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+  //   function (balance) {
+  //     console.log(balance);
+  //   }
+  // );
+  const keypair = chain.getKeysFromSeed('123')
+  console.log(keypair)
+
+  chain.connect()
+  // chain.getTcxDetails()
+}
+
+
+api.get('/call').then(res => {
+  console.log(res)
+})
+
 function App () {
   const [wsData, setWsData] = useState({ data: '' });
 
@@ -21,23 +43,6 @@ function App () {
     let result = JSON.parse(data);
     setWsData(result);
   }
-
-  const CASTOR_PROVIDER = 'ws://127.0.0.1:9944';
-  // const CASTOR_PROVIDER = 'wss://polkadot:9944';
-  chain.init(CASTOR_PROVIDER, run);
-  function run (api) {
-    console.log('CASTOR Start.', api);
-    chain.getBalance(
-      '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-      function (balance) {
-        console.log(balance);
-      }
-    );
-  }
-
-  api.get('/call').then(res => {
-    console.log(res)
-  })
 
   return (
     <div className="App">
