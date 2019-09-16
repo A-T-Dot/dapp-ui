@@ -1,6 +1,7 @@
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { Keyring } from '@polkadot/keyring';
 import { stringToU8a } from '@polkadot/util';
+// import BN from 'bn.js';
 
 let api = null;
 
@@ -114,6 +115,15 @@ const getKeysFromSeed = _seed => {
   return keyring.addFromSeed(stringToU8a(paddedSeed));
 };
 
+const getKeysFromUri = uri => {
+  if (!uri) {
+    throw new Error('Uri not valid.');
+  }
+
+  const keyring = new Keyring({ type: "sr25519" });
+  return keyring.addFromUri(uri);
+};
+
 const connect = async () => {
   const [chain, name, version] = await Promise.all([
     api.rpc.system.chain(),
@@ -151,11 +161,8 @@ const getTcxDetails = async (keys) => {
 const applyListing = async (keys, tcx_id, node_id, amount, action_id) => {
   return new Promise(async (resolve, reject) => {
     const nonce = await api.query.system.accountNonce(keys.address);
-    // create, sign and send transaction
     api.tx.tcx
-      // create transaction
       .propose(tcx_id, node_id, amount, action_id)
-      // Sign and send the transcation
       .sign(keys, { nonce })
       .send(({ events = [], status }) => {
         if (status.isFinalized) {
@@ -349,6 +356,7 @@ export default {
   getBalances,
   transfer,
   getKeysFromSeed,
+  getKeysFromUri,
   // ------- tcr
   connect,
   getTcxDetails,

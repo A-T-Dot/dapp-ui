@@ -25,14 +25,12 @@ function run () {
       console.log(balance);
     }
   );
-  let keys = chain.getKeysFromSeed('//Alice')
-  console.log(keys.address)
-  keys = chain.getKeysFromSeed('Alice')
+  const keys = chain.getKeysFromUri('//Alice')
   console.log(keys.address)
 
   chain.getTcxDetails(keys)
   // propose     tcx_id, node_id, amount, action_id
-  chain.applyListing(keys, 'tcx_id', 'node_id', 0, 'action_id')
+  chain.applyListing(keys, 'tcx_id', 'node_id', 10000000000, 'action_id')
   // challenge
   // vote
   // resolve
