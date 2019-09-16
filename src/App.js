@@ -9,8 +9,39 @@ import { TCXDetail } from './components/Governance/tcxDetail';
 import { NodeExplorer } from './components/NodeExplorer';
 import { Discover } from "./components/Discover";
 import { Whiteboard } from "./components/Whiteboard";
+import chain from "./api/chain";
+import api from "./api";
 
 import './App.css';
+
+const CASTOR_PROVIDER = 'ws://127.0.0.1:9944';
+// const CASTOR_PROVIDER = 'wss://polkadot:9944';
+chain.init(CASTOR_PROVIDER, run);
+function run () {
+  chain.connect()
+  chain.getBalance(
+    '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+    function (balance) {
+      console.log(balance);
+    }
+  );
+  const keys = chain.getKeysFromUri('//Alice')
+  console.log(keys.address)
+
+  chain.getTcxDetails(keys)
+  // propose     tcx_id, node_id, amount, action_id
+  chain.applyListing(keys, 'tcx_id', 'node_id', 10000000000, 'action_id')
+  // challenge
+  // vote
+  // resolve
+  // claim
+  // propose_tcx_creation
+}
+
+
+api.get('/call').then(res => {
+  console.log(res)
+})
 
 function App () {
   const [wsData, setWsData] = useState({ data: '' });
