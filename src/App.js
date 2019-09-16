@@ -18,17 +18,26 @@ const CASTOR_PROVIDER = 'ws://127.0.0.1:9944';
 // const CASTOR_PROVIDER = 'wss://polkadot:9944';
 chain.init(CASTOR_PROVIDER, run);
 function run () {
-  // chain.getBalance(
-  //   '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-  //   function (balance) {
-  //     console.log(balance);
-  //   }
-  // );
-  const keypair = chain.getKeysFromSeed('123')
-  console.log(keypair)
-
   chain.connect()
-  // chain.getTcxDetails()
+  chain.getBalance(
+    '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+    function (balance) {
+      console.log(balance);
+    }
+  );
+  let keys = chain.getKeysFromSeed('//Alice')
+  console.log(keys.address)
+  keys = chain.getKeysFromSeed('Alice')
+  console.log(keys.address)
+
+  chain.getTcxDetails(keys)
+  // propose     tcx_id, node_id, amount, action_id
+  chain.applyListing(keys, 'tcx_id', 'node_id', 0, 'action_id')
+  // challenge
+  // vote
+  // resolve
+  // claim
+  // propose_tcx_creation
 }
 
 

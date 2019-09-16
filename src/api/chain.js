@@ -126,92 +126,76 @@ const connect = async () => {
   return { chain, name, version };
 }
 
-const getTcxDetails = async () => {
+const getTcxDetails = async (keys) => {
   console.log('------- getTcxDetails')
   console.log(api.query)
 
-  const [q1, q2, q3] = await Promise.all([
-    api.query.tcx.allTcxsArray(),
-    api.query.tcx.allTcxsCount(),
-    api.query.tcx.challengeNonce(),
-    // api.query.tcx.challenges(),
-    // api.query.tcx.ownedTcxsArray(),
-    // api.query.tcx.ownedTcxsCount(),
-    // api.query.tcx.polls(),
-    // api.query.tcx.tcxListings(),
-    // api.query.tcx.tcxListingsCount(),
-    // api.query.tcx.tcxListingsIndexHash(),
-    // api.query.tcx.tcxOwner(),
-    // api.query.tcx.votes(),
+  const [q1, q2, q3, q4] = await Promise.all([
+    // api.query.tcx.allTcxsArray(''),
+    // api.query.tcx.allTcxsCount(''),
+    // api.query.tcx.challengeNonce(''),
+    // api.query.tcx.challenges(''),
+    // api.query.tcx.ownedTcxsArray(''),
+    // api.query.tcx.ownedTcxsCount(''),
+    // api.query.tcx.polls(''),
+    // api.query.tcx.tcxListings(''),
+    api.query.tcx.tcxListingsCount(''),
+    api.query.tcx.tcxListingsIndexHash(''),
+    api.query.tcx.tcxOwner(''),
+    api.query.tcx.votes([]),
   ]);
-  console.log(q1, q2, q3);
+  console.log(q1, q2, q3, q4);
 }
 
-
 // apply for a new listing
-const applyListing = async (name, deposit) => {
+const applyListing = async (keys, tcx_id, node_id, amount, action_id) => {
   return new Promise(async (resolve, reject) => {
-    const api = await ApiPromise.create();
-    const keys = getKeysFromSeed();
     const nonce = await api.query.system.accountNonce(keys.address);
-    console.log('Sending...', name, deposit);
     // create, sign and send transaction
-    api.tx.tcr
+    api.tx.tcx
       // create transaction
-      .propose(name, deposit)
+      .propose(tcx_id, node_id, amount, action_id)
       // Sign and send the transcation
       .sign(keys, { nonce })
       .send(({ events = [], status }) => {
         if (status.isFinalized) {
           console.log(status.asFinalized.toHex());
-          events.forEach(async ({ phase, event: { data, method, section } }) => {
-            console.log('\t', phase.toString(), `: ${section}.${method}`, data.toString());
-            // check if the tcr proposed event was emitted by Substrate runtime
-            if (section.toString() === "tcr" && method.toString() === "Proposed") {
-              // insert metadata in off-chain store
-              const datajson = JSON.parse(data.toString());
-              const listingInstance = {
-                name: name,
-                owner: datajson[0],
-                hash: datajson[1],
-                deposit: datajson[2],
-                isWhitelisted: false,
-                challengeId: 0,
-                rejected: false
-              }
-              // await dataService.insertListing(listingInstance);
-              // resolve the promise with listing data
-              resolve(listingInstance);
-            }
-          });
+          // events.forEach(async ({ phase, event: { data, method, section } }) => {
+          //   console.log('\t', phase.toString(), `: ${section}.${method}`, data.toString());
+          //   // check if the tcr proposed event was emitted by Substrate runtime
+          //   if (section.toString() === "tcr" && method.toString() === "Proposed") {
+          //     // insert metadata in off-chain store
+          //     const datajson = JSON.parse(data.toString());
+          //     const listingInstance = {
+          //       name: name,
+          //       owner: datajson[0],
+          //       hash: datajson[1],
+          //       deposit: datajson[2],
+          //       isWhitelisted: false,
+          //       challengeId: 0,
+          //       rejected: false
+          //     }
+          //     // await dataService.insertListing(listingInstance);
+          //     // resolve the promise with listing data
+          //     resolve(listingInstance);
+          //   }
+          // });
         }
       })
       .catch(err => reject(err));
   });
 }
 
-// gets the token balance for an account
-// this is the TCR token balance and not the Substrate balances module balance
-const getTokenBalance = async (seed, callback) => {
-  const keys = getKeysFromSeed(seed);
-  const api = await ApiPromise.create();
-  api.query.token.balanceOf(keys.address, (balance) => {
-    let bal = JSON.stringify(balance);
-    callback(bal);
-  });
-}
-
 // challenge a listing
-const challengeListing = async (hash, deposit) => {
+const challengeListing = async (keys, hash, deposit) => {
   return new Promise(async (resolve, reject) => {
-    const keys = getKeysFromSeed();
     const nonce = await api.query.system.accountNonce(keys.address);
 
     const listing = await api.query.tcr.listings(hash);
     const listingJson = JSON.parse(listing.toString());
 
     // create, sign and send transaction
-    api.tx.tcr
+    api.tx.tcx
       // create transaction
       .challenge(listingJson.id, deposit)
       .sign(keys, { nonce })
@@ -240,9 +224,8 @@ const challengeListing = async (hash, deposit) => {
 }
 
 // vote on a challenged listing
-const voteListing = async (hash, voteValue, deposit) => {
+const voteListing = async (keys, hash, voteValue, deposit) => {
   return new Promise(async (resolve, reject) => {
-    const keys = getKeysFromSeed();
     const nonce = await api.query.system.accountNonce(keys.address);
 
     const listing = await api.query.tcr.listings(hash);
@@ -251,7 +234,7 @@ const voteListing = async (hash, voteValue, deposit) => {
     // check if listing is currently challenged
     if (listingJson.challenge_id > 0) {
       // create, sign and send transaction
-      api.tx.tcr
+      api.tx.tcx
         // create transaction
         .vote(listingJson.challenge_id, voteValue, deposit)
         .sign(keys, { nonce })
@@ -280,16 +263,15 @@ const voteListing = async (hash, voteValue, deposit) => {
 }
 
 // resolve a listing
-const resolveListing = async (hash) => {
+const resolveListing = async (keys, hash) => {
   return new Promise(async (resolve, reject) => {
-    const keys = getKeysFromSeed();
     const nonce = await api.query.system.accountNonce(keys.address);
 
     const listing = await api.query.tcr.listings(hash);
     const listingJson = JSON.parse(listing.toString());
 
     // create, sign and send transaction
-    api.tx.tcr
+    api.tx.tcx
       // create transaction
       .resolve(listingJson.id)
       .sign(keys, { nonce })
@@ -332,13 +314,12 @@ const resolveListing = async (hash) => {
 }
 
 // claim reward for a resolved challenge
-const claimReward = async (challengeId) => {
+const claimReward = async (keys, challengeId) => {
   return new Promise(async (resolve, reject) => {
-    const keys = getKeysFromSeed();
     const nonce = await api.query.system.accountNonce(keys.address);
 
     // create, sign and send transaction
-    api.tx.tcr
+    api.tx.tcx
       // create transaction
       .claimReward(challengeId)
       .sign(keys, { nonce })
@@ -372,7 +353,6 @@ export default {
   connect,
   getTcxDetails,
   applyListing,
-  getTokenBalance,
   challengeListing,
   voteListing,
   resolveListing,
