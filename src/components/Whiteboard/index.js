@@ -5,6 +5,8 @@ import Sidebar from './Sidebar';
 import Toolbar from './Toolbar';
 import Editor from './Editor';
 import logo from "../../castor.svg";
+import Ipfs from "../../utils/Ipfs";
+
 
 export class Whiteboard extends React.Component {
   constructor(props) {
@@ -25,26 +27,50 @@ export class Whiteboard extends React.Component {
     this.setState({chosenNode: null});
   }
 
+  handleClick = async () => {
+    if(!this.editorRef) {
+      console.log("Cannot find editor");
+      return;
+    } 
+    let { nodes, links } = this.editorRef.state;
+    
+    let nodeObj = {
+      nodes: nodes.map((node) => {
+        return node.id
+      }),
+      links
+    };
+
+    let cid2 = await Ipfs.add([JSON.stringify(nodeObj)]);
+    console.log(cid2);
+    let res2 = await Ipfs.get(cid2);
+    console.log(JSON.parse(res2));
+
+  }
+
+
   render() {
     let { chosenNode } = this.state;
 
     return (
       <div className="whiteboard">
         <Menu>
-          <Menu.Item as={Link} to='/content'>
+          <Menu.Item as={Link} to="/content">
             <Icon name="arrow alternate circle left" />
           </Menu.Item>
-          <Menu.Item as={Link} to='/'>
+          <Menu.Item as={Link} to="/">
             <img src={logo} alt="logo" />
           </Menu.Item>
           <Menu.Menu position="right">
             <Menu.Item>
-              <Button primary>Submit</Button>
+              <Button primary onClick={this.handleClick}>
+                Submit
+              </Button>
             </Menu.Item>
           </Menu.Menu>
         </Menu>
         <Grid>
-          <Grid.Row columns={3} style={{ height: "100%", padding: "0px" }}>
+          <Grid.Row columns={2} style={{ height: "100%", padding: "0px" }}>
             <Grid.Column
               width={3}
               style={{
@@ -56,7 +82,7 @@ export class Whiteboard extends React.Component {
               <Sidebar onChoose={this.chooseNode} />
             </Grid.Column>
             <Grid.Column
-              width={10}
+              width={13}
               style={{
                 maxHeight: "100%",
                 overflow: "auto",
@@ -68,14 +94,17 @@ export class Whiteboard extends React.Component {
                 chosenNode={chosenNode}
                 clearChosen={this.clearChosen}
                 padding={10}
+                ref={editorRef => {
+                  this.editorRef = editorRef;
+                }}
               />
             </Grid.Column>
-            <Grid.Column
+            {/* <Grid.Column
               width={3}
               style={{ maxHeight: "100%", overflow: "auto" }}
             >
               <Toolbar />
-            </Grid.Column>
+            </Grid.Column> */}
           </Grid.Row>
         </Grid>
       </div>
