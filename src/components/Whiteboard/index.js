@@ -32,13 +32,14 @@ export class Whiteboard extends React.Component {
       console.log("Cannot find editor");
       return;
     } 
-    let { nodes, links } = this.editorRef.state;
+    let { nodes, links, root } = this.editorRef.state;
     
     let nodeObj = {
       nodes: nodes.map((node) => {
         return node.id
       }),
-      links
+      links,
+      root,
     };
 
     let cid2 = await Ipfs.add([JSON.stringify(nodeObj)]);

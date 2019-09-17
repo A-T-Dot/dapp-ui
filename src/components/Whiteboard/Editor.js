@@ -9,7 +9,16 @@ import Draggable from "react-draggable";
 import LinkTo from "react-lineto";
 
 function DraggableNode(props) {
-  let { dragHandlers, node, padding, onLinkClicked, onCardClicked, isLinking } = props;
+  let {
+    dragHandlers,
+    node,
+    padding,
+    onLinkClicked,
+    onCardClicked,
+    isLinking,
+    setRoot,
+    isRoot
+  } = props;
 
   return (
     <Draggable
@@ -31,9 +40,15 @@ function DraggableNode(props) {
         }}
       >
         <Card.Content
-          header={node.name}
-          className={`handle ${isLinking ? "pointer" : "move"}`}
-        />
+          className={`handle${isLinking ? " pointer" : " move"}${
+            isRoot ? " red" : ""
+          }`}
+        >
+          <Card.Header>
+            {node.name}
+            <Button circular icon="close" floated='right' size='mini'/>
+          </Card.Header>
+        </Card.Content>
         <Card.Content className={isLinking ? "pointer" : "default-cursor"}>
           <Card.Meta className="break-word">{node.id}</Card.Meta>
           <Card.Description className="break-word">
@@ -44,18 +59,32 @@ function DraggableNode(props) {
           extra
           className={isLinking ? "pointer" : "default-cursor"}
         >
-          <Button
-            primary
-            animated="vertical"
-            onClick={(e, data) => {
-              onLinkClicked(e, node.id);
-            }}
-          >
-            <Button.Content hidden>Link</Button.Content>
-            <Button.Content visible>
-              <Icon name="linkify" />
-            </Button.Content>
-          </Button>
+          <div className="ui two buttons">
+            <Button
+              primary
+              animated="vertical"
+              onClick={(e, data) => {
+                onLinkClicked(e, node.id);
+              }}
+            >
+              <Button.Content hidden>Link</Button.Content>
+              <Button.Content visible>
+                <Icon name="linkify" />
+              </Button.Content>
+            </Button>
+            <Button
+              color='red'
+              animated="vertical"
+              onClick={(e, data) => {
+                setRoot(e, node.id);
+              }}
+            >
+              <Button.Content hidden>Set Root</Button.Content>
+              <Button.Content visible>
+                <Icon name="chess king" />
+              </Button.Content>
+            </Button>
+          </div>
         </Card.Content>
       </Card>
     </Draggable>
@@ -81,7 +110,8 @@ export default class Editor extends React.Component {
       links: [
         { source: 1, target: 2},
       ],
-      activeLink: null
+      activeLink: null,
+      root: null,
     };
   }
 
@@ -150,11 +180,22 @@ export default class Editor extends React.Component {
 
   }
   
+  setRoot = (e, nodeId) => {
+    let { clearChosen } = this.props;
+
+    e.stopPropagation();
+    clearChosen();
+
+    this.setState({
+      root: nodeId
+    })
+    console.log("set root");
+  }
 
   render() {
     const dragHandlers = { onStart: this.onStart, onStop: this.onStop, onDrag: this.onDrag };
     let { padding, chosenNode } = this.props;
-    let { nodes, links, activeLink } = this.state;
+    let { nodes, links, activeLink, root } = this.state;
     return (
       <div
         className={`bg-grid${chosenNode ? " pointer" : ""}`}
@@ -171,6 +212,8 @@ export default class Editor extends React.Component {
               onLinkClicked={this.onLinkClicked}
               onCardClicked={this.onCardClicked}
               isLinking={!!activeLink}
+              setRoot={this.setRoot}
+              isRoot={node.id == root}
             />
           );
         })}

@@ -67,3 +67,11 @@ code {
   background: #fafafa;
   margin: 20px auto;
 }
+
+.red {
+  background-color: RGB(217, 43, 47) !important;
+}
+
+.red > div {
+  color: white !important;
+}
