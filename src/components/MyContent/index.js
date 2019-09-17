@@ -34,10 +34,10 @@ export function MyContent () {
 
   const handlModalOpen = (action, index) => {
     setModalContent({ index })
-    setIsModalOpen({ upload: action === 'upload', propose: action === 'propose' });
+    setIsModalOpen({ upload: action === 'upload', propose: action === 'propose', transfer: action === 'transfer' });
   }
   const handlModalClose = () => {
-    setIsModalOpen({ upload: false, propose: false });
+    setIsModalOpen({ upload: false, propose: false, transfer: false });
   }
 
   const items = []
@@ -50,6 +50,7 @@ export function MyContent () {
           <List.Item>node type: {value.type}</List.Item>
         </List>
         <Button primary onClick={handlModalOpen.bind(this, 'propose', index)}>propose</Button>
+        <Button basic color='blue' onClick={handlModalOpen.bind(this, 'transfer', index)}>transfer</Button>
       </Segment>
     </Grid.Column>)
   }
@@ -64,18 +65,19 @@ export function MyContent () {
           </Grid.Column>
           <Grid.Column floated='right' textAlign='right' width={8}>
             <Button basic onClick={createNode.bind(this, 'hash', 'whitepaper', ['hash1'])}>Create Node</Button>
-            <Button basic onClick={handlModalOpen.bind(this, 'upload', 0)}>Upload File</Button>
+            <Button basic color='blue' onClick={handlModalOpen.bind(this, 'upload', 0)}>Upload File</Button>
             <Button primary as={Link} to='whiteboard'>New Whiteboard</Button>
           </Grid.Column>
         </Grid>
       </Header>
 
-      <Grid stackable columns={5}>
+      <Grid stackable columns={4}>
         {items}
       </Grid>
 
       <ModalUpload isOpen={isModalOpen.upload} handleClose={handlModalClose} content={modalContent} />
       <ModalPropose isOpen={isModalOpen.propose} handleClose={handlModalClose} content={modalContent} />
+      <ModalPropose isOpen={isModalOpen.transfer} handleClose={handlModalClose} content={modalContent} />
 
     </Container>
   )

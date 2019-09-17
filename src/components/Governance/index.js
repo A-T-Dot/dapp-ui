@@ -86,12 +86,12 @@ export function Governance () {
           />
         </Grid.Column>
         <Grid.Column floated='right' textAlign='right' width={8}>
-          <Button basic>New GE</Button>
+          <Button basic color='blue'>New GE</Button>
           <Button primary>New Whiteboard</Button>
         </Grid.Column>
       </Grid>
 
-      <Grid stackable columns={5}>
+      <Grid stackable columns={4}>
         {items}
       </Grid>
     </Container>

@@ -39,21 +39,21 @@ export function Discover () {
     {
       menuItem: 'GE',
       render: () =>
-        <Grid stackable columns={5}>
+        <Grid stackable columns={4}>
           {gePane}
         </Grid>
     },
     {
       menuItem: 'TCX',
       render: () =>
-        <Grid stackable columns={5}>
+        <Grid stackable columns={4}>
           {tcsPane}
         </Grid>
     },
     {
       menuItem: 'Node',
       render: () =>
-        <Grid stackable columns={5}>
+        <Grid stackable columns={4}>
           {nodePane}
         </Grid>
     },

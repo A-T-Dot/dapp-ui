@@ -43,7 +43,7 @@ export function TCXDetail (props) {
         </Grid.Column>
       </Grid>
 
-      <Grid stackable columns={5}>
+      <Grid stackable columns={4}>
         {items}
       </Grid>
     </Container>
