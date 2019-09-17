@@ -9,6 +9,7 @@ import {
 import Draggable from "react-draggable";
 import LinkTo from "react-lineto";
 import { nodeType, nodeTypeToText } from "../../constants/nodeType";
+import NodeViewerModal from '../Modals/NodeViewerModal';
 
 function DraggableNode(props) {
   let {
@@ -73,7 +74,7 @@ function DraggableNode(props) {
               </Button.Content>
             </Button>
             <Button
-              color='blue'
+              color="blue"
               animated="vertical"
               onClick={(e, data) => {
                 onLinkClicked(e, node.id);
@@ -84,15 +85,16 @@ function DraggableNode(props) {
                 <Icon name="linkify" />
               </Button.Content>
             </Button>
-            <Button
-              color="green"
-              animated="vertical"
-            >
-              <Button.Content hidden>Remove</Button.Content>
-              <Button.Content visible>
-                <Icon name="close" />
-              </Button.Content>
-            </Button>
+            <NodeViewerModal
+              trigger={
+                <Button color="green" animated="vertical">
+                  <Button.Content hidden>Preview</Button.Content>
+                  <Button.Content visible>
+                    <Icon name="eye" />
+                  </Button.Content>
+                </Button>
+              }
+            />
           </div>
         </Card.Content>
       </Card>

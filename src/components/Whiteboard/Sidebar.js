@@ -2,8 +2,10 @@ import React from "react";
 import {
   Card,
   Search,
+  Button, Icon
 } from "semantic-ui-react";
 import { nodeType, nodeTypeToText } from "../../constants/nodeType";
+import NodeViewerModal from "../Modals/NodeViewerModal";
 
 export default class Sidebar extends React.Component {
   constructor(props) {
@@ -37,11 +39,7 @@ export default class Sidebar extends React.Component {
         <Card.Group centered>
           { nodes.map((node, index) => {
             return (
-              <Card
-                fluid
-                key={node.id}
-                onClick={() => this.handleClick(index)}
-              >
+              <Card fluid key={node.id} onClick={() => this.handleClick(index)}>
                 <Card.Content>
                   <Card.Header>{node.name}</Card.Header>
                   <Card.Meta>{node.id}</Card.Meta>
@@ -49,11 +47,22 @@ export default class Sidebar extends React.Component {
                     {nodeTypeToText[node.nodeType]}
                   </Card.Description>
                 </Card.Content>
+                <Card.Content extra>
+                  <NodeViewerModal
+                    trigger={
+                      <Button
+                        circular
+                        icon="eye"
+                        floated="right"
+                        onClick={e => e.stopPropagation()}
+                      />
+                    }
+                  />
+                </Card.Content>
               </Card>
             );
           })}
         </Card.Group>
-          {/* <Card fluid header="Option 3" onClick={() => this.handleClick(3)} /> */}
       </div>
     );
   }
