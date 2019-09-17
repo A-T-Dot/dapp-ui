@@ -75,7 +75,7 @@ export function Governance () {
   return (
     <Container>
       <Grid>
-        <Grid.Column width={4}>
+        <Grid.Column width={8}>
           <Search
             onResultSelect={handleResultSelect}
             onSearchChange={handleSearchChange}
@@ -85,7 +85,8 @@ export function Governance () {
             style={{ marginBottom: "1rem" }}
           />
         </Grid.Column>
-        <Grid.Column width={4}>
+        <Grid.Column floated='right' textAlign='right' width={8}>
+          <Button basic>New GE</Button>
           <Button primary>New Whiteboard</Button>
         </Grid.Column>
       </Grid>

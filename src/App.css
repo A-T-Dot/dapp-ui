@@ -13,12 +13,19 @@ code {
 }
 
 .App {
+  min-height: 100vh;
 }
 
 .App-link {
   color: #ff1864;
 }
 
+.footer {
+  position: absolute;
+  bottom: 0;
+  padding: 2em;
+  background: #fff;
+}
 
 
 .whiteboard .grid {

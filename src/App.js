@@ -30,7 +30,10 @@ function run () {
 
   chain.getTcxDetails(keys)
   // propose     tcx_id, node_id, amount, action_id
-  chain.applyListing(keys, 'tcx_id', 'node_id', 10000000000, 'action_id')
+  chain.applyListing(keys, 'tcx_id', 'node_id', 10000000000, 'action_id').then(res => {
+    console.log("------propose")
+    console.log(res)
+  })
   // challenge
   // vote
   // resolve
@@ -67,7 +70,7 @@ function App () {
       </Switch>
       <Websocket url='ws://localhost:7000/ws'
         onMessage={handleData} />
-      WS Data: {wsData.data}
+      <div className="footer">WS Connect: {wsData.data || 'run `node app.js` first'}</div>
     </div>
   );
 }

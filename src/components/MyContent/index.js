@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Container, Segment, Header, List, Button, Grid } from 'semantic-ui-react';
 import { ModalUpload } from '../Modals/Upload';
 import { ModalPropose } from '../Modals/Propose';
+import chain from "../../api/chain";
 
 export function MyContent () {
 
@@ -15,13 +16,21 @@ export function MyContent () {
     { type: 'jpeg' },
     { type: 'mp4' },
     { type: 'whiteboard' },
-    { type: 'whiteboard' },
-    { type: 'whiteboard' },
-    { type: 'whiteboard' },
   ])
   const [isModalOpen, setIsModalOpen] = useState({ upload: false, propose: false });
   const [modalContent, setModalContent] = useState({ index: 0 });
 
+  // TODO in modal
+  const createNode = (hash, type, sources) => {
+    elements.push({ type })
+
+    const keys = chain.getKeysFromUri('//Alice')
+    chain.nodeCreate(keys, hash, type, sources).then((res) => {
+      console.log('-------nodeCreate:')
+      console.log(res)
+      setContents(JSON.parse(JSON.stringify(elements)))
+    })
+  }
 
   const handlModalOpen = (action, index) => {
     setModalContent({ index })
@@ -54,6 +63,7 @@ export function MyContent () {
             Your balance: {account.balance} ATDot
           </Grid.Column>
           <Grid.Column floated='right' textAlign='right' width={8}>
+            <Button basic onClick={createNode.bind(this, 'hash', 'whitepaper', ['hash1'])}>Create Node</Button>
             <Button basic onClick={handlModalOpen.bind(this, 'upload', 0)}>Upload File</Button>
             <Button primary as={Link} to='whiteboard'>New Whiteboard</Button>
           </Grid.Column>
