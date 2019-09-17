@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Header } from 'semantic-ui-react';
 import { Graph } from "react-d3-graph";
+import NodeRenderer from '../ContentRenderer/NodeRenderer';
 
 const graphConfig = {
   "automaticRearrangeAfterDropNode": false,
@@ -165,10 +166,9 @@ export function NodeExplorer (props) {
 
   return (
     <Container>
-      <Header size='large'>
-        Node Explorer
-      </Header>
-      node id: {current.index}
+      <Header size="large">Node Explorer</Header>
+      <div>node id: {current.index}</div>
+      <NodeRenderer node={{}} ipfsGatewayUrl={"http://localhost:8080"} />
       <div className="node-explorer">
         <Graph
           id="graph-id"
@@ -186,8 +186,7 @@ export function NodeExplorer (props) {
           onNodePositionChange={onNodePositionChange}
         />
       </div>
-
     </Container>
-  )
+  );
 }
 
