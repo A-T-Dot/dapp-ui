@@ -3,17 +3,19 @@ import {
   Card,
   Search,
 } from "semantic-ui-react";
+import { nodeType, nodeTypeToText } from "../../constants/nodeType";
 
 export default class Sidebar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       nodes: [
-        { id: 5, name: 'yogurt.jpg'},
-        { id: 6, name: 'polkadot.md'},
-        { id: 7, name: 'hello.whiteboard'}
+        { id: 5, name: "yogurt", nodeType: 0 },
+        { id: 6, name: "polkadot", nodeType: 7 },
+        { id: 7, name: "cat", nodeType: 0 },
+        { id: 8, name: "dog", nodeType: 4 }
       ]
-    }
+    };
 
     this.handleClick = this.handleClick.bind(this);
   }
@@ -38,9 +40,16 @@ export default class Sidebar extends React.Component {
               <Card
                 fluid
                 key={node.id}
-                header={node.name}
                 onClick={() => this.handleClick(index)}
-              />
+              >
+                <Card.Content>
+                  <Card.Header>{node.name}</Card.Header>
+                  <Card.Meta>{node.id}</Card.Meta>
+                  <Card.Description>
+                    {nodeTypeToText[node.nodeType]}
+                  </Card.Description>
+                </Card.Content>
+              </Card>
             );
           })}
         </Card.Group>

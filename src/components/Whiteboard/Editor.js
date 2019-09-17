@@ -8,6 +8,7 @@ import {
 } from "semantic-ui-react";
 import Draggable from "react-draggable";
 import LinkTo from "react-lineto";
+import { nodeType, nodeTypeToText } from "../../constants/nodeType";
 
 function DraggableNode(props) {
   let {
@@ -46,12 +47,12 @@ function DraggableNode(props) {
           }`}
         >
           {/* <Button circular icon="close" floated="right" size="mini" /> */}
-          <Header size="small">{node.id}</Header>
+          <Header size="small">{node.name}</Header>
         </Card.Content>
         <Card.Content className={isLinking ? "pointer" : "default-cursor"}>
           <Card.Meta className="break-word">{node.id}</Card.Meta>
           <Card.Description className="break-word">
-            description here
+            {nodeTypeToText[node.nodeType]}
           </Card.Description>
         </Card.Content>
         <Card.Content
@@ -107,15 +108,33 @@ export default class Editor extends React.Component {
       activeDrags: 0,
       nodes: [
         {
-          id: "QmfQkD8pBSBCBxWEwFSu4XaDVSWK6bjnNuaWZjMyQbyDub",
+          id: "QmeY8rh5x5832wQD8mWt6cDEiX3uJHrSnEYURZQcNWBuYW",
           x: 200,
           y: 10,
-          name: "hi.yo"
+          name: "hi.jpg",
+          nodeType: 0
         },
-        { id: 2, x: 100, y: 400, name: "bob.txt" },
-        { id: 3, x: 500, y: 500, name: "hello.txt" }
+        {
+          id: "QmVFX5VKCN2cEGtB7JrHms1Bq9PcFQ7cDhHHujgYVyfzSA",
+          x: 100,
+          y: 400,
+          name: "bob.md",
+          nodeType: 7
+        },
+        {
+          id: "QmRC9s7W4a5mr3wuXDuM53CHvXKPexDaVc1342oYgp1fZQ",
+          x: 500,
+          y: 500,
+          name: "hello.txt",
+          nodeType: 1
+        }
       ],
-      links: [{ source: 1, target: 2 }],
+      links: [
+        {
+          source: "QmeY8rh5x5832wQD8mWt6cDEiX3uJHrSnEYURZQcNWBuYW",
+          target: "QmVFX5VKCN2cEGtB7JrHms1Bq9PcFQ7cDhHHujgYVyfzSA"
+        }
+      ],
       activeLink: null,
       root: null
     };
@@ -148,7 +167,7 @@ export default class Editor extends React.Component {
         let x = Math.round(clientX - rect.left) - padding;
         let y = Math.round(clientY - rect.top) - padding;
 
-        this.setState({nodes: [...this.state.nodes, {id: chosenNode.id, name: chosenNode.name,x, y}]})
+        this.setState({nodes: [...this.state.nodes, {...chosenNode, x, y}]})
 
         // console.log(x, y);
       }
