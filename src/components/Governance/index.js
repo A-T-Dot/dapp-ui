@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Search, Button, Segment, Grid, List } from 'semantic-ui-react';
+import axios from "../../api/axios";
 
 function listItem (elements) {
   const items = []
@@ -8,8 +9,8 @@ function listItem (elements) {
   for (const [index, value] of elements.entries()) {
     items.push(<Grid.Column key={index}>
       <Segment>
-        <List as={Link} to={`/ge/${value.index}`}>
-          <List.Item>GE #{value.index}</List.Item>
+        <List as={Link} to={`/ge/${value.geId}`}>
+          <List.Item>GE #{value.geId}</List.Item>
           <List.Item>{value.content}</List.Item>
         </List>
       </Segment>
@@ -20,12 +21,28 @@ function listItem (elements) {
 
 export function Governance () {
 
-  const elements = [
-    { index: 1, content: 'A collection of dog pictures' },
-    { index: 2, content: 'A collection of dog pictures' },
-    { index: 5, content: 'A collection of dog pictures' },
-  ]
-  const items = listItem(elements)
+  const [ges, setGes] = useState([]);
+  const items = listItem(ges);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await axios("/api/v1/ges");
+        let { data, error } = response;
+        if(error) {
+          console.log(error)
+          return;
+        }
+        console.log(data);
+        setGes(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchData();
+  },[]); 
+
+
 
   const [search, setSearch] = useState({ results: [], value: '', loading: false })
 

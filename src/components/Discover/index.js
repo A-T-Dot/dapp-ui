@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Search, Tab, Segment, Grid, List } from 'semantic-ui-react';
+import axios from '../../api/axios';
 
 function listItem (type, elements) {
   const items = []
@@ -8,7 +9,7 @@ function listItem (type, elements) {
     items.push(<Grid.Column key={index}>
       <Segment>
         <List>
-          <List.Item>{type} #{value.index}</List.Item>
+          <List.Item>{type} #{value.geId}</List.Item>
           <List.Item>{value.content}</List.Item>
         </List>
       </Segment>
@@ -17,91 +18,152 @@ function listItem (type, elements) {
   return items
 }
 
-export function Discover () {
+export function Discover() {
+  
+  const [ges, setGes] = useState([]);
+  const [tcxs, setTcxs] = useState([]);
+  const [nodes, setNodes] = useState([]);
 
-  const gePane = listItem('GE', [
-    { index: 1, content: 'A collection of dog pictures' },
-    { index: 2 },
-    { index: 3 },
-  ])
-  const tcsPane = listItem('TCS', [
-    { index: 1, content: 'A tcs demo' },
-    { index: 2 },
-    { index: 3 },
-  ])
-  const nodePane = listItem('Node', [
-    { index: 1, content: 'A node demo' },
-    { index: 2 },
-    { index: 3 },
-  ])
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await axios("/api/v1/ges");
+        let { data, error } = response;
+        if(error) {
+          console.log(error)
+          return;
+        }
+        console.log(data);
+        setGes(data);
+ 
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchData();
+  },[]); 
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await axios("/api/v1/tcxs");
+        let { data, error } = response;
+        if(error) {
+          console.log(error)
+          return;
+        }
+        console.log(data);
+        setTcxs(data);
+ 
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchData();
+  },[]); 
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await axios("/api/v1/nodes");
+        let { data, error } = response;
+        if (error) {
+          console.log(error);
+          return;
+        }
+        console.log(data);
+        setNodes(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchData();
+  }, []); 
+
+  const gePane = listItem("GE", ges);
+  const tcsPane = listItem("TCS", tcxs);
+  const nodePane = listItem("Node", nodes);
 
   const panes = [
     {
-      menuItem: 'GE',
-      render: () =>
+      menuItem: "GE",
+      render: () => (
         <Grid stackable columns={5}>
           {gePane}
         </Grid>
+      )
     },
     {
-      menuItem: 'TCX',
-      render: () =>
+      menuItem: "TCX",
+      render: () => (
         <Grid stackable columns={5}>
           {tcsPane}
         </Grid>
+      )
     },
     {
-      menuItem: 'Node',
-      render: () =>
+      menuItem: "Node",
+      render: () => (
         <Grid stackable columns={5}>
           {nodePane}
         </Grid>
-    },
-  ]
-  const [search, setSearch] = useState({ results: [], value: '', loading: false })
+      )
+    }
+  ];
+  const [search, setSearch] = useState({
+    results: [],
+    value: "",
+    loading: false
+  });
 
   const handleSearchChange = (event, { value }) => {
-    setSearch({ results: [], value: value, loading: true })
+    setSearch({ results: [], value: value, loading: true });
     setTimeout(() => {
       setSearch({
         loading: false,
-        results: [{
-          "title": "Pagac - Kovacek",
-          "description": "Cross-group eco-centric strategy",
-          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/nwdsha/128.jpg",
-          "price": "$71.71"
-        },
-        {
-          "title": "Mueller, Sawayn and Stamm",
-          "description": "Self-enabling bifurcated support",
-          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/waghner/128.jpg",
-          "price": "$94.97"
-        },
-        {
-          "title": "Bernhard - Rogahn",
-          "description": "Organic disintermediate challenge",
-          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/axel/128.jpg",
-          "price": "$92.87"
-        },
-        {
-          "title": "Hermann, Smith and Bogisich",
-          "description": "Persistent grid-enabled concept",
-          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/ralph_lam/128.jpg",
-          "price": "$96.26"
-        },
-        {
-          "title": "Bartell LLC",
-          "description": "Operative didactic moderator",
-          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/gt/128.jpg",
-          "price": "$54.59"
-        }]
-      })
-    }, 500)
-  }
+        results: [
+          {
+            title: "Pagac - Kovacek",
+            description: "Cross-group eco-centric strategy",
+            image:
+              "https://s3.amazonaws.com/uifaces/faces/twitter/nwdsha/128.jpg",
+            price: "$71.71"
+          },
+          {
+            title: "Mueller, Sawayn and Stamm",
+            description: "Self-enabling bifurcated support",
+            image:
+              "https://s3.amazonaws.com/uifaces/faces/twitter/waghner/128.jpg",
+            price: "$94.97"
+          },
+          {
+            title: "Bernhard - Rogahn",
+            description: "Organic disintermediate challenge",
+            image:
+              "https://s3.amazonaws.com/uifaces/faces/twitter/axel/128.jpg",
+            price: "$92.87"
+          },
+          {
+            title: "Hermann, Smith and Bogisich",
+            description: "Persistent grid-enabled concept",
+            image:
+              "https://s3.amazonaws.com/uifaces/faces/twitter/ralph_lam/128.jpg",
+            price: "$96.26"
+          },
+          {
+            title: "Bartell LLC",
+            description: "Operative didactic moderator",
+            image: "https://s3.amazonaws.com/uifaces/faces/twitter/gt/128.jpg",
+            price: "$54.59"
+          }
+        ]
+      });
+    }, 500);
+  };
   const handleResultSelect = (event, { result }) => {
-    console.log(result)
-    alert(`click item: ${result.title}`)
-  }
+    console.log(result);
+    alert(`click item: ${result.title}`);
+  };
 
   return (
     <Container>
@@ -115,6 +177,6 @@ export function Discover () {
       />
       <Tab menu={{ pointing: true }} panes={panes} />
     </Container>
-  )
+  );
 }
 
