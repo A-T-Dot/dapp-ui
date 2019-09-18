@@ -42,10 +42,17 @@ export class Whiteboard extends React.Component {
       root,
     };
 
-    let cid2 = await Ipfs.add([JSON.stringify(nodeObj)]);
-    console.log(cid2);
-    let res2 = await Ipfs.get(cid2);
-    console.log(JSON.parse(res2));
+    let cid = await Ipfs.add([JSON.stringify(nodeObj)]);
+    console.log(cid.buffer.toString('hex'));
+    let contentHashBuf = Ipfs.getContentHashBufFromCIDv0(cid);
+    console.log(
+      Ipfs.getCIDv0fromContentHashStr(
+        "0x4e8ac7dc3a61da3354ebf3ee7ed24b57df4762c2ef318c125f23cdd759362b63"
+      )
+    );
+    // let res2 = await Ipfs.get(cid2);
+    // console.log(JSON.parse(res2));
+
 
   }
 
