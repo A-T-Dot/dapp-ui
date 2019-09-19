@@ -172,7 +172,8 @@ const _handleEvents = (resolve, events, status, sectionName) => {
         resolve({
           tx: status.asFinalized.toHex(),
           data: datajson,
-          section: section.toString()
+          section: section.toString(),
+          method: method.toString()
         })
       }
     });
@@ -186,6 +187,62 @@ const geCreate = async (keys, content_hash) => {
     api.tx.ge.create(content_hash).sign(keys, { nonce }).send(({ events = [], status }) => {
       _handleEvents(resolve, events, status, "ge")
     }).catch(err => reject(err));
+  });
+}
+
+const geStake = async (keys, id, amount) => {
+  const api = await getApi();
+  return new Promise(async (resolve, reject) => {
+    const nonce = await api.query.system.accountNonce(keys.address);
+    api.tx.ge
+      .stake(id, amount)
+      .sign(keys, { nonce })
+      .send(({ events = [], status }) => {
+        _handleEvents(resolve, events, status, "ge")
+      })
+      .catch(err => reject(err));
+  });
+}
+
+const geInvest = async (keys, id, amount) => {
+  const api = await getApi();
+  return new Promise(async (resolve, reject) => {
+    const nonce = await api.query.system.accountNonce(keys.address);
+    api.tx.ge
+      .invest(id, amount)
+      .sign(keys, { nonce })
+      .send(({ events = [], status }) => {
+        _handleEvents(resolve, events, status, "ge")
+      })
+      .catch(err => reject(err));
+  });
+}
+
+const geWithdraw = async (keys, id, amount) => {
+  const api = await getApi();
+  return new Promise(async (resolve, reject) => {
+    const nonce = await api.query.system.accountNonce(keys.address);
+    api.tx.ge
+      .withdraw(id, amount)
+      .sign(keys, { nonce })
+      .send(({ events = [], status }) => {
+        _handleEvents(resolve, events, status, "ge")
+      })
+      .catch(err => reject(err));
+  });
+}
+
+const geUpdateRules = async (keys, rules) => {
+  const api = await getApi();
+  return new Promise(async (resolve, reject) => {
+    const nonce = await api.query.system.accountNonce(keys.address);
+    api.tx.ge
+      .updateRules(rules)
+      .sign(keys, { nonce })
+      .send(({ events = [], status }) => {
+        _handleEvents(resolve, events, status, "ge")
+      })
+      .catch(err => reject(err));
   });
 }
 
@@ -203,8 +260,23 @@ const nodeCreate = async (keys, content_hash, node_type, sources) => {
   });
 }
 
-// apply for a new listing
-const applyListing = async (keys, tcx_id, node_id, amount, action_id) => {
+const tcxCreate = async (keys, ge_id, tcx_type) => {
+  const api = await getApi();
+  return new Promise(async (resolve, reject) => {
+    const nonce = await api.query.system.accountNonce(keys.address);
+    api.tx.tcx
+      .proposeTcxCreation(ge_id, tcx_type)
+      .sign(keys, { nonce })
+      .send(({ events = [], status }) => {
+        _handleEvents(resolve, events, status, "tcx")
+      })
+      .catch(err => reject(err));
+  });
+}
+
+// propose
+// section.toString() === "tcx" && method.toString() === "Propose"
+const tcxPropose = async (keys, tcx_id, node_id, amount, action_id) => {
   const api = await getApi();
   return new Promise(async (resolve, reject) => {
     const nonce = await api.query.system.accountNonce(keys.address);
@@ -212,153 +284,74 @@ const applyListing = async (keys, tcx_id, node_id, amount, action_id) => {
       .propose(tcx_id, node_id, amount, action_id)
       .sign(keys, { nonce })
       .send(({ events = [], status }) => {
-        if (status.isFinalized) {
-          events.forEach(async ({ phase, event: { data, method, section } }) => {
-            if (section.toString() === "tcx" && method.toString() === "Propose") {
-              const datajson = JSON.parse(data.toString());
-              resolve({
-                tx: status.asFinalized.toHex(),
-                data: datajson
-              });
-            }
-          });
-        }
+        _handleEvents(resolve, events, status, "tcx")
       })
       .catch(err => reject(err));
   });
 }
 
-// challenge a listing
-const challengeListing = async (keys, hash, deposit) => {
+const tcxChallenge = async (keys, tcx_id, node_id, amount) => {
   const api = await getApi();
   return new Promise(async (resolve, reject) => {
     const nonce = await api.query.system.accountNonce(keys.address);
 
-    const listing = await api.query.tcx.listings(hash);
-    const listingJson = JSON.parse(listing.toString());
+    // const listing = await api.query.tcx.listings(hash);
+    // const listingJson = JSON.parse(listing.toString());
 
     api.tx.tcx
-      .challenge(listingJson.id, deposit)
+      // .challenge(listingJson.id, deposit)
+      .challenge(tcx_id, node_id, amount)
       .sign(keys, { nonce })
       .send(({ events = [], status }) => {
-        if (status.isFinalized) {
-          console.log(status.asFinalized.toHex());
-          events.forEach(async ({ phase, event: { data, method, section } }) => {
-            if (section.toString() === "tcx" && method.toString() === "Challenged") {
-              const datajson = JSON.parse(data.toString());
-              resolve({
-                tx: status.asFinalized.toHex(),
-                data: datajson
-              });
-            }
-          });
-        }
+        _handleEvents(resolve, events, status, "tcx")
       })
       .catch(err => reject(err));
   });
 }
 
-// vote on a challenged listing
-const voteListing = async (keys, hash, voteValue, deposit) => {
+const tcxResolve = async (keys, tcx_id, node_id) => {
   const api = await getApi();
   return new Promise(async (resolve, reject) => {
     const nonce = await api.query.system.accountNonce(keys.address);
-
-    const listing = await api.query.tcx.listings(hash);
-    const listingJson = JSON.parse(listing.toString());
-
-    if (listingJson.challenge_id > 0) {
-      api.tx.tcx
-        .vote(listingJson.challenge_id, voteValue, deposit)
-        .sign(keys, { nonce })
-        .send(({ events = [], status }) => {
-          if (status.isFinalized) {
-            console.log(status.asFinalized.toHex());
-            events.forEach(async ({ phase, event: { data, method, section } }) => {
-              if (section.toString() === "tcx" &&
-                method.toString() === "Voted") {
-                const datajson = JSON.parse(data.toString());
-                resolve({
-                  tx: status.asFinalized.toHex(),
-                  data: datajson
-                });
-              }
-            });
-          }
-        })
-        .catch(err => reject(err));
-    } else {
-      reject(new Error("Listing is not currently challenged."));
-    }
-  });
-}
-
-// resolve a listing
-const resolveListing = async (keys, hash) => {
-  const api = await getApi();
-  return new Promise(async (resolve, reject) => {
-    const nonce = await api.query.system.accountNonce(keys.address);
-
-    const listing = await api.query.tcx.listings(hash);
-    const listingJson = JSON.parse(listing.toString());
-
     api.tx.tcx
-      .resolve(listingJson.id)
+      .resolve(tcx_id, node_id)
       .sign(keys, { nonce })
       .send(({ events = [], status }) => {
-        if (status.isFinalized) {
-          events.forEach(async ({ phase, event: { data, method, section } }) => {
-            if (section.toString() === "tcx" &&
-              method.toString() === "Accepted") {
-              // if accepted, updated listing status
-              const datajson = JSON.parse(data.toString());
-              resolve({
-                tx: status.asFinalized.toHex(),
-                data: datajson
-              });
-            }
-
-            if (section.toString() === "tcx" &&
-              method.toString() === "Rejected") {
-              const datajson = JSON.parse(data.toString());
-              resolve({
-                tx: status.asFinalized.toHex(),
-                data: datajson
-              });
-            }
-          });
-        }
+        _handleEvents(resolve, events, status, "tcx")
       })
       .catch(err => reject(err));
   });
 }
 
-const claimReward = async (keys, challengeId) => {
+const tcxVote = async (keys, challenge_id, amount, value) => {
   const api = await getApi();
   return new Promise(async (resolve, reject) => {
     const nonce = await api.query.system.accountNonce(keys.address);
-
     api.tx.tcx
-      .claimReward(challengeId)
+      .vote(challenge_id, amount, value)
       .sign(keys, { nonce })
       .send(({ events = [], status }) => {
-        if (status.isFinalized) {
-          events.forEach(async ({ phase, event: { data, method, section } }) => {
-            if (section.toString() === "tcx" &&
-              method.toString() === "Claimed") {
-              const datajson = JSON.parse(data.toString());
-              resolve({
-                tx: status.asFinalized.toHex(),
-                data: datajson
-              });
-            }
-          });
-        }
+        _handleEvents(resolve, events, status, "tcx")
       })
       .catch(err => reject(err));
   });
 }
 
+const tcxClaim = async (keys, challenge_id) => {
+  const api = await getApi();
+  // section.toString() === "tcx" &&
+  // method.toString() === "Claimed"
+  return new Promise(async (resolve, reject) => {
+    const nonce = await api.query.system.accountNonce(keys.address);
+    api.tx.tcx
+      .claim(challenge_id)
+      .sign(keys, { nonce })
+      .send(({ events = [], status }) => {
+        _handleEvents(resolve, events, status, "tcx")
+      })
+      .catch(err => reject(err));
+  });
+}
 
 export default {
   getBalance,
@@ -367,14 +360,19 @@ export default {
   getKeysFromSeed,
   getKeysFromUri,
   connect,
-  // ------- tcx
+  // -------
   getTcxDetails,
   getTokenBalance,
   geCreate,
+  geStake,
+  geInvest,
+  geWithdraw,
+  geUpdateRules,
   nodeCreate,
-  applyListing,
-  challengeListing,
-  voteListing,
-  resolveListing,
-  claimReward
+  tcxCreate,
+  tcxPropose,
+  tcxChallenge,
+  tcxResolve,
+  tcxVote,
+  tcxClaim
 };
