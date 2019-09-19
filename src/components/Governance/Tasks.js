@@ -14,6 +14,8 @@ import Ipfs from "../../utils/Ipfs";
 import TaskModal from "../Modals/TaskModal";
 
 function Task(props) {
+  const [open, setOpen] = useState(false);
+
   let task = props.task;
   let cid = Ipfs.getCIDv0fromContentHashStr(task.nodeId).toString();
   if (task.status == 0) {
@@ -28,8 +30,13 @@ function Task(props) {
             to TCX#{task.tcxId}
           </Item.Description>
           <Button.Group floated="right">
-            <TaskModal trigger={<Button primary>Challenge</Button>} task={task} />
+            <Button color='blue' onClick={() => setOpen(true)}>Challenge</Button>
           </Button.Group>
+          <TaskModal
+            open={open}
+            closeModal={() => setOpen(false)}
+            task={task}
+          />
         </Item.Content>
       </Item>
     );
@@ -42,13 +49,19 @@ function Task(props) {
           <Item.Header>Vote now!</Item.Header>
           <Item.Description className="break-word">
             {task.challenger} challenged
-            <Link to={`/node/${cid}`}>{cid}</Link> from being added
-            to TCX#
+            <Link to={`/node/${cid}`}>{cid}</Link> from being added to TCX#
             {task.tcxId}
           </Item.Description>
           <Button.Group floated="right">
-            <TaskModal trigger={ <Button>Vote</Button> } task={task}/>
+            <Button color='orange' onClick={() => setOpen(true)}>
+              Vote
+            </Button>
           </Button.Group>
+          <TaskModal
+            open={open}
+            closeModal={() => setOpen(false)}
+            task={task}
+          />
         </Item.Content>
       </Item>
     );
@@ -65,8 +78,15 @@ function Task(props) {
             {task.tcxId} has been accepted
           </Item.Description>
           <Button.Group floated="right">
-            <TaskModal trigger={<Button positive>Claim Reward</Button>} task={task}/>
+            <Button color='green' onClick={() => setOpen(true)}>
+              Claim Reward
+            </Button>
           </Button.Group>
+          <TaskModal
+            open={open}
+            closeModal={() => setOpen(false)}
+            task={task}
+          />
         </Item.Content>
       </Item>
     );
@@ -84,8 +104,15 @@ function Task(props) {
             {task.tcxId} has been rejected
           </Item.Description>
           <Button.Group floated="right">
-            <TaskModal trigger={<Button color="red">Claim Reward</Button>} task={task}/>
+            <Button color='red' onClick={() => setOpen(true)}>
+              Challenge
+            </Button>
           </Button.Group>
+          <TaskModal
+            open={open}
+            closeModal={() => setOpen(false)}
+            task={task}
+          />
         </Item.Content>
       </Item>
     );
