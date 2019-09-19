@@ -80,7 +80,7 @@ export class Whiteboard extends React.Component {
         <Grid>
           <Grid.Row columns={2} style={{ height: "100%", padding: "0px" }}>
             <Grid.Column
-              width={3}
+              width={4}
               style={{
                 maxHeight: "100%",
                 overflow: "auto",
@@ -90,7 +90,7 @@ export class Whiteboard extends React.Component {
               <Sidebar onChoose={this.chooseNode} />
             </Grid.Column>
             <Grid.Column
-              width={13}
+              width={12}
               style={{
                 maxHeight: "100%",
                 overflow: "auto",

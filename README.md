@@ -16,5 +16,7 @@ A.T.Dot dapp ui.
 
 ### 注意
 ```
-默认调用 /api/v1/accounts/5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty/tasks
+对于account相关，默认使用5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty
+/api/v1/accounts/5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty/tasks
+/api/v1/accounts/5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty/nodes
 ```
