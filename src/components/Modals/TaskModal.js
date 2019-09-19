@@ -1,6 +1,7 @@
 import React from "react";
 import { Icon, Grid, Modal, Button, Input, Dimmer, Loader, Header } from "semantic-ui-react";
 import Ipfs from "../../utils/Ipfs";
+import chain from "../../api/chain";
 
 export default class TaskModal extends React.Component {
 
@@ -30,7 +31,9 @@ export default class TaskModal extends React.Component {
     this.setState({ loading: true, dimmerActive: true });
 
     console.log(amount);
-    // TODO: Call API
+    const keys = chain.getKeysFromUri("//Alice");
+    const challengeRes = await chain.tcxChallenge(keys, task.tcxId, task.nodeId, amount)
+    console.log("---challenge return:", challengeRes)
 
     this.setState({ loading: false})
     var that = this;
@@ -45,7 +48,9 @@ export default class TaskModal extends React.Component {
     this.setState({ loading: true, dimmerActive: true });
 
     console.log(amount);
-    // TODO: Call API
+    const keys = chain.getKeysFromUri("//Alice");
+    const voteRes = await chain.tcxVote(keys, task.challengeId, amount, value)
+    console.log("---vote return:", voteRes)
 
     this.setState({ loading: false });
     var that = this;
@@ -60,8 +65,9 @@ export default class TaskModal extends React.Component {
     this.setState({ loading: true, dimmerActive: true });
 
     console.log(amount);
-    // TODO: Call API
-
+    const keys = chain.getKeysFromUri("//Alice");
+    const claimRes = await chain.tcxClaim(keys, task.challengeId)
+    console.log("---claim return:", claimRes)
 
     
     this.setState({ loading: false });
