@@ -179,11 +179,11 @@ const _handleEvents = (resolve, events, status, sectionName) => {
   }
 }
 
-const geCreate = async (keys) => {
+const geCreate = async (keys, content_hash) => {
   const api = await getApi();
   return new Promise(async (resolve, reject) => {
     const nonce = await api.query.system.accountNonce(keys.address);
-    api.tx.ge.create().sign(keys, { nonce }).send(({ events = [], status }) => {
+    api.tx.ge.create(content_hash).sign(keys, { nonce }).send(({ events = [], status }) => {
       _handleEvents(resolve, events, status, "ge")
     }).catch(err => reject(err));
   });
@@ -197,7 +197,7 @@ const nodeCreate = async (keys, content_hash, node_type, sources) => {
       .create(content_hash, node_type, sources)
       .sign(keys, { nonce })
       .send(({ events = [], status }) => {
-        _handleEvents(resolve, events, status, "tcx")
+        _handleEvents(resolve, events, status, "node")
       })
       .catch(err => reject(err));
   });
