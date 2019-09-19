@@ -6,11 +6,13 @@ import Ipfs from "../../utils/Ipfs";
 
 export default function NodeCard(props) {
   let { link, node } = props;
-  let { sources, nodeType } = node;
+  let { sources, nodeType, referredBy } = node;
   return (
     <Card as={Link} to={link}>
       <Card.Content>
-        <Header className="break-word" size="small">{Ipfs.getCIDv0fromContentHashStr(node.nodeId).toString()}</Header>
+        <Header className="break-word" size="small">
+          {Ipfs.getCIDv0fromContentHashStr(node.nodeId).toString()}
+        </Header>
       </Card.Content>
       <Card.Content>
         <Card.Description>
@@ -21,7 +23,13 @@ export default function NodeCard(props) {
             </List.Item>
             <List.Item>
               <List.Icon name="linkify" />
-              <List.Content>{sources.length || "0"} cited sources</List.Content>
+              <List.Content>{(sources && sources.length) || "0"} cited sources</List.Content>
+            </List.Item>
+            <List.Item>
+              <List.Icon name="external alternate" />
+              <List.Content>
+                referred by {(referredBy && referredBy.length) || "0"} nodes
+              </List.Content>
             </List.Item>
           </List>
         </Card.Description>
