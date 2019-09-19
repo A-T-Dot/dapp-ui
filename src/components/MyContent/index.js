@@ -36,8 +36,8 @@ export function MyContent () {
   const [isModalOpen, setIsModalOpen] = useState({ upload: false, propose: false });
   const [modalContent, setModalContent] = useState({ index: 0 });
 
-  const handlModalOpen = (action, index) => {
-    setModalContent({ index })
+  const handlModalOpen = (action, index, nodeId) => {
+    setModalContent({ index, nodeId })
     setIsModalOpen({ upload: action === 'upload', propose: action === 'propose', transfer: action === 'transfer' });
   }
   const handlModalClose = () => {
@@ -45,7 +45,7 @@ export function MyContent () {
   }
 
   const cards = nodes.map((node, index) => {
-    let { sources, nodeType, referredBy } = node;
+    let { sources, nodeType, referredBy, nodeId } = node;
 
     return (
       <Card key={index}>
@@ -80,7 +80,7 @@ export function MyContent () {
           <div className="ui two buttons">
             <Button
               primary
-              onClick={handlModalOpen.bind(this, "propose", index)}
+              onClick={handlModalOpen.bind(this, "propose", index, nodeId)}
             >
               propose
             </Button>

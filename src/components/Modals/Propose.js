@@ -32,7 +32,6 @@ export class ModalPropose extends React.Component {
   }
 
   onChange(e) {
-    console.log(e.target);
     if (e.target.name == "tcx-id") {
       this.setState({ tcxId: e.target.value });
     } else if (e.target.name == "amount") {
@@ -47,10 +46,11 @@ export class ModalPropose extends React.Component {
     this.props.handleClose();
   }
 
-  async createNode(hash, type, sources) {
+  async propose(tcxId, nodeId, balance) {
     const keys = chain.getKeysFromUri("//Alice");
-    const nodeCreateRes = await chain.nodeCreate(keys, hash, type, sources);
-    console.log("---nodeCreate return:", nodeCreateRes);
+    const proposeRes = await chain.tcxPropose(keys, tcxId, nodeId, balance, 0)
+    console.log("---propose return:", proposeRes)
+
   }
 
   async handleClick() {
@@ -62,7 +62,8 @@ export class ModalPropose extends React.Component {
 
       // API HERE
       console.log(this.state.amount, this.state.tcxId);
-
+      
+      await this.propose(this.state.tcxId ,this.props.content.nodeId, this.state.amount)
       this.setState({
         loading: false
       });
