@@ -1,29 +1,42 @@
 import React, { Component } from "react";
-import { Button, Header, Icon, Modal } from "semantic-ui-react";
+import { Button, Header, Icon, Modal, Input } from "semantic-ui-react";
 
 export default class NewGeModalButton extends Component {
-  state = { modalOpen: false };
+  state = { modalOpen: false, metadata: '' };
 
   handleOpen = () => this.setState({ modalOpen: true });
 
   handleClose = () => this.setState({ modalOpen: false });
-
+  
+  handleChange = (e) => {
+    this.setState({ metadata: e.target.value });
+  }
+  
   render() {
     return (
       <Modal
-        trigger={<Button basic color='blue' onClick={this.handleOpen}>Show Modal</Button>}
+        trigger={
+          <Button basic color="blue" onClick={this.handleOpen}>
+            New Governance Entity
+          </Button>
+        }
         open={this.state.modalOpen}
         onClose={this.handleClose}
-        size="small"
+        size="tiny"
         closeIcon
       >
         <Header icon="group" content="New Governance Entity" />
         <Modal.Content>
-          <h3>This website uses cookies to ensure the best user experience.</h3>
+          <Input
+            icon="tag"
+            iconPosition="left"
+            placeholder="Few words to describe GE"
+            onChange={this.handleChange}
+          />
         </Modal.Content>
         <Modal.Actions>
-          <Button color="green" onClick={this.handleClose} inverted>
-            <Icon name="checkmark" /> Got it
+          <Button primary onClick={this.handleClose}>
+            <Icon name="checkmark" /> Create
           </Button>
         </Modal.Actions>
       </Modal>

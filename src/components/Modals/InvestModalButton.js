@@ -1,12 +1,16 @@
 import React, { Component } from "react";
-import { Button, Header, Icon, Modal } from "semantic-ui-react";
+import { Button, Header, Icon, Modal, Input } from "semantic-ui-react";
 
 export default class InvestModalButton extends Component {
-  state = { modalOpen: false };
+  state = { modalOpen: false, metadata: '' };
 
   handleOpen = () => this.setState({ modalOpen: true });
 
   handleClose = () => this.setState({ modalOpen: false });
+
+  handleChange = (e) => {
+    this.setState({ metadata: e.target.value });
+  }
 
   render() {
     return (
@@ -21,13 +25,18 @@ export default class InvestModalButton extends Component {
         size="small"
         closeIcon
       >
-        <Header icon="browser" content="Invest" />
+        <Header icon="money bill alternate" content="Invest" />
         <Modal.Content>
-          <h3>This website uses cookies to ensure the best user experience.</h3>
+          <Input
+            icon="dollar sign"
+            iconPosition="left"
+            placeholder="amount"
+            onChange={this.handleChange}
+          />
         </Modal.Content>
         <Modal.Actions>
           <Button color="green" onClick={this.handleClose} inverted>
-            <Icon name="checkmark" /> Got it
+            <Icon name="checkmark" /> Invest
           </Button>
         </Modal.Actions>
       </Modal>

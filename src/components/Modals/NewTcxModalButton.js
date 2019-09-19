@@ -1,12 +1,14 @@
 import React, { Component } from "react";
-import { Button, Header, Icon, Modal } from "semantic-ui-react";
+import { Button, Header, Icon, Modal, Input } from "semantic-ui-react";
 
 export default class NewTcxModalButton extends Component {
-  state = { modalOpen: false };
+  state = { modalOpen: false,  };
 
   handleOpen = () => this.setState({ modalOpen: true });
 
   handleClose = () => this.setState({ modalOpen: false });
+
+ 
 
   render() {
     return (
@@ -23,7 +25,12 @@ export default class NewTcxModalButton extends Component {
       >
         <Header icon="list" content="New TCX" />
         <Modal.Content>
-          <h3>This website uses cookies to ensure the best user experience.</h3>
+          <Input
+            icon="tag"
+            iconPosition="left"
+            placeholder="Few words to describe GE"
+            onChange={this.handleChange}
+          />
         </Modal.Content>
         <Modal.Actions>
           <Button color="green" onClick={this.handleClose} inverted>
