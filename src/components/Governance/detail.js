@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Button, Card, Grid, List } from 'semantic-ui-react';
+import { Container, Button, Card, Grid, List, Header } from 'semantic-ui-react';
 import Tasks from './Tasks';
 import axios from '../../api/axios';
 import TcxCard from '../Cards/TcxCard';
@@ -75,11 +75,18 @@ export function GovernanceDetail (props) {
     <Container>
       <Grid>
         <Grid.Column width={16}>
-          GE #{current.index}: {current.content}
-          <Button style={{ marginLeft: "1rem" }} basic color="blue">
-            Buy GE{current.index}
-          </Button>
-          <Button primary>New TCX</Button>
+          <Header floated='left' size='large'>
+            GE #{current.index}: {current.content}
+          </Header>
+          <Button.Group floated="right">
+            <Button basic color="blue">
+              Stake
+            </Button>
+            <Button basic color="blue">
+              Invest
+            </Button>
+            <Button primary>New TCX</Button>
+          </Button.Group>
         </Grid.Column>
         <Grid.Column width={16}>
           Your balance: {balance.atdot}ATDot, {balance.token}GE{current.index}{" "}

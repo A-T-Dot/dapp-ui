@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Button, Card, Grid, List } from 'semantic-ui-react';
+import { Container, Button, Card, Grid, List, Header } from 'semantic-ui-react';
 import NodeCard from '../Cards/NodeCard';
 import axios from '../../api/axios';
 
@@ -46,18 +46,21 @@ export function TCXDetail (props) {
     <Container>
       <Grid>
         <Grid.Column width={16}>
-          TCX #{current.index}: {current.content}
-          <Button style={{ marginLeft: '1rem'}} primary>Add Content Node</Button>
+          <Header floated='left' size='large'>
+            TCX #{current.index}: {current.content}
+          </Header>
+          <Button floated='right' primary>
+            Add Content Node
+          </Button>
         </Grid.Column>
         <Grid.Column width={16}>
-          Your balance: {balance.atdot}ATDot, {balance.token}GE{current.index} Token
+          Your balance: {balance.atdot}ATDot, {balance.token}GE{current.index}{" "}
+          Token
         </Grid.Column>
       </Grid>
 
-      <Card.Group>
-        {items}
-      </Card.Group>
+      <Card.Group>{items}</Card.Group>
     </Container>
-  )
+  );
 }
 
