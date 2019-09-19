@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon, Grid, Modal, Button, Input } from "semantic-ui-react";
+import { Icon, Grid, Modal, Button, Input, Dimmer, Loader, Header } from "semantic-ui-react";
 import Ipfs from "../../utils/Ipfs";
 
 export default class TaskModal extends React.Component {
@@ -10,33 +10,65 @@ export default class TaskModal extends React.Component {
     this.vote = this.vote.bind(this);
     this.claim = this.claim.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleClose = this.handleClose.bind(this);
 
     this.state = {
-      amount: 0
+      amount: 0,
+      dimmerActive: false,
+      loading: false,
     }
+  }
+
+  handleClose() {
+    this.setState({ dimmerActive: false, loading: false});
+    this.props.closeModal();
   }
 
   async challenge() {
     let { task, closeModal } = this.props;
     let { amount } = this.state;
+    this.setState({ loading: true, dimmerActive: true });
+
     console.log(amount);
     // TODO: Call API
-    closeModal();
+
+    this.setState({ loading: false})
+    var that = this;
+    setTimeout(() => {
+      that.handleClose();
+    }, 3000);
   }
 
   async vote(value) {
     let { task, closeModal } = this.props;
-    // TODO: Call API
-    console.log(value);
-    closeModal();
+    let { amount } = this.state;
+    this.setState({ loading: true, dimmerActive: true });
 
+    console.log(amount);
+    // TODO: Call API
+
+    this.setState({ loading: false });
+    var that = this;
+    setTimeout(() => {
+      that.handleClose();
+    }, 3000);
   }
 
   async claim() {
     let { task, closeModal } = this.props;
+    let { amount } = this.state;
+    this.setState({ loading: true, dimmerActive: true });
+
+    console.log(amount);
     // TODO: Call API
 
-    closeModal();
+
+    
+    this.setState({ loading: false });
+    var that = this;
+    setTimeout(() => {
+      that.handleClose();
+    }, 3000);
   }
 
   handleChange(e) {
@@ -45,7 +77,21 @@ export default class TaskModal extends React.Component {
 
   render() {
       let { task, open, closeModal } = this.props;
+      let { loading, dimmerActive} = this.state;
       let cid = Ipfs.getCIDv0fromContentHashStr(task.nodeId).toString();
+
+      let dimmerContent;
+      if (loading) {
+        dimmerContent = <Loader content="Loading" />;
+      } else {
+        dimmerContent = (
+          <Header as="h2" icon inverted>
+            <Icon name="checkmark" />
+            OK
+          </Header>
+        );
+      }
+  
 
       if (task.status == 0) {
         return (
@@ -54,8 +100,9 @@ export default class TaskModal extends React.Component {
             centered={true}
             closeIcon
             size="small"
-            onClose={() => closeModal()}
+            onClose={this.handleClose}
           >
+            <Dimmer active={dimmerActive}>{dimmerContent}</Dimmer>
             <Modal.Header>Challenge</Modal.Header>
             <Modal.Content>
               You want to challenge {task.proposer}'s proposal to add {cid} to
@@ -69,7 +116,7 @@ export default class TaskModal extends React.Component {
                 placeholder="amount"
                 onChange={this.handleChange}
               />
-              <Button color="green" onClick={async() => this.challenge()}>
+              <Button color="green" onClick={async () => this.challenge()}>
                 <Icon name="checkmark" /> Challenge
               </Button>
             </Modal.Actions>
@@ -82,8 +129,9 @@ export default class TaskModal extends React.Component {
             centered={true}
             closeIcon
             size="small"
-            onClose={() => closeModal()}
+            onClose={this.handleClose}
           >
+            <Dimmer active={dimmerActive}>{dimmerContent}</Dimmer>
             <Modal.Header>Vote</Modal.Header>
             <Modal.Content>
               Please vote whether you think {cid} should be added to TCX#{" "}
@@ -106,13 +154,14 @@ export default class TaskModal extends React.Component {
             centered={true}
             closeIcon
             size="small"
-            onClose={() => closeModal()}
+            onClose={this.handleClose}
           >
+            <Dimmer active={dimmerActive}>{dimmerContent}</Dimmer>
             <Modal.Header>Claim Reward</Modal.Header>
             <Modal.Content>
               <div>
-              {task.proposer}'s proposal to add {cid} to TCX#
-              {task.tcxId} has been accepted. Please claim your reward!
+                {task.proposer}'s proposal to add {cid} to TCX#
+                {task.tcxId} has been accepted. Please claim your reward!
               </div>
             </Modal.Content>
             <Modal.Actions>
@@ -129,8 +178,9 @@ export default class TaskModal extends React.Component {
             centered={true}
             closeIcon
             size="small"
-            onClose={() => closeModal()}
+            onClose={this.handleClose}
           >
+            <Dimmer active={dimmerActive}>{dimmerContent}</Dimmer>
             <Modal.Header>Claim Reward</Modal.Header>
             <Modal.Content>
               {task.proposer}'s proposal to add
@@ -139,7 +189,7 @@ export default class TaskModal extends React.Component {
             </Modal.Content>
             <Modal.Actions>
               <Button color="green">
-                <Icon name="checkmark" onClick={this.claim}/> Claim
+                <Icon name="checkmark" onClick={this.claim} /> Claim
               </Button>
             </Modal.Actions>
           </Modal>

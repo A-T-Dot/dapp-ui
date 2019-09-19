@@ -1,39 +1,85 @@
 import React, { Component } from "react";
-import { Button, Header, Icon, Modal, Input } from "semantic-ui-react";
+import { Button, Header, Icon, Modal, Input, Loader, Dimmer } from "semantic-ui-react";
+import chain from "../../api/chain";
 
 export default class NewTcxModalButton extends Component {
-  state = { modalOpen: false,  };
+  state = { modalOpen: false, metadata: '', loading: false, dimmerActive: false, tcxId: '' };
 
   handleOpen = () => this.setState({ modalOpen: true });
 
-  handleClose = () => this.setState({ modalOpen: false });
+  handleClose = () => this.setState({ modalOpen: false, dimmerActive: false});
+  
+  handleChange = (e) => {
+    this.setState({ metadata: e.target.value });
+  }
 
- 
+  onClick = async () => {
+    try {
+      this.setState({
+        loading: true,
+        dimmerActive: true
+      });
+
+      // write to chain
+      const keys = chain.getKeysFromUri("//Alice");
+
+      // const tcxCreateRes = await chain.geTcx(keys, this.state.metadata);
+      // console.log("---nodeCreate return:", geCreateRes);
+      // let tcxId = geCreateRes.data[1];
+      let tcxId = 1;
+
+      this.setState({ loading: false, tcxId})
+      var that = this;
+      setTimeout(() => {
+        that.handleClose();
+      }, 3000);
+    } catch (e) {
+      this.handleClose();
+      console.error(e);
+    }
+  }
+
+
 
   render() {
+    let { loading, tcxId, dimmerActive } = this.state;
+
+    let dimmerContent;
+    if (loading) {
+      dimmerContent = <Loader content="Loading" />;
+    } else {
+      dimmerContent = (
+        <Header as="h2" icon inverted>
+          <Icon name="checkmark" />
+          Tcx #{tcxId} Created
+        </Header>
+      );
+    }
+  
     return (
       <Modal
         trigger={
           <Button basic color="blue" onClick={this.handleOpen}>
-            New Tcx
+            New TCX
           </Button>
         }
         open={this.state.modalOpen}
         onClose={this.handleClose}
-        size="small"
+        size="tiny"
         closeIcon
       >
-        <Header icon="list" content="New TCX" />
+        <Dimmer active={dimmerActive}>{dimmerContent}</Dimmer>
+        <Header icon="group" content="New TCX" />
         <Modal.Content>
           <Input
             icon="tag"
             iconPosition="left"
-            placeholder="Few words to describe GE"
+            placeholder="Few words to describe TCX"
             onChange={this.handleChange}
           />
         </Modal.Content>
         <Modal.Actions>
-          <Button color="blue" onClick={this.handleClose}>
+          <Button primary onClick={this.onClick}>
             <Icon name="checkmark" /> Create
           </Button>
         </Modal.Actions>
