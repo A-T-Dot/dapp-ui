@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Search, Button, Card, Grid, List } from 'semantic-ui-react';
+import { Container, Search, Button, Card, Grid, List, Item } from 'semantic-ui-react';
 import axios from "../../api/axios";
+import Tasks from './Tasks';
 
 function listItem (elements) {
   const items = []
@@ -20,6 +21,7 @@ function listItem (elements) {
   }
   return items
 }
+
 
 export function Governance () {
 
@@ -43,6 +45,27 @@ export function Governance () {
     }
     fetchData();
   },[]); 
+
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        // TODO: change to dynamic key
+        const response = await axios("/api/v1/accounts/5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty/tasks");
+        let { data, error } = response;
+        if (error) {
+          console.log(error);
+          return;
+        }
+        console.log(data);
+        setTasks(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchData();
+  }, []); 
 
 
 
@@ -109,10 +132,16 @@ export function Governance () {
           <Button primary>New Whiteboard</Button>
         </Grid.Column>
       </Grid>
-
-      <Card.Group>
-        {items}
-      </Card.Group>
+      <Grid>
+        <Grid.Column width={11}>
+          <Card.Group>
+            {items}
+          </Card.Group>
+        </Grid.Column>
+        <Grid.Column width={5}>
+          <Tasks tasks={tasks} />
+        </Grid.Column>
+      </Grid>
     </Container>
   )
 }
