@@ -75,7 +75,7 @@ export function GovernanceDetail (props) {
     <Container>
       <Grid>
         <Grid.Column width={16}>
-          <Header floated='left' size='large'>
+          <Header floated="left" size="large">
             GE #{current.index}: {current.content}
           </Header>
           <Button.Group floated="right">
@@ -95,7 +95,7 @@ export function GovernanceDetail (props) {
       </Grid>
       <Grid>
         <Grid.Column width={12}>
-          <Card.Group>{items}</Card.Group>
+          <Card.Group itemsPerRow={3}>{items}</Card.Group>
         </Grid.Column>
         <Grid.Column width={4}>
           <Tasks tasks={tasks} />

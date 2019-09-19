@@ -127,7 +127,7 @@ export function Governance () {
         </Grid>
         <Grid>
           <Grid.Column width={12}>
-            <Card.Group>{items}</Card.Group>
+            <Card.Group itemsPerRow={3}>{items}</Card.Group>
           </Grid.Column>
           <Grid.Column width={4}>
             <Tasks tasks={tasks} />

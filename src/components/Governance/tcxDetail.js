@@ -59,7 +59,7 @@ export function TCXDetail (props) {
         </Grid.Column>
       </Grid>
 
-      <Card.Group>{items}</Card.Group>
+      <Card.Group itemsPerRow={3}>{items}</Card.Group>
     </Container>
   );
 }
