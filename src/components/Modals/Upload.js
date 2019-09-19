@@ -22,6 +22,7 @@ export class ModalUpload extends React.Component {
     this.uploadToIpfs = this.uploadToIpfs.bind(this)
     this.onChange = this.onChange.bind(this)
     this.handleClick = this.handleClick.bind(this)
+    this.onClose = this.onClose.bind(this)
   }
 
   onChange(e) {
@@ -36,8 +37,13 @@ export class ModalUpload extends React.Component {
       this.setState({ sources: e.target.value.split(",")})
     }
  
+  }
 
-
+  onClose() {
+    this.setState({
+      dimmerActive: false
+    });
+    this.props.handleClose();
   }
 
   async uploadToIpfs() {
@@ -78,10 +84,13 @@ export class ModalUpload extends React.Component {
 
       var that = this;
       setTimeout(() => {
+        that.setState({
+          dimmerActive: false
+        });
         that.props.handleClose();
       }, 3000);
     } catch(e) {
-      that.props.handleClose();
+      this.props.handleClose();
       console.error(e);
     }
 
@@ -107,7 +116,7 @@ export class ModalUpload extends React.Component {
   
 
     return (
-      <Modal open={isOpen} size="tiny" onClose={handleClose} closeIcon>
+      <Modal open={isOpen} size="tiny" onClose={this.onClose} closeIcon>
         <Dimmer active={dimmerActive}>
           {dimmerContent}
         </Dimmer>
