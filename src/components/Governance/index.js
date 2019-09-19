@@ -3,22 +3,14 @@ import { Link } from 'react-router-dom';
 import { Container, Search, Button, Card, Grid, List, Item, Segment } from 'semantic-ui-react';
 import axios from "../../api/axios";
 import Tasks from './Tasks';
+import GeCard from '../Cards/GeCard';
 
 function listItem (elements) {
-  const items = []
 
-  for (const [index, value] of elements.entries()) {
-    items.push(
-      <Card key={index} as={Link} to={`/ge/${value.geId}`}>
-        <Card.Content>
-          <Card.Header>GE #{value.geId}</Card.Header>
-          <Card.Description>
-            {"asdf"}
-          </Card.Description>
-        </Card.Content>
-      </Card>
-    )
-  }
+  let items = elements.map((ele, index) => {
+    return <GeCard key={index} link={`/ge/${ele.geId}`} ge={ele} />;
+  });
+
   return items
 }
 
@@ -133,8 +125,6 @@ export function Governance () {
             </Button>
           </Grid.Column>
         </Grid>
-      </Container>
-      <Container>
         <Grid>
           <Grid.Column width={12}>
             <Card.Group>{items}</Card.Group>

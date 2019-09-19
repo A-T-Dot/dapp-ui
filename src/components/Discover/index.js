@@ -1,28 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Search, Tab, Card, Button, List } from 'semantic-ui-react';
 import axios from '../../api/axios';
+import GeCard from '../Cards/GeCard';
+import TcxCard from '../Cards/TcxCard';
+import NodeCard from '../Cards/NodeCard';
 
 function listItem (type, elements) {
-  const items = []
-
-  for (const [index, value] of elements.entries()) {
-    items.push(
-      <Card key={index}>
-        <Card.Content>
-          <Card.Header>{type} #{value.geId}</Card.Header>
-          <Card.Description>
-            {value.content}
-          </Card.Description>
-        </Card.Content>
-        {/* <Card.Content extra>
-          <div className='ui two buttons'>
-            <Button primary>propose</Button>
-            <Button basic color='blue'>transfer</Button>
-          </div>
-        </Card.Content> */}
-      </Card>
-    )
+  let items;
+  if(type == "GE") {
+    items = elements.map((ele, index) => {
+      return <GeCard key={index} link={`/ge/${ele.geId}`} ge={ele} />;
+    });
+  } else if (type == "TCX") {
+    items = elements.map((ele, index) => {
+      return <TcxCard key={index} link={`/ge/${ele.owner}/tcx/${ele.tcxId}`} tcx={ele} />;
+    });
+  } else {
+    items = elements.map((ele, index) => {
+      return <NodeCard key={index} link={`/node/${ele.nodeId}`} node={ele} />;
+    });
   }
+
   return (
     <Card.Group>
       {items}
@@ -93,7 +91,7 @@ export function Discover() {
   }, []); 
 
   const gePane = listItem("GE", ges);
-  const tcsPane = listItem("TCS", tcxs);
+  const tcsPane = listItem("TCX", tcxs);
   const nodePane = listItem("Node", nodes);
 
   const panes = [
