@@ -23,12 +23,11 @@ export default class NewTcxModalButton extends Component {
       // write to chain
       const keys = chain.getKeysFromUri("//Alice");
 
-      // const tcxCreateRes = await chain.geTcx(keys, this.state.metadata);
-      // console.log("---nodeCreate return:", geCreateRes);
-      // let tcxId = geCreateRes.data[1];
-      let tcxId = 1;
+      const tcxCreateRes = await chain.tcxCreate(keys, this.props.geId, 0, this.state.metadata);
+      console.log("---tcxCreate return:", tcxCreateRes);
+      let tcxId = tcxCreateRes.data[1];
 
-      this.setState({ loading: false, tcxId})
+      this.setState({ loading: false, tcxId });
       var that = this;
       setTimeout(() => {
         that.handleClose();

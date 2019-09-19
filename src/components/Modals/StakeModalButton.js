@@ -21,11 +21,13 @@ export default class StakeModalButton extends Component {
       });
 
       // // write to chain
-      // const keys = chain.getKeysFromUri("//Alice");
+      const keys = chain.getKeysFromUri("//Alice");
 
       // const geCreateRes = await chain.geCreate(keys, this.state.metadata);
       // console.log("---nodeCreate return:", geCreateRes);
       // let geId = geCreateRes.data[1];
+      const geStakeRes = await chain.geStake(keys, this.props.geId, this.state.amount)
+      console.log("---geStake return:", geStakeRes)
 
       this.setState({ loading: false})
       var that = this;
@@ -39,7 +41,7 @@ export default class StakeModalButton extends Component {
   }
 
   render() {
-    let { loading, geId, dimmerActive, amount } = this.state;
+    let { loading, dimmerActive, amount } = this.state;
 
     let dimmerContent;
     if (loading) {

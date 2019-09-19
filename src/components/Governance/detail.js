@@ -20,7 +20,7 @@ export function GovernanceDetail (props) {
   const { geid } = props.match.params;
   const [current, setCurrent] = useState({
     index: geid,
-    content: "some desc"
+    metadata: ""
   });
 
   const [tcxs, setTcxs] = useState([]);
@@ -32,14 +32,15 @@ export function GovernanceDetail (props) {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios("/api/v1/tcxs");
+        const response = await axios(`/api/v1/ges/${geid}`);
         let { data, error } = response;
         if (error) {
           console.log(error);
           return;
         }
-        console.log(data);
-        setTcxs(data);
+        console.log("data", data);
+        setCurrent({metadata: data.contentHash})
+        setTcxs(data.tcxs);
       } catch (error) {
         console.error(error);
       }
@@ -79,12 +80,12 @@ export function GovernanceDetail (props) {
       <Grid>
         <Grid.Column width={16}>
           <Header floated="left" size="large">
-            GE #{current.index}: {current.content}
+            GE #{current.index}: {current.metadata}
           </Header>
           <Button.Group floated="right">
-            <StakeModalButton/>
-            <InvestModalButton/>
-            <NewTcxModalButton />
+            <StakeModalButton geId={geid} />
+            <InvestModalButton geId={geid} />
+            <NewTcxModalButton geId={geid} />
           </Button.Group>
         </Grid.Column>
         <Grid.Column width={16}>

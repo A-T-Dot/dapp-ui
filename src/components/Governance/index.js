@@ -45,7 +45,7 @@ export function Governance () {
     async function fetchData() {
       try {
         // TODO: change to dynamic key
-        const response = await axios("/api/v1/accounts/5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty/tasks");
+        const response = await axios("/api/v1/accounts/5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY/tasks");
         let { data, error } = response;
         if (error) {
           console.log(error);
