@@ -39,18 +39,32 @@ setTimeout(async () => {
 
   // 2.创建node
   // 涉及invest / stake
-  const nodeCreateRes = await chain.nodeCreate(keys)
+  const nodeCreateRes = await chain.nodeCreate(keys, 'content_hash', 'node_type', '')
   console.log("---nodeCreate return:", nodeCreateRes)
-
+  
   // 3.创建tcx
-
-
+  const tcxCreateRes = await chain.tcxCreate(keys, 'ge_id', 'tcx_type')
+  console.log("---tcxCreate return:", tcxCreateRes)
+  
   // 4.propose  
-  const proposeRes = await chain.applyListing(keys, '1', '2', 10000000000, 'action_id')
+  const proposeRes = await chain.tcxPropose(keys, '1', '2', 10000000000, 'action_id')
   console.log("---propose return:", proposeRes)
 
   // 5.challenge
+  const challengeRes = await chain.tcxChallenge(keys, 'tcx_id', 'node_id', 10000000000)
+  console.log("---challenge return:", challengeRes)
 
+  // 6.resolve
+  const resolveRes = await chain.tcxResolve(keys, 'tcx_id', 'node_id')
+  console.log("---resolve return:", resolveRes)
+
+  // 7.vote
+  const voteRes = await chain.tcxVote(keys, 'challenge_id', 10000000000, false)
+  console.log("---vote return:", voteRes)
+
+  // 8.claim
+  const claimRes = await chain.tcxClaim(keys, 'challenge_id')
+  console.log("---claim return:", claimRes)
 
 }, 2000)
 
