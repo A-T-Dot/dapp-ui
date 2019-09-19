@@ -4,6 +4,9 @@ import { Container, Button, Card, Grid, List, Header } from 'semantic-ui-react';
 import Tasks from './Tasks';
 import axios from '../../api/axios';
 import TcxCard from '../Cards/TcxCard';
+import NewTcxModalButton from '../Modals/NewTcxModalButton';
+import StakeModalButton from "../Modals/StakeModalButton";
+import InvestModalButton from "../Modals/InvestModalButton";
 
 function listItem (current, elements) {
   let items = elements.map((ele, index) => {
@@ -79,13 +82,9 @@ export function GovernanceDetail (props) {
             GE #{current.index}: {current.content}
           </Header>
           <Button.Group floated="right">
-            <Button basic color="blue">
-              Stake
-            </Button>
-            <Button basic color="blue">
-              Invest
-            </Button>
-            <Button primary>New TCX</Button>
+            <StakeModalButton/>
+            <InvestModalButton/>
+            <NewTcxModalButton />
           </Button.Group>
         </Grid.Column>
         <Grid.Column width={16}>

@@ -4,6 +4,7 @@ import { Container, Search, Button, Card, Grid, List, Item, Segment } from 'sema
 import axios from "../../api/axios";
 import Tasks from './Tasks';
 import GeCard from '../Cards/GeCard';
+import NewGeModalButton from "../Modals/NewGeModalButton";
 
 function listItem (elements) {
 
@@ -120,9 +121,7 @@ export function Governance () {
             />
           </Grid.Column>
           <Grid.Column floated="right" textAlign="right" width={8}>
-            <Button basic color="blue">
-              New GE
-            </Button>
+            <NewGeModalButton/>
           </Grid.Column>
         </Grid>
         <Grid>
