@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
-import { Container, Segment, Header, List, Button, Grid } from 'semantic-ui-react';
+import { Container, Segment, Header, Card, Button, Grid } from 'semantic-ui-react';
 import { ModalUpload } from '../Modals/Upload';
 import { ModalPropose } from '../Modals/Propose';
 
@@ -15,34 +15,36 @@ export function MyContent () {
     { type: 'jpeg' },
     { type: 'mp4' },
     { type: 'whiteboard' },
-    { type: 'whiteboard' },
-    { type: 'whiteboard' },
-    { type: 'whiteboard' },
   ])
   const [isModalOpen, setIsModalOpen] = useState({ upload: false, propose: false });
   const [modalContent, setModalContent] = useState({ index: 0 });
 
-
   const handlModalOpen = (action, index) => {
     setModalContent({ index })
-    setIsModalOpen({ upload: action === 'upload', propose: action === 'propose' });
+    setIsModalOpen({ upload: action === 'upload', propose: action === 'propose', transfer: action === 'transfer' });
   }
   const handlModalClose = () => {
-    setIsModalOpen({ upload: false, propose: false });
+    setIsModalOpen({ upload: false, propose: false, transfer: false });
   }
 
   const items = []
 
   for (const [index, value] of elements.entries()) {
-    items.push(<Grid.Column key={index}>
-      <Segment>
-        <List>
-          <List.Item>node id: #{index}</List.Item>
-          <List.Item>node type: {value.type}</List.Item>
-        </List>
-        <Button primary onClick={handlModalOpen.bind(this, 'propose', index)}>propose</Button>
-      </Segment>
-    </Grid.Column>)
+    items.push(<Card key={index}>
+      <Card.Content>
+        <Card.Header>node id: #{index}</Card.Header>
+        <Card.Description>
+          node type: {value.type}
+        </Card.Description>
+      </Card.Content>
+      <Card.Content extra>
+        <div className='ui two buttons'>
+          <Button primary onClick={handlModalOpen.bind(this, 'propose', index)}>propose</Button>
+          <Button basic color='blue' onClick={handlModalOpen.bind(this, 'transfer', index)}>transfer</Button>
+        </div>
+      </Card.Content>
+    </Card>
+    )
   }
 
   return (
@@ -54,18 +56,19 @@ export function MyContent () {
             Your balance: {account.balance} ATDot
           </Grid.Column>
           <Grid.Column floated='right' textAlign='right' width={8}>
-            <Button basic onClick={handlModalOpen.bind(this, 'upload', 0)}>Upload File</Button>
+            <Button basic color='blue' onClick={handlModalOpen.bind(this, 'upload', 0)}>Upload File</Button>
             <Button primary as={Link} to='whiteboard'>New Whiteboard</Button>
           </Grid.Column>
         </Grid>
       </Header>
 
-      <Grid stackable columns={5}>
+      <Card.Group>
         {items}
-      </Grid>
+      </Card.Group>
 
       <ModalUpload isOpen={isModalOpen.upload} handleClose={handlModalClose} content={modalContent} />
       <ModalPropose isOpen={isModalOpen.propose} handleClose={handlModalClose} content={modalContent} />
+      <ModalPropose isOpen={isModalOpen.transfer} handleClose={handlModalClose} content={modalContent} />
 
     </Container>
   )

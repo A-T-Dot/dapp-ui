@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Button, Segment, Grid, List } from 'semantic-ui-react';
+import { Container, Button, Card, Grid, List } from 'semantic-ui-react';
 
 function listItem (current, elements) {
   const items = []
 
   for (const [index, value] of elements.entries()) {
-    items.push(<Grid.Column key={index}>
-      <Segment>
-        <List as={Link} to={`/ge/${current.index}/tcx/${value.index}`}>
-          <List.Item>TCX #{value.index}</List.Item>
-          <List.Item>{value.content}</List.Item>
-        </List>
-      </Segment>
-    </Grid.Column>)
+    items.push(<Card key={index}>
+      <Card.Content>
+        <Card.Header>TCX #{value.index}</Card.Header>
+        <Card.Description>
+          <List as={Link} to={`/ge/${current.index}/tcx/${value.index}`}>
+            <List.Item>{value.content}</List.Item>
+          </List>
+        </Card.Description>
+      </Card.Content>
+    </Card>)
   }
   return items
 }
@@ -29,7 +31,7 @@ export function GovernanceDetail (props) {
   const { geid } = props.match.params
   const [balance, setBalance] = useState({ atdot: 50, token: 30 })
   const [current, setCurrent] = useState({ index: geid, content: 'some desc' })
-  
+
   const items = listItem(current, elements)
 
 
@@ -38,7 +40,7 @@ export function GovernanceDetail (props) {
       <Grid>
         <Grid.Column width={16}>
           GE #{current.index}: {current.content}
-          <Button style={{ marginLeft: '1rem' }} default>Buy GE{current.index}</Button>
+          <Button style={{ marginLeft: '1rem' }} basic color='blue'>Buy GE{current.index}</Button>
           <Button primary>New TCX</Button>
         </Grid.Column>
         <Grid.Column width={16}>
@@ -46,9 +48,9 @@ export function GovernanceDetail (props) {
         </Grid.Column>
       </Grid>
 
-      <Grid stackable columns={5}>
+      <Card.Group>
         {items}
-      </Grid>
+      </Card.Group>
     </Container>
   )
 }

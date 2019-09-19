@@ -136,6 +136,36 @@ const connect = async () => {
   return { chain, name, version };
 }
 
+const nodeCreate = async (keys, content_hash, node_type, sources) => {
+  console.log(keys, content_hash, node_type, sources)
+  return new Promise(async (resolve, reject) => {
+    const nonce = await api.query.system.accountNonce(keys.address);
+    console.log(sources)
+    api.tx.node
+      .create(content_hash, node_type, sources)
+      .sign(keys, { nonce })
+      .send(({ events = [], status }) => {
+        console.log('------146')
+        console.log(status.isFinalized)
+        if (status.isFinalized) {
+          console.log(status.asFinalized.toHex());
+          events.forEach(async ({ phase, event: { data, method, section } }) => {
+            console.log('------151')
+            console.log(method.toString())
+            if (section.toString() === "tcx") {
+              const datajson = JSON.parse(data.toString());
+              resolve({
+                tx: status.asFinalized.toHex(),
+                data: datajson
+              });
+            }
+          });
+        }
+      })
+      .catch(err => reject(err));
+  });
+}
+
 const getTcxDetails = async (keys) => {
   console.log('------- getTcxDetails')
   console.log(api.query)
@@ -165,28 +195,19 @@ const applyListing = async (keys, tcx_id, node_id, amount, action_id) => {
       .propose(tcx_id, node_id, amount, action_id)
       .sign(keys, { nonce })
       .send(({ events = [], status }) => {
+        console.log('------184')
+        console.log(status.isFinalized)
         if (status.isFinalized) {
           console.log(status.asFinalized.toHex());
-          // events.forEach(async ({ phase, event: { data, method, section } }) => {
-          //   console.log('\t', phase.toString(), `: ${section}.${method}`, data.toString());
-          //   // check if the tcr proposed event was emitted by Substrate runtime
-          //   if (section.toString() === "tcr" && method.toString() === "Proposed") {
-          //     // insert metadata in off-chain store
-          //     const datajson = JSON.parse(data.toString());
-          //     const listingInstance = {
-          //       name: name,
-          //       owner: datajson[0],
-          //       hash: datajson[1],
-          //       deposit: datajson[2],
-          //       isWhitelisted: false,
-          //       challengeId: 0,
-          //       rejected: false
-          //     }
-          //     // await dataService.insertListing(listingInstance);
-          //     // resolve the promise with listing data
-          //     resolve(listingInstance);
-          //   }
-          // });
+          events.forEach(async ({ phase, event: { data, method, section } }) => {
+            if (section.toString() === "tcx" && method.toString() === "Propose") {
+              const datajson = JSON.parse(data.toString());
+              resolve({
+                tx: status.asFinalized.toHex(),
+                data: datajson
+              });
+            }
+          });
         }
       })
       .catch(err => reject(err));
@@ -365,4 +386,5 @@ export default {
   voteListing,
   resolveListing,
   claimReward,
+  nodeCreate,
 };
