@@ -13,29 +13,35 @@ import chain from "./api/chain";
 
 import './App.css';
 
-// const CASTOR_PROVIDER = 'ws://127.0.0.1:9944';
-// // const CASTOR_PROVIDER = 'wss://polkadot:9944';
-// chain.init(CASTOR_PROVIDER, run);
-// function run () {
-//   chain.connect()
-//   chain.getBalance(
-//     '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-//     function (balance) {
-//       console.log(balance);
-//     }
-//   );
-//   const keys = chain.getKeysFromUri('//Alice')
-//   console.log(keys.address)
+const CASTOR_PROVIDER = 'ws://127.0.0.1:9944';
+chain.init(CASTOR_PROVIDER, run);
+function run () {
+  chain.connect()
+  chain.getBalance(
+    '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+    function (balance) {
+      console.log(balance);
+    }
+  );
+  const keys = chain.getKeysFromUri('//Alice')
+  console.log(keys.address)
 
-//   chain.getTcxDetails(keys)
-//   // propose     tcx_id, node_id, amount, action_id
-//   chain.applyListing(keys, 'tcx_id', 'node_id', 10000000000, 'action_id')
-//   // challenge
-//   // vote
-//   // resolve
-//   // claim
-//   // propose_tcx_creation
-// }
+
+  chain.getTcxDetails(keys)
+  // 1.创建ge和节点，涉及invest / stake
+
+  // 2.创建tcx
+
+  // 3.完成propose / challenge  
+
+  // propose     tcx_id, node_id, amount, action_id
+  // chain.applyListing(keys, 'tcx_id', 'node_id', 10000000000, 'action_id')
+  // challenge
+  // vote
+  // resolve
+  // claim
+  // propose_tcx_creation
+}
 
 
 function App () {

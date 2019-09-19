@@ -14,7 +14,7 @@ const init = async (wsp, callback) => {
 
   api = await ApiPromise.create({
     types: {
-      ContentHash: "[u8; 32]",
+      ContentHash: "Hash",
       NodeType: "u32",
       Node: {
         id: "ContentHash",
@@ -38,8 +38,8 @@ const init = async (wsp, callback) => {
         total_tokens: "Balance",
         owner: "AccountId"
       },
-      ListingId: "u64",
       ChallengeId: "u64",
+      ListingId: "u64",
       Listing: {
         id: "ListingId",
         node_id: "ContentHash",
@@ -62,7 +62,8 @@ const init = async (wsp, callback) => {
         source: "u32",
         target: "u32"
       },
-      VecContentHash: "Vec<ContentHash>"
+      VecContentHash: "Vec<ContentHash>",
+      Quota: "Balance"
     },
     provider
   });
