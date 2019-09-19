@@ -13,29 +13,46 @@ import chain from "./api/chain";
 
 import './App.css';
 
-// const CASTOR_PROVIDER = 'ws://127.0.0.1:9944';
-// // const CASTOR_PROVIDER = 'wss://polkadot:9944';
-// chain.init(CASTOR_PROVIDER, run);
-// function run () {
-//   chain.connect()
-//   chain.getBalance(
-//     '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-//     function (balance) {
-//       console.log(balance);
-//     }
-//   );
-//   const keys = chain.getKeysFromUri('//Alice')
-//   console.log(keys.address)
+chain.connect()
 
-//   chain.getTcxDetails(keys)
-//   // propose     tcx_id, node_id, amount, action_id
-//   chain.applyListing(keys, 'tcx_id', 'node_id', 10000000000, 'action_id')
-//   // challenge
-//   // vote
-//   // resolve
-//   // claim
-//   // propose_tcx_creation
-// }
+chain.getBalance(
+  '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+  function (balance) {
+    console.log(balance);
+  }
+);
+
+// timeout for fix: @polkadot/wasm-crypto has not been initialized
+setTimeout(async () => {
+  const keys = chain.getKeysFromUri('//Alice')
+  console.log(keys)
+
+  // tcx信息
+  chain.getTcxDetails(keys)
+
+  // // 显示token余额
+  // chain.getTokenBalance(keys)
+
+  // 1.创建ge
+  const geCreateRes = await chain.geCreate(keys)
+  console.log("---geCreate return:", geCreateRes)
+
+  // 2.创建node
+  // 涉及invest / stake
+  const nodeCreateRes = await chain.nodeCreate(keys)
+  console.log("---nodeCreate return:", nodeCreateRes)
+
+  // 3.创建tcx
+
+
+  // 4.propose  
+  const proposeRes = await chain.applyListing(keys, '1', '2', 10000000000, 'action_id')
+  console.log("---propose return:", proposeRes)
+
+  // 5.challenge
+
+
+}, 2000)
 
 
 function App () {
