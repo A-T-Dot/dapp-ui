@@ -11,6 +11,7 @@ import {
 } from "semantic-ui-react";
 import axios from "../../api/axios";
 import Ipfs from "../../utils/Ipfs";
+import TaskModal from "../Modals/TaskModal";
 
 function Task(props) {
   let task = props.task;
@@ -23,14 +24,11 @@ function Task(props) {
           <Item.Header>New Proposal </Item.Header>
           <Item.Description className="break-word">
             A proposal has been made from {task.proposer} to add
-            <Link to={`/node/${cid}`}>
-              {cid}
-            </Link>
-            to TCX#
-            {task.tcxId}
+            <Link to={`/node/${cid}`}>{cid}</Link>
+            to TCX#{task.tcxId}
           </Item.Description>
           <Button.Group floated="right">
-            <Button primary>Challenge</Button>
+            <TaskModal trigger={<Button primary>Challenge</Button>} task={task} />
           </Button.Group>
         </Item.Content>
       </Item>
@@ -49,9 +47,7 @@ function Task(props) {
             {task.tcxId}
           </Item.Description>
           <Button.Group floated="right">
-            <Button>Yes</Button>
-            <Button.Or />
-            <Button positive>No</Button>
+            <TaskModal trigger={ <Button>Vote</Button> } task={task}/>
           </Button.Group>
         </Item.Content>
       </Item>
@@ -69,7 +65,7 @@ function Task(props) {
             {task.tcxId} has been accepted
           </Item.Description>
           <Button.Group floated="right">
-            <Button positive>Claim Reward</Button>
+            <TaskModal trigger={<Button positive>Claim Reward</Button>} task={task}/>
           </Button.Group>
         </Item.Content>
       </Item>
@@ -88,7 +84,7 @@ function Task(props) {
             {task.tcxId} has been rejected
           </Item.Description>
           <Button.Group floated="right">
-            <Button color="red">Claim Reward</Button>
+            <TaskModal trigger={<Button color="red">Claim Reward</Button>} task={task}/>
           </Button.Group>
         </Item.Content>
       </Item>
