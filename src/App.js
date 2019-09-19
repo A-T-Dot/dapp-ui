@@ -36,35 +36,48 @@ setTimeout(async () => {
   // 1.创建ge
   const geCreateRes = await chain.geCreate(keys)
   console.log("---geCreate return:", geCreateRes)
+  // ge others
 
-  // 2.创建node
-  // 涉及invest / stake
-  const nodeCreateRes = await chain.nodeCreate(keys, 'content_hash', 'node_type', '')
-  console.log("---nodeCreate return:", nodeCreateRes)
-  
-  // 3.创建tcx
-  const tcxCreateRes = await chain.tcxCreate(keys, 'ge_id', 'tcx_type')
-  console.log("---tcxCreate return:", tcxCreateRes)
-  
-  // 4.propose  
-  const proposeRes = await chain.tcxPropose(keys, '1', '2', 10000000000, 'action_id')
-  console.log("---propose return:", proposeRes)
+  const geStakeRes = await chain.geStake(keys, 'id', 10000000000)
+  console.log("---geStake return:", geStakeRes)
 
-  // 5.challenge
-  const challengeRes = await chain.tcxChallenge(keys, 'tcx_id', 'node_id', 10000000000)
-  console.log("---challenge return:", challengeRes)
+  const geInvestRes = await chain.geInvest(keys, 'id', 10000000000)
+  console.log("---geInvest return:", geInvestRes)
 
-  // 6.resolve
-  const resolveRes = await chain.tcxResolve(keys, 'tcx_id', 'node_id')
-  console.log("---resolve return:", resolveRes)
+  const geWithdrawRes = await chain.geWithdraw(keys, 'id', 10000000000)
+  console.log("---geWithdraw return:", geWithdrawRes)
 
-  // 7.vote
-  const voteRes = await chain.tcxVote(keys, 'challenge_id', 10000000000, false)
-  console.log("---vote return:", voteRes)
+  // const geUpdateRulesRes = await chain.geUpdateRules(keys)
+  // console.log("---geUpdateRules return:", geUpdateRulesRes)
 
-  // 8.claim
-  const claimRes = await chain.tcxClaim(keys, 'challenge_id')
-  console.log("---claim return:", claimRes)
+  // // 2.创建node
+  // // 涉及invest / stake
+  // const nodeCreateRes = await chain.nodeCreate(keys, 'content_hash', 'node_type', '')
+  // console.log("---nodeCreate return:", nodeCreateRes)
+
+  // // 3.创建tcx
+  // const tcxCreateRes = await chain.tcxCreate(keys, 'ge_id', 'tcx_type')
+  // console.log("---tcxCreate return:", tcxCreateRes)
+
+  // // 4.propose  
+  // const proposeRes = await chain.tcxPropose(keys, '1', '2', 10000000000, 'action_id')
+  // console.log("---propose return:", proposeRes)
+
+  // // 5.challenge
+  // const challengeRes = await chain.tcxChallenge(keys, 'tcx_id', 'node_id', 10000000000)
+  // console.log("---challenge return:", challengeRes)
+
+  // // 6.resolve
+  // const resolveRes = await chain.tcxResolve(keys, 'tcx_id', 'node_id')
+  // console.log("---resolve return:", resolveRes)
+
+  // // 7.vote
+  // const voteRes = await chain.tcxVote(keys, 'challenge_id', 10000000000, false)
+  // console.log("---vote return:", voteRes)
+
+  // // 8.claim
+  // const claimRes = await chain.tcxClaim(keys, 'challenge_id')
+  // console.log("---claim return:", claimRes)
 
 }, 2000)
 

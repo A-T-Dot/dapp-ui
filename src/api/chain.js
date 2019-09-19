@@ -190,6 +190,62 @@ const geCreate = async (keys) => {
   });
 }
 
+const geStake = async (keys, id, amount) => {
+  const api = await getApi();
+  return new Promise(async (resolve, reject) => {
+    const nonce = await api.query.system.accountNonce(keys.address);
+    api.tx.ge
+      .stake(id, amount)
+      .sign(keys, { nonce })
+      .send(({ events = [], status }) => {
+        _handleEvents(resolve, events, status, "ge")
+      })
+      .catch(err => reject(err));
+  });
+}
+
+const geInvest = async (keys, id, amount) => {
+  const api = await getApi();
+  return new Promise(async (resolve, reject) => {
+    const nonce = await api.query.system.accountNonce(keys.address);
+    api.tx.ge
+      .invest(id, amount)
+      .sign(keys, { nonce })
+      .send(({ events = [], status }) => {
+        _handleEvents(resolve, events, status, "ge")
+      })
+      .catch(err => reject(err));
+  });
+}
+
+const geWithdraw = async (keys, id, amount) => {
+  const api = await getApi();
+  return new Promise(async (resolve, reject) => {
+    const nonce = await api.query.system.accountNonce(keys.address);
+    api.tx.ge
+      .withdraw(id, amount)
+      .sign(keys, { nonce })
+      .send(({ events = [], status }) => {
+        _handleEvents(resolve, events, status, "ge")
+      })
+      .catch(err => reject(err));
+  });
+}
+
+const geUpdateRules = async (keys, rules) => {
+  const api = await getApi();
+  return new Promise(async (resolve, reject) => {
+    const nonce = await api.query.system.accountNonce(keys.address);
+    api.tx.ge
+      .updateRules(rules)
+      .sign(keys, { nonce })
+      .send(({ events = [], status }) => {
+        _handleEvents(resolve, events, status, "ge")
+      })
+      .catch(err => reject(err));
+  });
+}
+
 const nodeCreate = async (keys, content_hash, node_type, sources) => {
   const api = await getApi();
   return new Promise(async (resolve, reject) => {
@@ -284,7 +340,7 @@ const tcxVote = async (keys, challenge_id, amount, value) => {
 const tcxClaim = async (keys, challenge_id) => {
   const api = await getApi();
   // section.toString() === "tcx" &&
-    // method.toString() === "Claimed"
+  // method.toString() === "Claimed"
   return new Promise(async (resolve, reject) => {
     const nonce = await api.query.system.accountNonce(keys.address);
     api.tx.tcx
@@ -308,6 +364,10 @@ export default {
   getTcxDetails,
   getTokenBalance,
   geCreate,
+  geStake,
+  geInvest,
+  geWithdraw,
+  geUpdateRules,
   nodeCreate,
   tcxCreate,
   tcxPropose,
