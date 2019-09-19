@@ -4,12 +4,14 @@ import {
   Card,
   Button,
   Icon,
-  Header
+  Header,
+  List,
 } from "semantic-ui-react";
 import Draggable from "react-draggable";
 import LinkTo from "react-lineto";
 import { nodeType, nodeTypeToText } from "../../constants/nodeType";
 import NodeViewerModal from '../Modals/NodeViewerModal';
+import Ipfs from '../../utils/Ipfs';
 
 function DraggableNode(props) {
   let {
@@ -22,6 +24,8 @@ function DraggableNode(props) {
     setRoot,
     isRoot
   } = props;
+  
+  let { sources, nodeType, referredBy } = node;
 
   return (
     <Draggable
@@ -31,7 +35,7 @@ function DraggableNode(props) {
       handle=".handle"
     >
       <Card
-        className={`n${node.id}`}
+        className={`n${node.nodeId}`}
         style={{
           margin: "0em",
           top: padding,
@@ -39,7 +43,7 @@ function DraggableNode(props) {
           position: "absolute"
         }}
         onClick={e => {
-          onCardClicked(e, node.id);
+          onCardClicked(e, node.nodeId);
         }}
       >
         <Card.Content
@@ -48,12 +52,28 @@ function DraggableNode(props) {
           }`}
         >
           {/* <Button circular icon="close" floated="right" size="mini" /> */}
-          <Header size="small">{node.name}</Header>
+          <Header size="small">{Ipfs.getCIDv0fromContentHashStr(node.nodeId).toString()}</Header>
         </Card.Content>
         <Card.Content className={isLinking ? "pointer" : "default-cursor"}>
-          <Card.Meta className="break-word">{node.id}</Card.Meta>
-          <Card.Description className="break-word">
-            {nodeTypeToText[node.nodeType]}
+          <Card.Description>
+            <List>
+              <List.Item>
+                <List.Icon name="users" />
+                <List.Content>{nodeTypeToText[nodeType] || "0"}</List.Content>
+              </List.Item>
+              <List.Item>
+                <List.Icon name="linkify" />
+                <List.Content>
+                  {(sources && sources.length) || "0"} cited sources
+                </List.Content>
+              </List.Item>
+              <List.Item>
+                <List.Icon name="external alternate" />
+                <List.Content>
+                  referred by {(referredBy && referredBy.length) || "0"} nodes
+                </List.Content>
+              </List.Item>
+            </List>
           </Card.Description>
         </Card.Content>
         <Card.Content
@@ -65,7 +85,7 @@ function DraggableNode(props) {
               color="red"
               animated="vertical"
               onClick={(e, data) => {
-                setRoot(e, node.id);
+                setRoot(e, node.nodeId);
               }}
             >
               <Button.Content hidden>Set Root</Button.Content>
@@ -77,7 +97,7 @@ function DraggableNode(props) {
               color="blue"
               animated="vertical"
               onClick={(e, data) => {
-                onLinkClicked(e, node.id);
+                onLinkClicked(e, node.nodeId);
               }}
             >
               <Button.Content hidden>Link</Button.Content>
@@ -108,35 +128,8 @@ export default class Editor extends React.Component {
     super(props);
     this.state = {
       activeDrags: 0,
-      nodes: [
-        {
-          id: "QmeY8rh5x5832wQD8mWt6cDEiX3uJHrSnEYURZQcNWBuYW",
-          x: 200,
-          y: 10,
-          name: "hi.jpg",
-          nodeType: 0
-        },
-        {
-          id: "QmVFX5VKCN2cEGtB7JrHms1Bq9PcFQ7cDhHHujgYVyfzSA",
-          x: 100,
-          y: 400,
-          name: "bob.md",
-          nodeType: 7
-        },
-        {
-          id: "QmRC9s7W4a5mr3wuXDuM53CHvXKPexDaVc1342oYgp1fZQ",
-          x: 500,
-          y: 500,
-          name: "hello.txt",
-          nodeType: 1
-        }
-      ],
-      links: [
-        {
-          source: "QmeY8rh5x5832wQD8mWt6cDEiX3uJHrSnEYURZQcNWBuYW",
-          target: "QmVFX5VKCN2cEGtB7JrHms1Bq9PcFQ7cDhHHujgYVyfzSA"
-        }
-      ],
+      nodes: [],
+      links: [],
       activeLink: null,
       root: null
     };
@@ -240,7 +233,7 @@ export default class Editor extends React.Component {
               onCardClicked={this.onCardClicked}
               isLinking={!!activeLink}
               setRoot={this.setRoot}
-              isRoot={node.id == root}
+              isRoot={node.nodeId == root}
             />
           );
         })}

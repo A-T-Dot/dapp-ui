@@ -25,11 +25,12 @@ export default class NodeRenderer extends Component {
         break;
       case 1:
         // txt
-        content = (
-          <object data={url} width="100%">
-            Not supported
-          </object>
-        );
+        // content = (
+        //   <object data={url} width="100%" height="100%">
+        //     Not supported
+        //   </object>
+        // );
+        content = <MarkdownRenderer url={url} />;
         break;
       case 2:
         // json

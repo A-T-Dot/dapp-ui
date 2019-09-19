@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Container, Header } from 'semantic-ui-react';
 import { Graph } from "react-d3-graph";
 import NodeRenderer from '../ContentRenderer/NodeRenderer';
+import axios from "../../api/axios";
+import Ipfs from "../../utils/Ipfs";
 
 const graphConfig = {
   "automaticRearrangeAfterDropNode": false,
   "collapsible": false,
-  "directed": false,
+  "directed": true,
   "focusAnimationDuration": 0.75,
   "focusZoom": 2,
   "height": 600,
@@ -36,11 +38,11 @@ const graphConfig = {
     "highlightFontWeight": "normal",
     "highlightStrokeColor": "SAME",
     "highlightStrokeWidth": "SAME",
-    "labelProperty": "id",
+    "labelProperty": "cid",
     "mouseCursor": "pointer",
     "opacity": 1,
     "renderLabel": true,
-    "size": 150,
+    "size": 300,
     "strokeColor": "none",
     "strokeWidth": 1.5,
     "svg": "",
@@ -65,65 +67,66 @@ const graphConfig = {
 
 export function NodeExplorer (props) {
   const { nodeid } = props.match.params
-  const [current, setCurrent] = useState({
+  const [state, setState] = useState({
     index: nodeid,
-    srcData: [
-      {
-        tcx: 'TCX1',
-        node: [
-          'Chenjesu',
-          'Ilwrath',
-          'Mycon',
-          'Spathi',
-          'Umgah',
-          'VUX',
-          'Guardian',
-        ]
-      },
-      {
-        tcx: 'TCX2',
-        node: [
-          'Mycon',
-          'Spathi',
-          'Umgah',
-          'VUX',
-        ]
-      },
-      {
-        tcx: 'TCX3',
-        node: [
-          'Spathi',
-          'Umgah',
-          'VUX',
-        ]
-      },
-    ]
+  graphData: {
+      links: [],
+      nodes: [{id: nodeid}]
+    }
   })
 
-  const graphData = {
-    links: [],
-    nodes: []
-  }
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await axios(`/api/v1/explorer/${nodeid}`);
+        let { data, error } = response;
+        if (error) {
+          console.log(error);
+          return;
+        }
+        console.log(data);
+        let nodes = data.nodes.map((node, index) => {
+          return {
+            id: node.nodeId,
+            symbolType: index == 0 ? "circle" : "square",
+            color: index == 0 ? "red" : "blue",
+            cid: Ipfs.getCIDv0fromContentHashStr(node.nodeId).toString()
+          };
+        });
 
-  const tempIdList = []
-  current.srcData.forEach(item => {
-    graphData.nodes.push({
-      id: item.tcx,
-    })
-    item.node.forEach(node => {
-      graphData.links.push({
-        source: item.tcx,
-        target: node,
-      })
-      if (tempIdList.indexOf(node) === -1) {
-        tempIdList.push(node)
-        graphData.nodes.push({
-          id: node,
-          symbolType: "square",
-        })
+        setState({
+          graphData: {
+            links: data.links,
+            nodes
+          }
+        });
+        console.log(state)
+      } catch (error) {
+        console.error(error);
       }
-    })
-  })
+    }
+    fetchData();
+  }, []); 
+
+  // const tempIdList = []
+  // current.srcData.forEach(item => {
+  //   graphData.nodes.push({
+  //     id: item.tcx,
+  //   })
+  //   item.node.forEach(node => {
+  //     graphData.links.push({
+  //       source: item.tcx,
+  //       target: node,
+  //     })
+  //     if (tempIdList.indexOf(node) === -1) {
+  //       tempIdList.push(node)
+  //       graphData.nodes.push({
+  //         id: node,
+  //         symbolType: "square",
+  //       })
+  //     }
+  //   })
+  // })
 
   // graph event callbacks
   const onClickGraph = function () {
@@ -167,12 +170,12 @@ export function NodeExplorer (props) {
   return (
     <Container>
       <Header size="large">Node Explorer</Header>
-      <div>node id: {current.index}</div>
+      <div>Node Id: {nodeid}</div>
       <NodeRenderer node={{}} ipfsGatewayUrl={"http://localhost:8080"} />
       <div className="node-explorer">
         <Graph
           id="graph-id"
-          data={graphData}
+          data={state.graphData}
           config={graphConfig}
           onClickNode={onClickNode}
           onRightClickNode={onRightClickNode}

@@ -1,25 +1,35 @@
 import React from "react";
-import {
-  Card,
-  Search,
-  Button, Icon
-} from "semantic-ui-react";
+import { Card, Search, Button, Icon, Header, List } from "semantic-ui-react";
 import { nodeType, nodeTypeToText } from "../../constants/nodeType";
 import NodeViewerModal from "../Modals/NodeViewerModal";
+import axios from "../../api/axios";
+import Ipfs from "../../utils/Ipfs";
 
 export default class Sidebar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      nodes: [
-        { id: 5, name: "yogurt", nodeType: 0 },
-        { id: 6, name: "polkadot", nodeType: 7 },
-        { id: 7, name: "cat", nodeType: 0 },
-        { id: 8, name: "dog", nodeType: 4 }
-      ]
+      nodes: []
     };
 
     this.handleClick = this.handleClick.bind(this);
+  }
+
+  async componentDidMount() {
+    try {
+      const response = await axios("/api/v1/nodes");
+      let { data, error } = response;
+      if (error) {
+        console.log(error);
+        return;
+      }
+      console.log(data);
+      this.setState({
+        nodes: data
+      })
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   handleClick(arrayIndex) {
@@ -36,15 +46,41 @@ export default class Sidebar extends React.Component {
     return (
       <div className="sidebar">
         <Search />
-        <Card.Group centered>
+        <Card.Group centered style={{padding: "0px 10px"}}>
           { nodes.map((node, index) => {
+            
+            let { sources, nodeType, referredBy, nodeId } = node;
+
             return (
-              <Card fluid key={node.id} onClick={() => this.handleClick(index)}>
+              <Card fluid key={nodeId} onClick={() => this.handleClick(index)}>
                 <Card.Content>
-                  <Card.Header>{node.name}</Card.Header>
-                  <Card.Meta>{node.id}</Card.Meta>
+                  <Header className="break-word" size="small">
+                    {Ipfs.getCIDv0fromContentHashStr(nodeId).toString()}
+                  </Header>
+                </Card.Content>
+                <Card.Content>
                   <Card.Description>
-                    {nodeTypeToText[node.nodeType]}
+                    <List>
+                      <List.Item>
+                        <List.Icon name="users" />
+                        <List.Content>
+                          {nodeTypeToText[nodeType] || "0"}
+                        </List.Content>
+                      </List.Item>
+                      <List.Item>
+                        <List.Icon name="linkify" />
+                        <List.Content>
+                          {(sources && sources.length) || "0"} cited sources
+                        </List.Content>
+                      </List.Item>
+                      <List.Item>
+                        <List.Icon name="external alternate" />
+                        <List.Content>
+                          referred by {(referredBy && referredBy.length) || "0"}{" "}
+                          nodes
+                        </List.Content>
+                      </List.Item>
+                    </List>
                   </Card.Description>
                 </Card.Content>
                 <Card.Content extra>
