@@ -1,6 +1,5 @@
 import React from "react";
 import { Icon, Grid, Modal, Button, Input } from "semantic-ui-react";
-import NodeRenderer from "../ContentRenderer/NodeRenderer";
 import Ipfs from "../../utils/Ipfs";
 
 export default class TaskModal extends React.Component {
