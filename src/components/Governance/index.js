@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Search, Button, Card, Grid, List, Item } from 'semantic-ui-react';
+import { Container, Search, Button, Card, Grid, List, Item, Segment } from 'semantic-ui-react';
 import axios from "../../api/axios";
 import Tasks from './Tasks';
 
@@ -8,16 +8,16 @@ function listItem (elements) {
   const items = []
 
   for (const [index, value] of elements.entries()) {
-    items.push(<Card key={index}>
-      <Card.Content>
-        <Card.Header>GE #{value.geId}</Card.Header>
-        <Card.Description>
-          <List as={Link} to={`/ge/${value.geId}`}>
-            <List.Item>{value.content}</List.Item>
-          </List>
-        </Card.Description>
-      </Card.Content>
-    </Card>)
+    items.push(
+      <Card key={index} as={Link} to={`/ge/${value.geId}`}>
+        <Card.Content>
+          <Card.Header>GE #{value.geId}</Card.Header>
+          <Card.Description>
+            {"asdf"}
+          </Card.Description>
+        </Card.Content>
+      </Card>
+    )
   }
   return items
 }
@@ -115,34 +115,36 @@ export function Governance () {
   }
 
   return (
-    <Container>
-      <Grid>
-        <Grid.Column width={8}>
-          <Search
-            onResultSelect={handleResultSelect}
-            onSearchChange={handleSearchChange}
-            loading={search.loading}
-            results={search.results}
-            value={search.value}
-            style={{ marginBottom: "1rem" }}
-          />
-        </Grid.Column>
-        <Grid.Column floated='right' textAlign='right' width={8}>
-          <Button basic color='blue'>New GE</Button>
-          <Button primary>New Whiteboard</Button>
-        </Grid.Column>
-      </Grid>
-      <Grid>
-        <Grid.Column width={11}>
-          <Card.Group>
-            {items}
-          </Card.Group>
-        </Grid.Column>
-        <Grid.Column width={5}>
-          <Tasks tasks={tasks} />
-        </Grid.Column>
-      </Grid>
-    </Container>
-  )
+    <div>
+      <Container>
+        <Grid>
+          <Grid.Column width={8}>
+            <Search
+              onResultSelect={handleResultSelect}
+              onSearchChange={handleSearchChange}
+              loading={search.loading}
+              results={search.results}
+              value={search.value}
+            />
+          </Grid.Column>
+          <Grid.Column floated="right" textAlign="right" width={8}>
+            <Button basic color="blue">
+              New GE
+            </Button>
+          </Grid.Column>
+        </Grid>
+      </Container>
+      <Container>
+        <Grid>
+          <Grid.Column width={12}>
+            <Card.Group>{items}</Card.Group>
+          </Grid.Column>
+          <Grid.Column width={4}>
+            <Tasks tasks={tasks} />
+          </Grid.Column>
+        </Grid>
+      </Container>
+    </div>
+  );
 }
 
