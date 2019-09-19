@@ -35,7 +35,7 @@ export default class InvestModalButton extends Component {
           />
         </Modal.Content>
         <Modal.Actions>
-          <Button color="green" onClick={this.handleClose} inverted>
+          <Button color="green" onClick={this.handleClose} >
             <Icon name="checkmark" /> Invest
           </Button>
         </Modal.Actions>

@@ -33,8 +33,8 @@ export default class NewTcxModalButton extends Component {
           />
         </Modal.Content>
         <Modal.Actions>
-          <Button color="green" onClick={this.handleClose} inverted>
-            <Icon name="checkmark" /> Got it
+          <Button color="blue" onClick={this.handleClose}>
+            <Icon name="checkmark" /> Create
           </Button>
         </Modal.Actions>
       </Modal>
