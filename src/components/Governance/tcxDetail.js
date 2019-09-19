@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Button, Segment, Grid, List } from 'semantic-ui-react';
+import { Container, Button, Card, Grid, List } from 'semantic-ui-react';
 
 function listItem (elements) {
   const items = []
 
   for (const [index, value] of elements.entries()) {
-    items.push(<Grid.Column key={index}>
-      <Segment>
-        <List as={Link} to={`/node/${value.index}`}>
-          <List.Item>Node #{value.index}</List.Item>
-          <List.Item>{value.content}</List.Item>
-        </List>
-      </Segment>
-    </Grid.Column>)
+    items.push(<Card key={index}>
+      <Card.Content>
+        <Card.Header>Node #{value.index}</Card.Header>
+        <Card.Description>
+          <List as={Link} to={`/node/${value.index}`}>
+            <List.Item>{value.content}</List.Item>
+          </List>
+        </Card.Description>
+      </Card.Content>
+    </Card>)
   }
   return items
 }
@@ -43,9 +45,9 @@ export function TCXDetail (props) {
         </Grid.Column>
       </Grid>
 
-      <Grid stackable columns={4}>
+      <Card.Group>
         {items}
-      </Grid>
+      </Card.Group>
     </Container>
   )
 }

@@ -62,7 +62,7 @@ function App () {
       </Switch>
       <Websocket url='ws://localhost:7000/ws'
         onMessage={handleData} />
-      <div className="footer">WS Connect: {wsData.data || 'run `node app.js` first'}</div>
+      <div className="footer">WS Connect: {wsData.data || 'castor'}</div>
     </div>
   );
 }

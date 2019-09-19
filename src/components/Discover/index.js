@@ -1,21 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Search, Tab, Segment, Grid, List } from 'semantic-ui-react';
+import { Container, Search, Tab, Card, Button, List } from 'semantic-ui-react';
 import axios from '../../api/axios';
 
 function listItem (type, elements) {
   const items = []
 
   for (const [index, value] of elements.entries()) {
-    items.push(<Grid.Column key={index}>
-      <Segment>
-        <List>
-          <List.Item>{type} #{value.geId}</List.Item>
-          <List.Item>{value.content}</List.Item>
-        </List>
-      </Segment>
-    </Grid.Column>)
+    items.push(
+      <Card key={index}>
+        <Card.Content>
+          <Card.Header>{type} #{value.geId}</Card.Header>
+          <Card.Description>
+            {value.content}
+          </Card.Description>
+        </Card.Content>
+        {/* <Card.Content extra>
+          <div className='ui two buttons'>
+            <Button primary>propose</Button>
+            <Button basic color='blue'>transfer</Button>
+          </div>
+        </Card.Content> */}
+      </Card>
+    )
   }
-  return items
+  return (
+    <Card.Group>
+      {items}
+    </Card.Group>
+  )
 }
 
 export function Discover() {
@@ -88,25 +100,19 @@ export function Discover() {
     {
       menuItem: "GE",
       render: () => (
-        <Grid stackable columns={4}>
-          {gePane}
-        </Grid>
+        gePane
       )
     },
     {
       menuItem: "TCX",
       render: () => (
-        <Grid stackable columns={4}>
-          {tcsPane}
-        </Grid>
+        tcsPane
       )
     },
     {
       menuItem: "Node",
       render: () => (
-        <Grid stackable columns={4}>
-          {nodePane}
-        </Grid>
+        nodePane
       )
     }
   ];

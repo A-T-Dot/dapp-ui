@@ -22,6 +22,7 @@ code {
 
 .footer {
   position: absolute;
+  z-index: -1;
   bottom: 0;
   padding: 2em;
   background: #fff;
