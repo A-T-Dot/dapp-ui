@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon, Grid, Modal, Button } from "semantic-ui-react";
+import { Icon, Grid, Modal, Button, Input } from "semantic-ui-react";
 import NodeRenderer from "../ContentRenderer/NodeRenderer";
 import Ipfs from "../../utils/Ipfs";
 
@@ -10,27 +10,38 @@ export default class TaskModal extends React.Component {
     this.challenge = this.challenge.bind(this);
     this.vote = this.vote.bind(this);
     this.claim = this.claim.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+
+    this.state = {
+      amount: 0
+    }
   }
 
-  async challenge(amount) {
+  async challenge() {
     let { task, closeModal } = this.props;
-    // TODO:
+    let { amount } = this.state;
+    console.log(amount);
+    // TODO: Call API
     closeModal();
   }
 
-  async vote(amount) {
+  async vote(value) {
     let { task, closeModal } = this.props;
-    // TODO:
-
+    // TODO: Call API
+    console.log(value);
     closeModal();
 
   }
 
   async claim() {
     let { task, closeModal } = this.props;
-    // TODO:
+    // TODO: Call API
 
     closeModal();
+  }
+
+  handleChange(e) {
+    this.setState({ amount: e.target.value });
   }
 
   render() {
@@ -53,7 +64,13 @@ export default class TaskModal extends React.Component {
               {task.tcxId}
             </Modal.Content>
             <Modal.Actions>
-              <Button color="green" onClick={this.challenge}>
+              <Input
+                icon="dollar"
+                iconPosition="left"
+                placeholder="amount"
+                onChange={this.handleChange}
+              />
+              <Button color="green" onClick={async() => this.challenge()}>
                 <Icon name="checkmark" /> Challenge
               </Button>
             </Modal.Actions>
@@ -74,10 +91,10 @@ export default class TaskModal extends React.Component {
               {task.tcxId}
             </Modal.Content>
             <Modal.Actions>
-              <Button color="red" onClick={this.vote}>
+              <Button color="red" onClick={async () => this.vote(false)}>
                 <Icon name="remove" /> No
               </Button>
-              <Button color="green" onClick={this.vote}>
+              <Button color="green" onClick={async () => this.vote(true)}>
                 <Icon name="checkmark" /> Yes
               </Button>
             </Modal.Actions>
@@ -94,9 +111,10 @@ export default class TaskModal extends React.Component {
           >
             <Modal.Header>Claim Reward</Modal.Header>
             <Modal.Content>
-              {task.proposer}'s proposal to add
-              {cid} to TCX#
+              <div>
+              {task.proposer}'s proposal to add {cid} to TCX#
               {task.tcxId} has been accepted. Please claim your reward!
+              </div>
             </Modal.Content>
             <Modal.Actions>
               <Button color="green" onClick={this.claim}>
@@ -114,11 +132,11 @@ export default class TaskModal extends React.Component {
             size="small"
             onClose={() => closeModal()}
           >
-            <Modal.Header>Task</Modal.Header>
+            <Modal.Header>Claim Reward</Modal.Header>
             <Modal.Content>
               {task.proposer}'s proposal to add
               {cid} to TCX#
-              {task.tcxId} has been accepted. Please claim your reward!
+              {task.tcxId} has been rejected. Please claim your reward!
             </Modal.Content>
             <Modal.Actions>
               <Button color="green">

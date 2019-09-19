@@ -25,9 +25,7 @@ function Task(props) {
         <Item.Content style={{ width: "100%" }}>
           <Item.Header>New Proposal </Item.Header>
           <Item.Description className="break-word">
-            A proposal has been made from {task.proposer} to add
-            <Link to={`/node/${cid}`}>{cid}</Link>
-            to TCX#{task.tcxId}
+              A proposal has been made from {task.proposer} to add <Link to={`/node/${cid}`}>{cid}</Link> to TCX#{task.tcxId}
           </Item.Description>
           <Button.Group floated="right">
             <Button color='blue' onClick={() => setOpen(true)}>Challenge</Button>
@@ -48,9 +46,7 @@ function Task(props) {
         <Item.Content style={{ width: "100%" }}>
           <Item.Header>Vote now!</Item.Header>
           <Item.Description className="break-word">
-            {task.challenger} challenged
-            <Link to={`/node/${cid}`}>{cid}</Link> from being added to TCX#
-            {task.tcxId}
+            {task.challenger} challenged <Link to={`/node/${cid}`}>{cid}</Link> from being added to TCX#{task.tcxId}
           </Item.Description>
           <Button.Group floated="right">
             <Button color='orange' onClick={() => setOpen(true)}>
@@ -73,9 +69,7 @@ function Task(props) {
         <Item.Content style={{ width: "100%" }}>
           <Item.Header>Content Accepted</Item.Header>
           <Item.Description className="break-word">
-            {task.proposer}'s proposal to add
-            <Link to={`/node/${cid}`}>{cid}</Link> to TCX#
-            {task.tcxId} has been accepted
+            {task.proposer}'s proposal to add <Link to={`/node/${cid}`}>{cid}</Link> to TCX#{task.tcxId} has been accepted
           </Item.Description>
           <Button.Group floated="right">
             <Button color='green' onClick={() => setOpen(true)}>
@@ -99,9 +93,7 @@ function Task(props) {
         <Item.Content style={{ width: "100%" }}>
           <Item.Header>Content Rejected</Item.Header>
           <Item.Description className="break-word">
-            {task.proposer}'s proposal to add
-            <Link to={`/node/${cid}`}>{cid}</Link> to TCX#
-            {task.tcxId} has been rejected
+            {task.proposer}'s proposal to add <Link to={`/node/${cid}`}>{cid}</Link> to TCX#{task.tcxId} has been rejected
           </Item.Description>
           <Button.Group floated="right">
             <Button color='red' onClick={() => setOpen(true)}>
