@@ -13,12 +13,20 @@ code {
 }
 
 .App {
+  min-height: 100vh;
 }
 
 .App-link {
   color: #ff1864;
 }
 
+.footer {
+  position: absolute;
+  z-index: -1;
+  bottom: 0;
+  padding: 2em;
+  background: #fff;
+}
 
 
 .whiteboard .grid {
@@ -64,6 +72,14 @@ code {
 }
 
 .node-explorer {
-  background: #fafafa;
+  background: RGB(246, 246, 246);
   margin: 20px auto;
+}
+
+.red {
+  background-color: RGB(217, 43, 47) !important;
+}
+
+.red > div {
+  color: white !important;
 }

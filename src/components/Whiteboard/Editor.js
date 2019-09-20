@@ -3,13 +3,29 @@ import {
   Image,
   Card,
   Button,
-  Icon
+  Icon,
+  Header,
+  List,
 } from "semantic-ui-react";
 import Draggable from "react-draggable";
 import LinkTo from "react-lineto";
+import { nodeType, nodeTypeToText } from "../../constants/nodeType";
+import NodeViewerModal from '../Modals/NodeViewerModal';
+import Ipfs from '../../utils/Ipfs';
 
 function DraggableNode(props) {
-  let { dragHandlers, node, padding, onLinkClicked, onCardClicked, isLinking } = props;
+  let {
+    dragHandlers,
+    node,
+    padding,
+    onLinkClicked,
+    onCardClicked,
+    isLinking,
+    setRoot,
+    isRoot
+  } = props;
+  
+  let { sources, nodeType, referredBy } = node;
 
   return (
     <Draggable
@@ -19,7 +35,7 @@ function DraggableNode(props) {
       handle=".handle"
     >
       <Card
-        className={`n${node.id}`}
+        className={`n${node.nodeId}`}
         style={{
           margin: "0em",
           top: padding,
@@ -27,35 +43,79 @@ function DraggableNode(props) {
           position: "absolute"
         }}
         onClick={e => {
-          onCardClicked(e, node.id);
+          onCardClicked(e, node.nodeId);
         }}
       >
         <Card.Content
-          header={node.name}
-          className={`handle ${isLinking ? "pointer" : "move"}`}
-        />
+          className={`handle break-word${isLinking ? " pointer" : " move"}${
+            isRoot ? " red" : ""
+          }`}
+        >
+          {/* <Button circular icon="close" floated="right" size="mini" /> */}
+          <Header size="small">{Ipfs.getCIDv0fromContentHashStr(node.nodeId).toString()}</Header>
+        </Card.Content>
         <Card.Content className={isLinking ? "pointer" : "default-cursor"}>
-          <Card.Meta className="break-word">{node.id}</Card.Meta>
-          <Card.Description className="break-word">
-            description here
+          <Card.Description>
+            <List>
+              <List.Item>
+                <List.Icon name="users" />
+                <List.Content>{nodeTypeToText[nodeType] || "0"}</List.Content>
+              </List.Item>
+              <List.Item>
+                <List.Icon name="linkify" />
+                <List.Content>
+                  {(sources && sources.length) || "0"} cited sources
+                </List.Content>
+              </List.Item>
+              <List.Item>
+                <List.Icon name="external alternate" />
+                <List.Content>
+                  referred by {(referredBy && referredBy.length) || "0"} nodes
+                </List.Content>
+              </List.Item>
+            </List>
           </Card.Description>
         </Card.Content>
         <Card.Content
           extra
           className={isLinking ? "pointer" : "default-cursor"}
         >
-          <Button
-            primary
-            animated="vertical"
-            onClick={(e, data) => {
-              onLinkClicked(e, node.id);
-            }}
-          >
-            <Button.Content hidden>Link</Button.Content>
-            <Button.Content visible>
-              <Icon name="linkify" />
-            </Button.Content>
-          </Button>
+          <div className="ui three buttons">
+            <Button
+              color="red"
+              animated="vertical"
+              onClick={(e, data) => {
+                setRoot(e, node.nodeId);
+              }}
+            >
+              <Button.Content hidden>Set Root</Button.Content>
+              <Button.Content visible>
+                <Icon name="chess king" />
+              </Button.Content>
+            </Button>
+            <Button
+              color="blue"
+              animated="vertical"
+              onClick={(e, data) => {
+                onLinkClicked(e, node.nodeId);
+              }}
+            >
+              <Button.Content hidden>Link</Button.Content>
+              <Button.Content visible>
+                <Icon name="linkify" />
+              </Button.Content>
+            </Button>
+            <NodeViewerModal
+              trigger={
+                <Button color="green" animated="vertical">
+                  <Button.Content hidden>Preview</Button.Content>
+                  <Button.Content visible>
+                    <Icon name="eye" />
+                  </Button.Content>
+                </Button>
+              }
+            />
+          </div>
         </Card.Content>
       </Card>
     </Draggable>
@@ -68,20 +128,10 @@ export default class Editor extends React.Component {
     super(props);
     this.state = {
       activeDrags: 0,
-      nodes: [
-        {
-          id: 1,
-          x: 200,
-          y: 10,
-          name: "bob.mp4"
-        },
-        { id: 2, x: 100, y: 400, name: "bob.txt" },
-        { id: 3, x: 500, y: 500, name: "hello.txt" }
-      ],
-      links: [
-        { source: 1, target: 2},
-      ],
-      activeLink: null
+      nodes: [],
+      links: [],
+      activeLink: null,
+      root: null
     };
   }
 
@@ -112,7 +162,7 @@ export default class Editor extends React.Component {
         let x = Math.round(clientX - rect.left) - padding;
         let y = Math.round(clientY - rect.top) - padding;
 
-        this.setState({nodes: [...this.state.nodes, {id: chosenNode.id, name: chosenNode.name,x, y}]})
+        this.setState({nodes: [...this.state.nodes, {...chosenNode, x, y}]})
 
         // console.log(x, y);
       }
@@ -150,11 +200,22 @@ export default class Editor extends React.Component {
 
   }
   
+  setRoot = (e, nodeId) => {
+    let { clearChosen } = this.props;
+
+    e.stopPropagation();
+    clearChosen();
+
+    this.setState({
+      root: nodeId
+    })
+    console.log("set root");
+  }
 
   render() {
     const dragHandlers = { onStart: this.onStart, onStop: this.onStop, onDrag: this.onDrag };
     let { padding, chosenNode } = this.props;
-    let { nodes, links, activeLink } = this.state;
+    let { nodes, links, activeLink, root } = this.state;
     return (
       <div
         className={`bg-grid${chosenNode ? " pointer" : ""}`}
@@ -171,6 +232,8 @@ export default class Editor extends React.Component {
               onLinkClicked={this.onLinkClicked}
               onCardClicked={this.onCardClicked}
               isLinking={!!activeLink}
+              setRoot={this.setRoot}
+              isRoot={node.nodeId == root}
             />
           );
         })}

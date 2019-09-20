@@ -1,49 +1,103 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
-import { Container, Segment, Header, List, Button, Grid } from 'semantic-ui-react';
+import { Container, Segment, Header, Card, Button, Grid, List } from 'semantic-ui-react';
 import { ModalUpload } from '../Modals/Upload';
 import { ModalPropose } from '../Modals/Propose';
+import axios from '../../api/axios';
+import Ipfs from '../../utils/Ipfs';
+import { nodeTypeToText } from '../../constants/nodeType';
 
 export function MyContent () {
 
-  const [account, setValues] = useState({ balance: '50' }, [
-    { type: 'jpeg' },
-    { type: 'mp4' },
-    { type: 'whiteboard' },
-  ])
-  const [elements, setContents] = useState([
-    { type: 'jpeg' },
-    { type: 'mp4' },
-    { type: 'whiteboard' },
-    { type: 'whiteboard' },
-    { type: 'whiteboard' },
-    { type: 'whiteboard' },
-  ])
+  const [account, setValues] = useState({ balance: '50' })
+
+  const [nodes, setNodes] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await axios(
+          "/api/v1/accounts/5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY/nodes"
+        );
+        let { data, error } = response;
+        if (error) {
+          console.log(error);
+          return;
+        }
+        console.log(data);
+        setNodes(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchData();
+  }, []); 
+
   const [isModalOpen, setIsModalOpen] = useState({ upload: false, propose: false });
   const [modalContent, setModalContent] = useState({ index: 0 });
 
-
-  const handlModalOpen = (action, index) => {
-    setModalContent({ index })
-    setIsModalOpen({ upload: action === 'upload', propose: action === 'propose' });
+  const handlModalOpen = (action, index, nodeId) => {
+    setModalContent({ index, nodeId })
+    setIsModalOpen({ upload: action === 'upload', propose: action === 'propose', transfer: action === 'transfer' });
   }
   const handlModalClose = () => {
-    setIsModalOpen({ upload: false, propose: false });
+    setIsModalOpen({ upload: false, propose: false, transfer: false });
   }
 
-  const items = []
+  const cards = nodes.map((node, index) => {
+    let { sources, nodeType, referredBy, nodeId } = node;
+    let cidStr = Ipfs.getCIDv0fromContentHashStr(node.nodeId).toString();
+    return (
+      <Card key={index}>
+        <Card.Content>
+          <Header className="break-word" size="small" as={Link} to={`/node/${cidStr}`}>
+            {cidStr}
+          </Header>
+        </Card.Content>
+        <Card.Content>
+          <Card.Description>
+            <List>
+              <List.Item>
+                <List.Icon name="users" />
+                <List.Content>{nodeTypeToText[nodeType] || "0"}</List.Content>
+              </List.Item>
+              <List.Item>
+                <List.Icon name="linkify" />
+                <List.Content>
+                  {(sources && sources.length) || "0"} cited sources
+                </List.Content>
+              </List.Item>
+              <List.Item>
+                <List.Icon name="external alternate" />
+                <List.Content>
+                  referred by {(referredBy && referredBy.length) || "0"} nodes
+                </List.Content>
+              </List.Item>
+            </List>
+          </Card.Description>
+        </Card.Content>
+        <Card.Content extra>
+          <div className="ui two buttons">
+            <Button
+              primary
+              onClick={handlModalOpen.bind(this, "propose", index, nodeId)}
+            >
+              propose
+            </Button>
+            <Button
+              basic
+              color="blue"
+              onClick={handlModalOpen.bind(this, "transfer", index)}
+            >
+              transfer
+            </Button>
+          </div>
+        </Card.Content>
+      </Card>
+    );
+  });
 
-  for (const [index, value] of elements.entries()) {
-    items.push(<Grid.Column key={index}>
-      <Segment>
-        <List>
-          <List.Item>node id: #{index}</List.Item>
-          <List.Item>node type: {value.type}</List.Item>
-        </List>
-        <Button primary onClick={handlModalOpen.bind(this, 'propose', index)}>propose</Button>
-      </Segment>
-    </Grid.Column>)
-  }
+
 
   return (
     <Container>
@@ -54,18 +108,19 @@ export function MyContent () {
             Your balance: {account.balance} ATDot
           </Grid.Column>
           <Grid.Column floated='right' textAlign='right' width={8}>
-            <Button basic onClick={handlModalOpen.bind(this, 'upload', 0)}>Upload File</Button>
-            <Button primary as={Link} to='whiteboard'>New Whiteboard</Button>
+            <Button basic color='blue' onClick={handlModalOpen.bind(this, 'upload', 0)}>Upload File</Button>
+            <Button basic color='blue' as={Link} to='whiteboard'>New Whiteboard</Button>
           </Grid.Column>
         </Grid>
       </Header>
 
-      <Grid stackable columns={5}>
-        {items}
-      </Grid>
+      <Card.Group>
+        {cards}
+      </Card.Group>
 
       <ModalUpload isOpen={isModalOpen.upload} handleClose={handlModalClose} content={modalContent} />
       <ModalPropose isOpen={isModalOpen.propose} handleClose={handlModalClose} content={modalContent} />
+      <ModalPropose isOpen={isModalOpen.transfer} handleClose={handlModalClose} content={modalContent} />
 
     </Container>
   )
