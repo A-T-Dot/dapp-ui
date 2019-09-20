@@ -85,7 +85,7 @@ export default class AdmireModalButton extends Component {
         </Modal.Content>
         <Modal.Actions>
           <Button primary onClick={this.onClick}>
-            <Icon name="checkmark" /> Create
+            <Icon name="checkmark" /> Admire
           </Button>
         </Modal.Actions>
       </Modal>

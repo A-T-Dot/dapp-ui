@@ -86,7 +86,7 @@ export default class LikeModalButton extends Component {
         </Modal.Content>
         <Modal.Actions>
           <Button primary onClick={this.onClick}>
-            <Icon name="checkmark" /> Create
+            <Icon name="checkmark" /> Like
           </Button>
         </Modal.Actions>
       </Modal>

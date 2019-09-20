@@ -77,15 +77,15 @@ export default class GrantModalButton extends Component {
         <Header icon="leaf" content="Grant" />
         <Modal.Content>
           <Input
-            icon="tag"
+            icon="dollar"
             iconPosition="left"
-            placeholder="Few words here"
+            placeholder="amount"
             onChange={this.handleChange}
           />
         </Modal.Content>
         <Modal.Actions>
           <Button primary onClick={this.onClick}>
-            <Icon name="checkmark" /> Create
+            <Icon name="checkmark" /> Grant
           </Button>
         </Modal.Actions>
       </Modal>
