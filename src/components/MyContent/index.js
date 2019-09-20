@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
-import { Container, Segment, Header, Card, Button, Grid, List } from 'semantic-ui-react';
+import { Container, Segment, Header, Card, Button, Grid, List, Label } from 'semantic-ui-react';
 import { ModalUpload } from '../Modals/Upload';
 import { ModalPropose } from '../Modals/Propose';
 import axios from '../../api/axios';
@@ -10,9 +10,31 @@ import chain from '../../api/chain';
 
 export function MyContent () {
 
-  const [account, setValues] = useState({ balance: '50' })
+  const [account, setAccount] = useState({ balance: '0', energy: '0', activity: '0', reputation: '0' })
 
   const [nodes, setNodes] = useState([]);
+
+  useEffect(() => {
+    async function fetchChainData() {
+      try {
+        const keys = chain.getKey();
+        let [balance, energy, activity, reputation] = await Promise.all([
+          chain.getBalance(keys.address),
+          chain.getEnergyAsset(keys.address),
+          chain.getActivityAsset(keys.address),
+          chain.getReputationAsset(keys.address)
+        ]);
+
+        setAccount({
+          balance, energy, activity, reputation
+        });
+        console.log(balance);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchChainData();
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -35,6 +57,8 @@ export function MyContent () {
     fetchData();
   }, []); 
 
+ 
+
   const [isModalOpen, setIsModalOpen] = useState({ upload: false, propose: false });
   const [modalContent, setModalContent] = useState({ index: 0 });
 
@@ -52,7 +76,7 @@ export function MyContent () {
     return (
       <Card key={index}>
         <Card.Content>
-          <Header className="break-word" size="small" as={Link} to={`/node/${cidStr}`}>
+          <Header className="break-word" size="small" as={Link} to={`/node/${cidStr}`} >
             {cidStr}
           </Header>
         </Card.Content>
@@ -84,14 +108,14 @@ export function MyContent () {
               primary
               onClick={handlModalOpen.bind(this, "propose", index, nodeId)}
             >
-              propose
+              Propose
             </Button>
             <Button
               basic
               color="blue"
               onClick={handlModalOpen.bind(this, "transfer", index)}
             >
-              transfer
+              Transfer
             </Button>
           </div>
         </Card.Content>
@@ -103,28 +127,59 @@ export function MyContent () {
 
   return (
     <Container>
-
-      <Header size='large'>
-        <Grid>
+      <Grid>
+        <Grid.Row>
           <Grid.Column width={8}>
-            Your balance: {account.balance} ATDot
+            <Label color="blue">
+              {account.balance}
+              <Label.Detail>CT</Label.Detail>
+            </Label>
+            <Label color="teal">
+              {account.energy}
+              <Label.Detail>CEP</Label.Detail>
+            </Label>
+            <Label color="orange">
+              {account.activity}
+              <Label.Detail>CAP</Label.Detail>
+            </Label>
+            <Label color="yellow">
+              {account.reputation}
+              <Label.Detail>CRP</Label.Detail>
+            </Label>
           </Grid.Column>
-          <Grid.Column floated='right' textAlign='right' width={8}>
-            <Button basic color='blue' onClick={handlModalOpen.bind(this, 'upload', 0)}>Upload File</Button>
-            <Button basic color='blue' as={Link} to='whiteboard'>New Whiteboard</Button>
+          <Grid.Column floated="right" textAlign="right" width={8}>
+            <Button
+              basic
+              color="blue"
+              onClick={handlModalOpen.bind(this, "upload", 0)}
+            >
+              Upload File
+            </Button>
+            <Button basic color="blue" as={Link} to="whiteboard">
+              New Whiteboard
+            </Button>
           </Grid.Column>
-        </Grid>
-      </Header>
+        </Grid.Row>
+      </Grid>
 
-      <Card.Group>
-        {cards}
-      </Card.Group>
+      <Card.Group>{cards}</Card.Group>
 
-      <ModalUpload isOpen={isModalOpen.upload} handleClose={handlModalClose} content={modalContent} />
-      <ModalPropose isOpen={isModalOpen.propose} handleClose={handlModalClose} content={modalContent} />
-      <ModalPropose isOpen={isModalOpen.transfer} handleClose={handlModalClose} content={modalContent} />
-
+      <ModalUpload
+        isOpen={isModalOpen.upload}
+        handleClose={handlModalClose}
+        content={modalContent}
+      />
+      <ModalPropose
+        isOpen={isModalOpen.propose}
+        handleClose={handlModalClose}
+        content={modalContent}
+      />
+      <ModalPropose
+        isOpen={isModalOpen.transfer}
+        handleClose={handlModalClose}
+        content={modalContent}
+      />
     </Container>
-  )
+  );
 }
 

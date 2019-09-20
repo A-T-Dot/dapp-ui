@@ -74,6 +74,25 @@ const getBalance = async (address) => {
   return currentBalance.toString();
 };
 
+const getEnergyAsset = async address => {
+  const api = await getApi();
+  const currentBalance = await api.query.nonTransferAssets.freeBalance(0, address);
+  return currentBalance.toString();
+};
+
+const getActivityAsset = async address => {
+  const api = await getApi();
+  const currentBalance = await api.query.nonTransferAssets.freeBalance(1, address);
+  return currentBalance.toString();
+};
+
+const getReputationAsset = async address => {
+  const api = await getApi();
+  const currentBalance = await api.query.nonTransferAssets.freeBalance(2, address);
+  return currentBalance.toString();
+};
+
+
 const getBalances = async (addresses, callback) => {
   const api = await getApi();
   const currentBalances = await api.query.balances.freeBalance.multi(addresses);
@@ -391,4 +410,8 @@ export default {
   tcxClaim,
   setKeyFromUri,
   getKey,
+  // -------
+  getEnergyAsset,
+  getActivityAsset,
+  getReputationAsset,
 };
