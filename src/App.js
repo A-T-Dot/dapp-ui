@@ -12,7 +12,9 @@ import { Whiteboard } from "./components/Whiteboard";
 import chain from "./api/chain";
 import { cryptoWaitReady } from "@polkadot/util-crypto";
 import Ipfs from "./utils/Ipfs";
+import "semantic-ui-css/semantic.min.css";
 import './App.css';
+
 
 window.Ipfs = Ipfs;
 
