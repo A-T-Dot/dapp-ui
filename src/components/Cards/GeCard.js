@@ -16,7 +16,7 @@ export default function GeCard(props) {
           <List>
             <List.Item>
               <List.Icon name="users" />
-              <List.Content>{members.length || "0"} members</List.Content>
+              <List.Content>{Object.keys(members).length || "0"} members</List.Content>
             </List.Item>
             <List.Item>
               <List.Icon name="numbered list" />

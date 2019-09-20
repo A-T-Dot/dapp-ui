@@ -68,10 +68,10 @@ const getApi = async () => {
   // });
 };
 
-const getBalance = async (address, callback) => {
+const getBalance = async (address) => {
   const api = await getApi();
   const currentBalance = await api.query.balances.freeBalance(address);
-  callback(currentBalance.toString());
+  return currentBalance.toString();
 };
 
 const getBalances = async (addresses, callback) => {

@@ -28,7 +28,8 @@ setTimeout(async () => {
   // chain.setKeyFromUri("//Alice");
   // const keys = chain.getKey()
   // console.log("keys", keys)
-
+  let balance = await chain.getBalance(chain.getKey().address);
+  console.log("balance", balance);
   // tcx信息
   // chain.getTcxDetails(keys)
 
