@@ -57,7 +57,7 @@ export class ModalUpload extends React.Component {
   }
 
   async createNode (hash, type, sources) {
-    const keys = chain.getKeysFromUri('//Alice')
+    const keys = chain.getKey();
     const nodeCreateRes = await chain.nodeCreate(keys, hash, type, sources);
     console.log("---nodeCreate return:", nodeCreateRes);
   }
@@ -76,9 +76,14 @@ export class ModalUpload extends React.Component {
       console.log(contentHash);
       console.log(this.state.fileType)
 
-      let sources = this.state.sourcesStr.split(",").map(source => {
-        return Ipfs.getContentHashStrfromCIDStr(source.trim());
-      });
+      let sources = [];
+      if(this.state.sourcesStr.length > 0 ){
+        this.state.sourcesStr.split(",").map(source => {
+          return Ipfs.getContentHashStrfromCIDStr(source.trim());
+        });
+      }
+      
+      console.log(sources);
       await this.createNode(contentHash, this.state.fileType, sources);
 
       this.setState({

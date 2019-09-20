@@ -77,7 +77,7 @@ function Task(props) {
         <Item.Content style={{ width: "100%" }}>
           <Item.Header>Resolve!</Item.Header>
           <Item.Description className="break-word">
-            Your proposal result for adding <Link to={`/node/${cid}`}>{cid}</Link>{" "}
+            The proposal result for adding <Link to={`/node/${cid}`}>{cid}</Link>{" "}
             to TCX#{task.tcxId} has been finalized. Resolve now to see the result.
           </Item.Description>
           <Button.Group floated="right">

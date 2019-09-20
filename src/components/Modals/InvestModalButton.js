@@ -29,7 +29,7 @@ export default class InvestModalButton extends Component {
       });
 
       // // write to chain
-      const keys = chain.getKeysFromUri("//Alice");
+      const keys = chain.getKey();
       const geStakeRes = await chain.geStake(keys, this.props.geId, this.state.amount)
       console.log("---geStake return:", geStakeRes)
 

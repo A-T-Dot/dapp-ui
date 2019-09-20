@@ -68,11 +68,30 @@ const getApi = async () => {
   // });
 };
 
-const getBalance = async (address, callback) => {
+const getBalance = async (address) => {
   const api = await getApi();
   const currentBalance = await api.query.balances.freeBalance(address);
-  callback(currentBalance.toString());
+  return currentBalance.toString();
 };
+
+const getEnergyAsset = async address => {
+  const api = await getApi();
+  const currentBalance = await api.query.nonTransferAssets.freeBalance(0, address);
+  return currentBalance.toString();
+};
+
+const getActivityAsset = async address => {
+  const api = await getApi();
+  const currentBalance = await api.query.nonTransferAssets.freeBalance(1, address);
+  return currentBalance.toString();
+};
+
+const getReputationAsset = async address => {
+  const api = await getApi();
+  const currentBalance = await api.query.nonTransferAssets.freeBalance(2, address);
+  return currentBalance.toString();
+};
+
 
 const getBalances = async (addresses, callback) => {
   const api = await getApi();
@@ -352,6 +371,20 @@ const tcxClaim = async (keys, challenge_id) => {
       .catch(err => reject(err));
   });
 }
+let key = null;
+
+const setKeyFromUri = (uri) => {
+  const keyring = new Keyring({ type: "sr25519" });
+  key = keyring.addFromUri(uri);
+}
+
+const getKey = () => {
+  if(!key) {
+    console.error("key has not been set");
+    return;
+  }
+  return key;
+}
 
 export default {
   getBalance,
@@ -374,5 +407,11 @@ export default {
   tcxChallenge,
   tcxResolve,
   tcxVote,
-  tcxClaim
+  tcxClaim,
+  setKeyFromUri,
+  getKey,
+  // -------
+  getEnergyAsset,
+  getActivityAsset,
+  getReputationAsset,
 };
