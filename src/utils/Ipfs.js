@@ -70,5 +70,10 @@ export default {
     let buf = Buffer.concat([Buffer.from("1220", "hex"), Buffer.from(b.slice(2),"hex")]);
     let cid = new CID(buf);
     return cid;
+  },
+  getContentHashStrfromCIDStr: (cidStr) => {
+    let cid = new CID(cidStr);
+    let contentHashBuf = cid.multihash.slice(2);
+    return "0x" + contentHashBuf.toString('hex');
   }
 };

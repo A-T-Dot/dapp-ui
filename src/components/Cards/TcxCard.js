@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Container, Button, Card, Grid, List } from "semantic-ui-react";
 import { tcxTypeToText } from "../../constants/tcxType";
+import hex2ascii from "hex2ascii";
 
 export default function TcxCard(props) {
   let { link, tcx } = props;
@@ -11,7 +12,7 @@ export default function TcxCard(props) {
   return (
     <Card as={Link} to={link}>
       <Card.Content>
-        <Card.Header>Dog images</Card.Header>
+        <Card.Header>{hex2ascii(tcx.contentHash)}</Card.Header>
         <Card.Meta>TCX #{tcx.tcxId}</Card.Meta>
         <Card.Description>
           <List>

@@ -100,13 +100,13 @@ function App () {
           <Route exact path="/governance" component={Governance} />
           <Route exact path="/ge/:geid" component={GovernanceDetail} />
           <Route exact path="/ge/:geid/tcx/:tcxid" component={TCXDetail} />
-          <Route exact path="/node/:nodeid" component={NodeExplorer} />
+          <Route exact path="/node/:cid" component={NodeExplorer} />
           <Route exact path="/discover" component={Discover} />
         </Fragment>
       </Switch>
       <Websocket url='ws://localhost:7000/ws'
         onMessage={handleData} />
-      <div className="footer">WS Connect: {wsData.data || 'castor'}</div>
+      {/* <div className="footer">WS Connect: {wsData.data || 'castor'}</div> */}
     </div>
   );
 }

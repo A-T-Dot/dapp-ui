@@ -46,12 +46,12 @@ export function MyContent () {
 
   const cards = nodes.map((node, index) => {
     let { sources, nodeType, referredBy, nodeId } = node;
-
+    let cidStr = Ipfs.getCIDv0fromContentHashStr(node.nodeId).toString();
     return (
       <Card key={index}>
         <Card.Content>
-          <Header className="break-word" size="small">
-            {Ipfs.getCIDv0fromContentHashStr(node.nodeId).toString()}
+          <Header className="break-word" size="small" as={Link} to={`/node/${cidStr}`}>
+            {cidStr}
           </Header>
         </Card.Content>
         <Card.Content>

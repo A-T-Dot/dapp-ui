@@ -66,10 +66,14 @@ const graphConfig = {
 };
 
 export function NodeExplorer (props) {
-  const { nodeid } = props.match.params
+  const { cid } = props.match.params;
+
+  let nodeid = Ipfs.getContentHashStrfromCIDStr(cid);
+  console.log(nodeid);
+
   const [state, setState] = useState({
     index: nodeid,
-  graphData: {
+    graphData: {
       links: [],
       nodes: [{id: nodeid}]
     }
@@ -170,8 +174,8 @@ export function NodeExplorer (props) {
   return (
     <Container>
       <Header size="large">Node Explorer</Header>
-      <div>Node Id: {nodeid}</div>
-      <NodeRenderer node={{}} ipfsGatewayUrl={"http://localhost:8080"} />
+      <div>Content Hash: {cid}</div>
+      <NodeRenderer contentHash={nodeid} contentType={nodeid} ipfsGatewayUrl={"http://localhost:8080"} />
       <div className="node-explorer">
         <Graph
           id="graph-id"

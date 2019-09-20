@@ -4,6 +4,7 @@ import axios from '../../api/axios';
 import GeCard from '../Cards/GeCard';
 import TcxCard from '../Cards/TcxCard';
 import NodeCard from '../Cards/NodeCard';
+import Ipfs from '../../utils/Ipfs';
 
 function listItem (type, elements) {
   let items;
@@ -17,7 +18,7 @@ function listItem (type, elements) {
     });
   } else {
     items = elements.map((ele, index) => {
-      return <NodeCard key={index} link={`/node/${ele.nodeId}`} node={ele} />;
+      return <NodeCard key={index} link={`/node/${Ipfs.getCIDv0fromContentHashStr(ele.nodeId).toString()}`} node={ele} />;
     });
   }
 

@@ -7,6 +7,7 @@ import TcxCard from '../Cards/TcxCard';
 import NewTcxModalButton from '../Modals/NewTcxModalButton';
 import StakeModalButton from "../Modals/StakeModalButton";
 import InvestModalButton from "../Modals/InvestModalButton";
+import hex2ascii from "hex2ascii";
 
 function listItem (current, elements) {
   let items = elements.map((ele, index) => {
@@ -80,7 +81,7 @@ export function GovernanceDetail (props) {
       <Grid>
         <Grid.Column width={16}>
           <Header floated="left" size="large">
-            GE #{current.index}: {current.metadata}
+            GE #{geid}: {hex2ascii(current.metadata)}
           </Header>
           <Button.Group floated="right">
             <StakeModalButton geId={geid} />

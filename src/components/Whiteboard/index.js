@@ -58,7 +58,7 @@ export class Whiteboard extends React.Component {
     
     let nodeObj = {
       nodes: nodes.map((node) => {
-        return node.id
+        return node.nodeId
       }),
       links,
       root,
@@ -72,7 +72,6 @@ export class Whiteboard extends React.Component {
     let contentHashBuf = Ipfs.getContentHashBufFromCIDv0(cid);
     console.log("uploaded to ipfs", cid.toString());
 
-    
     await this.createNode(contentHashBuf, nodeType.WHITEBOARD, nodeObj.nodes)
     // let res2 = await Ipfs.get(cid2);
     // console.log(JSON.parse(res2));

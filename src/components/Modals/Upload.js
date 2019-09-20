@@ -13,7 +13,7 @@ export class ModalUpload extends React.Component {
       cid: '',
       files: null,
       fileType: 0,
-      sources: [],
+      sourcesStr: '',
       loading: false,
       dimmerActive: false,
     };
@@ -34,7 +34,7 @@ export class ModalUpload extends React.Component {
     } else if(e.target.name == "file-type") {
       this.setState({ fileType: e.target.value });
     } else {
-      this.setState({ sources: e.target.value.split(",")})
+      this.setState({ sourcesStr: e.target.value })
     }
  
   }
@@ -76,7 +76,10 @@ export class ModalUpload extends React.Component {
       console.log(contentHash);
       console.log(this.state.fileType)
 
-      await this.createNode(contentHash, this.state.fileType, this.state.sources);
+      let sources = this.state.sourcesStr.split(",").map(source => {
+        return Ipfs.getContentHashStrfromCIDStr(source.trim());
+      });
+      await this.createNode(contentHash, this.state.fileType, sources);
 
       this.setState({
         loading: false
