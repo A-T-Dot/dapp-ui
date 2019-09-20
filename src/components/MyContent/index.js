@@ -13,27 +13,56 @@ export function MyContent () {
   const [account, setAccount] = useState({ balance: '0', energy: '0', activity: '0', reputation: '0' })
 
   const [nodes, setNodes] = useState([]);
+  
+  // Query chain state for balance;
+  // useEffect(() => {
+  //   async function fetchChainData() {
+  //     try {
+  //       const keys = chain.getKey();
+  //       let [balance, energy, activity, reputation] = await Promise.all([
+  //         chain.getBalance(keys.address),
+  //         chain.getEnergyAsset(keys.address),
+  //         chain.getActivityAsset(keys.address),
+  //         chain.getReputationAsset(keys.address)
+  //       ]);
 
+  //       setAccount({
+  //         balance, energy, activity, reputation
+  //       });
+  //       console.log(balance);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   }
+  //   fetchChainData();
+  // }, []);
   useEffect(() => {
-    async function fetchChainData() {
+    async function fetchData() {
       try {
         const keys = chain.getKey();
-        let [balance, energy, activity, reputation] = await Promise.all([
-          chain.getBalance(keys.address),
-          chain.getEnergyAsset(keys.address),
-          chain.getActivityAsset(keys.address),
-          chain.getReputationAsset(keys.address)
-        ]);
+        const response = await axios(
+          `/api/v1/accounts/${keys.address}`
+        );
+        let { data, error } = response;
+        if (error) {
+          console.log(error);
+          return;
+        }
+        let { balance, energy, activity, reputation}  = data;
 
         setAccount({
-          balance, energy, activity, reputation
+          balance,
+          energy,
+          activity,
+          reputation
         });
+
         console.log(balance);
       } catch (error) {
         console.error(error);
       }
     }
-    fetchChainData();
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -131,19 +160,19 @@ export function MyContent () {
         <Grid.Row>
           <Grid.Column width={8}>
             <Label color="blue">
-              {account.balance}
+              {account.balance || 0}
               <Label.Detail>CT</Label.Detail>
             </Label>
             <Label color="teal">
-              {account.energy}
+              {account.energy || 0}
               <Label.Detail>CEP</Label.Detail>
             </Label>
             <Label color="orange">
-              {account.activity}
+              {account.activity || 0}
               <Label.Detail>CAP</Label.Detail>
             </Label>
             <Label color="yellow">
-              {account.reputation}
+              {account.reputation || 0}
               <Label.Detail>CRP</Label.Detail>
             </Label>
           </Grid.Column>
