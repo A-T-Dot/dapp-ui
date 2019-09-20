@@ -3,44 +3,40 @@ import { Menu } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import MarkdownRenderer from "./MarkdownRenderer";
 import { nodeType, nodeTypeToText } from "../../constants/nodeType";
+import JsonRender from "./JsonRenderer";
 
 export default class NodeRenderer extends Component {
   render() {
-    let { node, ipfsGatewayUrl } = this.props;
-    if (!node) {
+    if (!this.props.cidStr || !this.props.nodeType) {
       return <div>Loading</div>;
     }
 
-    // let typeId = node.node_type.toNumber();
-    // let cid = node.id.toHex();
-    let typeId = nodeType.TXT;
-    let cid = "QmRC9s7W4a5mr3wuXDuM53CHvXKPexDaVc1342oYgp1fZQ";
+    let typeId = parseInt(this.props.nodeType);
+    let cid = this.props.cidStr;
+    // let typeId = nodeType.TXT;
+    // let cid = "QmRC9s7W4a5mr3wuXDuM53CHvXKPexDaVc1342oYgp1fZQ";
 
     let content;
-    let url = `${ipfsGatewayUrl}/ipfs/${cid}`;
+    let url = `${this.props.ipfsGatewayUrl}/ipfs/${cid}`;
     switch (typeId) {
-      case 0:
+      case nodeType.JPG:
         // jpg
-        content = <img src={url}></img>;
+        content = <img src={url} style={{maxWidth: '100%', height: '300px'}}></img>;
         break;
-      case 1:
+      case nodeType.TXT:
         // txt
         // content = (
         //   <object data={url} width="100%" height="100%">
         //     Not supported
         //   </object>
         // );
-        content = <MarkdownRenderer url={url} />;
+        content = <MarkdownRenderer url={url}/>;
         break;
-      case 2:
+      case nodeType.JSON:
         // json
-        content = (
-          <object data={url} width="100%">
-            Not supported
-          </object>
-        );
+        content = <JsonRender url={url} />;
         break;
-      case 3:
+      case nodeType.MP4:
         // mp4
         content = (
           <video width="100%" controls>
@@ -49,19 +45,19 @@ export default class NodeRenderer extends Component {
           </video>
         );
         break;
-      case 4:
+      case nodeType.WHITEBOARD:
         // whiteboard
-        content = <p>whiteboard</p>;
+        content = <JsonRender url={url} />;
         break;
-      case 5:
+      case nodeType.TCXPOINTER:
         // tcx pointer
         content = <p>tcx pointer</p>;
         break;
-      case 6:
+      case nodeType.NODEPOINTER:
         // node pointer
         content = <p>node pointer</p>;
         break;
-      case 7:
+      case nodeType.MARKDOWN:
         // markdown
         content = <MarkdownRenderer url={url} />;
         break;
@@ -69,6 +65,10 @@ export default class NodeRenderer extends Component {
         content = <p>No renderer for node type</p>;
     }
 
-    return <React.Fragment>{content}</React.Fragment>;
+    return (
+      <div>
+        {content}
+      </div>
+    )
   }
 }

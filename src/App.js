@@ -34,18 +34,18 @@ setTimeout(async () => {
   // chain.getTokenBalance(keys)
 
   // 1.创建ge
-  const geCreateRes = await chain.geCreate(keys)
-  console.log("---geCreate return:", geCreateRes)
-  // ge others
+  // const geCreateRes = await chain.geCreate(keys)
+  // console.log("---geCreate return:", geCreateRes)
+  // // ge others
 
-  const geStakeRes = await chain.geStake(keys, 'id', 10000000000)
-  console.log("---geStake return:", geStakeRes)
+  // const geStakeRes = await chain.geStake(keys, 'id', 10000000000)
+  // console.log("---geStake return:", geStakeRes)
 
-  const geInvestRes = await chain.geInvest(keys, 'id', 10000000000)
-  console.log("---geInvest return:", geInvestRes)
+  // const geInvestRes = await chain.geInvest(keys, 'id', 10000000000)
+  // console.log("---geInvest return:", geInvestRes)
 
-  const geWithdrawRes = await chain.geWithdraw(keys, 'id', 10000000000)
-  console.log("---geWithdraw return:", geWithdrawRes)
+  // const geWithdrawRes = await chain.geWithdraw(keys, 'id', 10000000000)
+  // console.log("---geWithdraw return:", geWithdrawRes)
 
   // const geUpdateRulesRes = await chain.geUpdateRules(keys)
   // console.log("---geUpdateRules return:", geUpdateRulesRes)
@@ -100,13 +100,13 @@ function App () {
           <Route exact path="/governance" component={Governance} />
           <Route exact path="/ge/:geid" component={GovernanceDetail} />
           <Route exact path="/ge/:geid/tcx/:tcxid" component={TCXDetail} />
-          <Route exact path="/node/:nodeid" component={NodeExplorer} />
+          <Route exact path="/node/:cid" component={NodeExplorer} />
           <Route exact path="/discover" component={Discover} />
         </Fragment>
       </Switch>
       <Websocket url='ws://localhost:7000/ws'
         onMessage={handleData} />
-      <div className="footer">WS Connect: {wsData.data || 'castor'}</div>
+      {/* <div className="footer">WS Connect: {wsData.data || 'castor'}</div> */}
     </div>
   );
 }

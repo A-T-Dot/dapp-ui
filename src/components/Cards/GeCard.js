@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Container, Button, Card, Grid, List } from "semantic-ui-react";
+import hex2ascii from "hex2ascii";
 
 export default function GeCard(props) {
   let { link, ge } = props;
@@ -9,7 +10,7 @@ export default function GeCard(props) {
   return (
     <Card as={Link} to={link}>
       <Card.Content>
-        <Card.Header>Dog lovers</Card.Header>
+        <Card.Header>{hex2ascii(ge.contentHash)}</Card.Header>
         <Card.Meta>GE #{ge.geId}</Card.Meta>
         <Card.Description>
           <List>

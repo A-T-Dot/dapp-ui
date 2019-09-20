@@ -24,7 +24,7 @@ export default class MarkdownRenderer extends React.Component {
       });
   }
   render() {
-    return <ReactMarkdown source={this.state.input} />;
+    return <ReactMarkdown source={this.state.input} className="break-word" />;
   }
 }
 

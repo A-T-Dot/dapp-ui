@@ -1,18 +1,35 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Container, Header, Grid, Image, Card, Search, Button, Menu, Icon } from "semantic-ui-react";
+import { Link, Redirect } from "react-router-dom";
+import {
+  Container,
+  Header,
+  Grid,
+  Image,
+  Card,
+  Search,
+  Button,
+  Menu,
+  Icon,
+  Dimmer,
+  Loader,
+} from "semantic-ui-react";
 import Sidebar from './Sidebar';
 import Toolbar from './Toolbar';
 import Editor from './Editor';
 import logo from "../../castor.svg";
 import Ipfs from "../../utils/Ipfs";
-
+import chain from "../../api/chain";
+import { nodeType } from "../../constants/nodeType"
 
 export class Whiteboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      chosenNode: null
+      chosenNode: null,
+      loading: false,
+      dimmerActive: false,
+      cid: '',
+      redirect: false
     };
   }
 
@@ -27,6 +44,11 @@ export class Whiteboard extends React.Component {
     this.setState({chosenNode: null});
   }
 
+  async createNode (hash, type, sources) {
+    const keys = chain.getKeysFromUri('//Alice')
+    const nodeCreateRes = await chain.nodeCreate(keys, hash, type, sources);
+    console.log("---nodeCreate return:", nodeCreateRes);
+  }
   handleClick = async () => {
     if(!this.editorRef) {
       console.log("Cannot find editor");
@@ -36,30 +58,56 @@ export class Whiteboard extends React.Component {
     
     let nodeObj = {
       nodes: nodes.map((node) => {
-        return node.id
+        return node.nodeId
       }),
       links,
       root,
     };
 
+    this.setState({
+      loading: true,
+      dimmerActive: true,
+    })
     let cid = await Ipfs.add([JSON.stringify(nodeObj)]);
-    console.log(cid.buffer.toString('hex'));
     let contentHashBuf = Ipfs.getContentHashBufFromCIDv0(cid);
-    console.log(
-      Ipfs.getCIDv0fromContentHashStr(
-        "0x4e8ac7dc3a61da3354ebf3ee7ed24b57df4762c2ef318c125f23cdd759362b63"
-      )
-    );
+    console.log("uploaded to ipfs", cid.toString());
+
+    await this.createNode(contentHashBuf, nodeType.WHITEBOARD, nodeObj.nodes)
     // let res2 = await Ipfs.get(cid2);
     // console.log(JSON.parse(res2));
 
+    this.setState({ loading: false, cid});
+    var that = this;
+    setTimeout(() => {
+      that.setState({
+        dimmerActive: false,
+        redirect: true
+      });
+    }, 3000);
 
   }
 
 
   render() {
-    let { chosenNode } = this.state;
 
+    let { chosenNode, loading, dimmerActive, cid, redirect } = this.state;
+    
+    if(redirect) {
+      return <Redirect to="/content" />;
+    }
+
+    let dimmerContent;
+    if (loading) {
+      dimmerContent = <Loader content="Loading" />;
+    } else {
+      dimmerContent = (
+        <Header as="h2" icon inverted>
+          <Icon name="checkmark" />
+          Node Created
+          <Header.Subheader>{cid.toString()}</Header.Subheader>
+        </Header>
+      );
+    }
     return (
       <div className="whiteboard">
         <Menu>
@@ -77,6 +125,7 @@ export class Whiteboard extends React.Component {
             </Menu.Item>
           </Menu.Menu>
         </Menu>
+        <Dimmer active={dimmerActive}>{dimmerContent}</Dimmer>
         <Grid>
           <Grid.Row columns={2} style={{ height: "100%", padding: "0px" }}>
             <Grid.Column

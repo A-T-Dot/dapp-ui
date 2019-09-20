@@ -17,7 +17,7 @@ export function MyContent () {
     async function fetchData() {
       try {
         const response = await axios(
-          "/api/v1/accounts/5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty/nodes"
+          "/api/v1/accounts/5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY/nodes"
         );
         let { data, error } = response;
         if (error) {
@@ -36,8 +36,8 @@ export function MyContent () {
   const [isModalOpen, setIsModalOpen] = useState({ upload: false, propose: false });
   const [modalContent, setModalContent] = useState({ index: 0 });
 
-  const handlModalOpen = (action, index) => {
-    setModalContent({ index })
+  const handlModalOpen = (action, index, nodeId) => {
+    setModalContent({ index, nodeId })
     setIsModalOpen({ upload: action === 'upload', propose: action === 'propose', transfer: action === 'transfer' });
   }
   const handlModalClose = () => {
@@ -45,13 +45,13 @@ export function MyContent () {
   }
 
   const cards = nodes.map((node, index) => {
-    let { sources, nodeType, referredBy } = node;
-
+    let { sources, nodeType, referredBy, nodeId } = node;
+    let cidStr = Ipfs.getCIDv0fromContentHashStr(node.nodeId).toString();
     return (
       <Card key={index}>
         <Card.Content>
-          <Header className="break-word" size="small">
-            {Ipfs.getCIDv0fromContentHashStr(node.nodeId).toString()}
+          <Header className="break-word" size="small" as={Link} to={`/node/${cidStr}`}>
+            {cidStr}
           </Header>
         </Card.Content>
         <Card.Content>
@@ -80,7 +80,7 @@ export function MyContent () {
           <div className="ui two buttons">
             <Button
               primary
-              onClick={handlModalOpen.bind(this, "propose", index)}
+              onClick={handlModalOpen.bind(this, "propose", index, nodeId)}
             >
               propose
             </Button>

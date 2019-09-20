@@ -7,7 +7,7 @@ export default function NodeViewerModal(props) {
     <Modal trigger={props.trigger} centered={false} closeIcon size='small'>
       <Modal.Header>Node Viewer</Modal.Header>
       <Modal.Content>
-        <NodeRenderer node={{}} ipfsGatewayUrl={"http://localhost:8080"} />
+        <NodeRenderer cidStr={props.cidStr} nodeType={props.nodeType} ipfsGatewayUrl={"http://localhost:8080"} />
       </Modal.Content>
     </Modal>
   );
