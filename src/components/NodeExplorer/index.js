@@ -5,6 +5,9 @@ import NodeRenderer from '../ContentRenderer/NodeRenderer';
 import axios from "../../api/axios";
 import Ipfs from "../../utils/Ipfs";
 import { nodeTypeToText } from "../../constants/nodeType";
+import LikeModalButton from "../Modals/LikeModalButton"
+import AdmireModalButton from '../Modals/AdmireModalButton';
+import GrantModalButton from "../Modals/GrantModalButton";
 
 const graphConfig = {
   "automaticRearrangeAfterDropNode": false,
@@ -202,15 +205,9 @@ export function NodeExplorer (props) {
           <Grid.Row>
             <Grid.Column>
               <Button.Group floated="right">
-                <Button basic color="blue" onClick={() => {}}>
-                  Like
-                </Button>
-                <Button basic color="blue">
-                  Admire
-                </Button>
-                <Button basic color="blue">
-                  Grant
-                </Button>
+                <LikeModalButton/>
+                <AdmireModalButton/>
+                <GrantModalButton/>
                 <Button basic color="blue">
                   Report
                 </Button>
