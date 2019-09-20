@@ -45,7 +45,7 @@ export class Whiteboard extends React.Component {
   }
 
   async createNode (hash, type, sources) {
-    const keys = chain.getKeysFromUri('//Alice')
+    const keys = chain.getKey();
     const nodeCreateRes = await chain.nodeCreate(keys, hash, type, sources);
     console.log("---nodeCreate return:", nodeCreateRes);
   }

@@ -10,6 +10,7 @@ import { NodeExplorer } from './components/NodeExplorer';
 import { Discover } from "./components/Discover";
 import { Whiteboard } from "./components/Whiteboard";
 import chain from "./api/chain";
+import { cryptoWaitReady } from "@polkadot/util-crypto";
 
 import './App.css';
 
@@ -24,11 +25,12 @@ chain.getBalance(
 
 // timeout for fix: @polkadot/wasm-crypto has not been initialized
 setTimeout(async () => {
-  const keys = chain.getKeysFromUri('//Alice')
-  console.log(keys)
+  // chain.setKeyFromUri("//Alice");
+  // const keys = chain.getKey()
+  // console.log("keys", keys)
 
   // tcx信息
-  chain.getTcxDetails(keys)
+  // chain.getTcxDetails(keys)
 
   // // 显示token余额
   // chain.getTokenBalance(keys)
@@ -83,11 +85,25 @@ setTimeout(async () => {
 
 
 function App () {
+  const [cryptoReady, setCryptoReady] = useState(false);
+
+  const setKey = async() => {
+    await cryptoWaitReady();
+    chain.setKeyFromUri('//Alice');
+    setCryptoReady(true)
+  }
+
+  setKey();
+  
   const [wsData, setWsData] = useState({ data: '' });
 
   const handleData = (data) => {
     let result = JSON.parse(data);
     setWsData(result);
+  }
+
+  if(!cryptoReady) {
+    return <div>Loading</div>
   }
 
   return (

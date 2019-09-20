@@ -47,7 +47,7 @@ export class ModalPropose extends React.Component {
   }
 
   async propose(tcxId, nodeId, balance) {
-    const keys = chain.getKeysFromUri("//Alice");
+    const keys = chain.getKey();
     const proposeRes = await chain.tcxPropose(keys, tcxId, nodeId, balance, 0)
     console.log("---propose return:", proposeRes)
 

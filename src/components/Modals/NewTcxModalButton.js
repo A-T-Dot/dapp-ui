@@ -21,7 +21,7 @@ export default class NewTcxModalButton extends Component {
       });
 
       // write to chain
-      const keys = chain.getKeysFromUri("//Alice");
+      const keys = chain.getKey();
 
       const tcxCreateRes = await chain.tcxCreate(keys, this.props.geId, 0, this.state.metadata);
       console.log("---tcxCreate return:", tcxCreateRes);

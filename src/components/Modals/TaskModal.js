@@ -32,7 +32,7 @@ export default class TaskModal extends React.Component {
     this.setState({ loading: true, dimmerActive: true });
 
     console.log(amount);
-    const keys = chain.getKeysFromUri("//Alice");
+    const keys = chain.getKey();
     const challengeRes = await chain.tcxChallenge(keys, task.tcxId, task.nodeId, amount)
     console.log("---challenge return:", challengeRes)
 
@@ -49,7 +49,7 @@ export default class TaskModal extends React.Component {
     this.setState({ loading: true, dimmerActive: true });
 
     console.log(amount);
-    const keys = chain.getKeysFromUri("//Alice");
+    const keys = chain.getKey();
     const voteRes = await chain.tcxVote(keys, task.challengeId, amount, value)
     console.log("---vote return:", voteRes)
 
@@ -66,7 +66,7 @@ export default class TaskModal extends React.Component {
     this.setState({ loading: true, dimmerActive: true });
 
     console.log(amount);
-    const keys = chain.getKeysFromUri("//Alice");
+    const keys = chain.getKey();
     const resolveRes = await chain.tcxResolve(keys, task.tcxId, task.nodeId);
     console.log("---resolve return:", resolveRes)
 
@@ -84,7 +84,7 @@ export default class TaskModal extends React.Component {
     this.setState({ loading: true, dimmerActive: true });
 
     console.log(amount);
-    const keys = chain.getKeysFromUri("//Alice");
+    const keys = chain.getKey();
     const claimRes = await chain.tcxClaim(keys, task.challengeId)
     console.log("---claim return:", claimRes)
 
@@ -164,6 +164,12 @@ export default class TaskModal extends React.Component {
               {task.tcxId}
             </Modal.Content>
             <Modal.Actions>
+              <Input
+                icon="dollar"
+                iconPosition="left"
+                placeholder="amount"
+                onChange={this.handleChange}
+              />
               <Button color="red" onClick={async () => this.vote(false)}>
                 <Icon name="remove" /> No
               </Button>

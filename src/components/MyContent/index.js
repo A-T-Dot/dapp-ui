@@ -6,6 +6,7 @@ import { ModalPropose } from '../Modals/Propose';
 import axios from '../../api/axios';
 import Ipfs from '../../utils/Ipfs';
 import { nodeTypeToText } from '../../constants/nodeType';
+import chain from '../../api/chain';
 
 export function MyContent () {
 
@@ -16,8 +17,9 @@ export function MyContent () {
   useEffect(() => {
     async function fetchData() {
       try {
+        const keys = chain.getKey();
         const response = await axios(
-          "/api/v1/accounts/5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY/nodes"
+          `/api/v1/accounts/${keys.address}/nodes`
         );
         let { data, error } = response;
         if (error) {

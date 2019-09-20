@@ -5,6 +5,7 @@ import axios from "../../api/axios";
 import Tasks from './Tasks';
 import GeCard from '../Cards/GeCard';
 import NewGeModalButton from "../Modals/NewGeModalButton";
+import chain from "../../api/chain";
 
 function listItem (elements) {
 
@@ -24,7 +25,9 @@ export function Governance () {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios("/api/v1/ges");
+        const keys = chain.getKey();
+        console.log(keys.address);
+        const response = await axios(`/api/v1/accounts/${keys.address}/ges`);
         let { data, error } = response;
         if(error) {
           console.log(error)
@@ -45,7 +48,8 @@ export function Governance () {
     async function fetchData() {
       try {
         // TODO: change to dynamic key
-        const response = await axios("/api/v1/accounts/5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY/tasks");
+        const keys = chain.getKey();
+        const response = await axios(`/api/v1/accounts/${keys.address}/tasks`);
         let { data, error } = response;
         if (error) {
           console.log(error);
