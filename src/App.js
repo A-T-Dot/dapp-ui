@@ -11,17 +11,19 @@ import { Discover } from "./components/Discover";
 import { Whiteboard } from "./components/Whiteboard";
 import chain from "./api/chain";
 import { cryptoWaitReady } from "@polkadot/util-crypto";
-
+import Ipfs from "./utils/Ipfs";
 import './App.css';
+
+window.Ipfs = Ipfs;
 
 chain.connect()
 
-chain.getBalance(
-  '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-  function (balance) {
-    console.log(balance);
-  }
-);
+// chain.getBalance(
+//   '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+//   function (balance) {
+//     console.log(balance);
+//   }
+// );
 
 // timeout for fix: @polkadot/wasm-crypto has not been initialized
 setTimeout(async () => {
@@ -121,8 +123,8 @@ function App () {
           <Route exact path="/discover" component={Discover} />
         </Fragment>
       </Switch>
-      <Websocket url='ws://localhost:7000/ws'
-        onMessage={handleData} />
+      {/* <Websocket url='ws://localhost:7000/ws'
+        onMessage={handleData} /> */}
       {/* <div className="footer">WS Connect: {wsData.data || 'castor'}</div> */}
     </div>
   );
