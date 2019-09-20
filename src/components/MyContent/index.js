@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
-import { Container, Segment, Header, Card, Button, Grid, List, Label } from 'semantic-ui-react';
+import { Container, Segment, Header, Card, Button, Grid, List, Label, Progress } from 'semantic-ui-react';
 import { ModalUpload } from '../Modals/Upload';
 import { ModalPropose } from '../Modals/Propose';
 import axios from '../../api/axios';
@@ -158,7 +158,7 @@ export function MyContent () {
     <Container>
       <Grid>
         <Grid.Row>
-          <Grid.Column width={8}>
+          <Grid.Column width={10}>
             <Label color="blue">
               {account.balance || 0}
               <Label.Detail>CT</Label.Detail>
@@ -175,8 +175,9 @@ export function MyContent () {
               {account.reputation || 0}
               <Label.Detail>CRP</Label.Detail>
             </Label>
+            <Progress percent={80} style={{marginTop: '10px'}} indicating progress label={'Energy'}/>
           </Grid.Column>
-          <Grid.Column floated="right" textAlign="right" width={8}>
+          <Grid.Column floated="right" textAlign="right" width={6}>
             <Button
               basic
               color="blue"
