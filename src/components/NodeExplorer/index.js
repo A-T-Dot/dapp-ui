@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Header } from 'semantic-ui-react';
+import { Container, Header, Segment, Label, Button, Grid, List } from 'semantic-ui-react';
 import { Graph } from "react-d3-graph";
 import NodeRenderer from '../ContentRenderer/NodeRenderer';
 import axios from "../../api/axios";
 import Ipfs from "../../utils/Ipfs";
+import { nodeTypeToText } from "../../constants/nodeType";
 
 const graphConfig = {
   "automaticRearrangeAfterDropNode": false,
@@ -61,7 +62,7 @@ const graphConfig = {
     "opacity": 1,
     "renderLabel": false,
     "semanticStrokeWidth": false,
-    "strokeWidth": 1
+    "strokeWidth": 1.5
   }
 };
 
@@ -94,7 +95,7 @@ export function NodeExplorer (props) {
           return {
             id: node.nodeId,
             symbolType: index == 0 ? "circle" : "square",
-            color: index == 0 ? "red" : "blue",
+            color: index == 0 ? "#D62324" : "#1D7ACA",
             cid: Ipfs.getCIDv0fromContentHashStr(node.nodeId).toString()
           };
         });
@@ -168,17 +169,96 @@ export function NodeExplorer (props) {
   const onNodePositionChange = function (nodeId, x, y) {
   };
 
+  const handleLike = async function() {
+
+  };
+
+  const handleAdmire = async function() {
+
+  };
+
+  const handleGrant = async function() {
+    
+  };
+  
+  const handleReport = async function() {
+
+  };
+
+
+
+
+
   useEffect(() => {
     // TODO request api
 
   }, []);
 
+
   return (
     <Container>
-      <Header size="large">Node Explorer</Header>
-      <div>Node ID / CID: {cid}</div>
-      <NodeRenderer cidStr={cid} nodeType={state.node && state.node.nodeType} ipfsGatewayUrl={"http://localhost:8080"} />
-      <div className="node-explorer">
+      <Segment>
+        <Grid>
+          <Grid.Row>
+            <Grid.Column>
+              <Button.Group floated="right">
+                <Button basic color="blue" onClick={() => {}}>
+                  Like
+                </Button>
+                <Button basic color="blue">
+                  Admire
+                </Button>
+                <Button basic color="blue">
+                  Grant
+                </Button>
+                <Button basic color="blue">
+                  Report
+                </Button>
+              </Button.Group>
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column textAlign="justified">
+              <div className="justify-center">
+                <Header size="large">Node Explorer</Header>
+                <Label style={{ marginBottom: "20px" }}>
+                  <Label.Detail>{cid}</Label.Detail>
+                </Label>
+                <NodeRenderer
+                  cidStr={cid}
+                  nodeType={state.node && state.node.nodeType}
+                  ipfsGatewayUrl={"http://localhost:8080"}
+                />
+                <List>
+                  <List.Item>
+                    <List.Icon name="file" />
+                    <List.Content>
+                      {(state.node && nodeTypeToText[state.node.nodeType]) ||
+                        "0"}
+                    </List.Content>
+                  </List.Item>
+                  <List.Item>
+                    <List.Icon name="linkify" />
+                    <List.Content>
+                      {(state.node && state.node.sources.length) || "0"} cited
+                      sources
+                    </List.Content>
+                  </List.Item>
+                  <List.Item>
+                    <List.Icon name="external alternate" />
+                    <List.Content>
+                      referred by{" "}
+                      {(state.node && state.node.referredBy.length) || "0"}{" "}
+                      nodes
+                    </List.Content>
+                  </List.Item>
+                </List>
+              </div>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </Segment>
+      <Segment style={{ marginBottom: "10px" }}>
         <Graph
           id="graph-id"
           data={state.graphData}
@@ -194,7 +274,7 @@ export function NodeExplorer (props) {
           onMouseOutLink={onMouseOutLink}
           onNodePositionChange={onNodePositionChange}
         />
-      </div>
+      </Segment>
     </Container>
   );
 }
