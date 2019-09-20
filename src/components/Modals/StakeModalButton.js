@@ -21,7 +21,7 @@ export default class StakeModalButton extends Component {
       });
 
       // // write to chain
-      const keys = chain.getKeysFromUri("//Alice");
+      const keys = chain.getKey();
 
       // const geCreateRes = await chain.geCreate(keys, this.state.metadata);
       // console.log("---nodeCreate return:", geCreateRes);
