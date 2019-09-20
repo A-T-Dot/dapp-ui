@@ -50,12 +50,13 @@ export default class Sidebar extends React.Component {
           { nodes.map((node, index) => {
             
             let { sources, nodeType, referredBy, nodeId } = node;
+            let cid = Ipfs.getCIDv0fromContentHashStr(nodeId).toString();
 
             return (
               <Card fluid key={nodeId} onClick={() => this.handleClick(index)}>
                 <Card.Content>
                   <Header className="break-word" size="small">
-                    {Ipfs.getCIDv0fromContentHashStr(nodeId).toString()}
+                    {cid}
                   </Header>
                 </Card.Content>
                 <Card.Content>
@@ -93,6 +94,8 @@ export default class Sidebar extends React.Component {
                         onClick={e => e.stopPropagation()}
                       />
                     }
+                    cidStr={cid}
+                    nodeType={nodeType}
                   />
                 </Card.Content>
               </Card>

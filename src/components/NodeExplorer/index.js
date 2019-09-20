@@ -76,7 +76,8 @@ export function NodeExplorer (props) {
     graphData: {
       links: [],
       nodes: [{id: nodeid}]
-    }
+    },
+    node: null
   })
 
   useEffect(() => {
@@ -102,7 +103,8 @@ export function NodeExplorer (props) {
           graphData: {
             links: data.links,
             nodes
-          }
+          },
+          node: data.nodes[0],
         });
         console.log(state)
       } catch (error) {
@@ -174,8 +176,8 @@ export function NodeExplorer (props) {
   return (
     <Container>
       <Header size="large">Node Explorer</Header>
-      <div>Content Hash: {cid}</div>
-      <NodeRenderer contentHash={nodeid} contentType={nodeid} ipfsGatewayUrl={"http://localhost:8080"} />
+      <div>Node ID / CID: {cid}</div>
+      <NodeRenderer cidStr={cid} nodeType={state.node && state.node.nodeType} ipfsGatewayUrl={"http://localhost:8080"} />
       <div className="node-explorer">
         <Graph
           id="graph-id"
