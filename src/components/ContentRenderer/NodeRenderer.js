@@ -51,7 +51,7 @@ export default class NodeRenderer extends Component {
         break;
       case nodeType.TCXPOINTER:
         // tcx pointer
-        content = <p>tcx pointer</p>;
+        content = <JsonRender url={url} />;
         break;
       case nodeType.NODEPOINTER:
         // node pointer

@@ -18,12 +18,14 @@ export default function NodeCard(props) {
         <Card.Description>
           <List>
             <List.Item>
-              <List.Icon name="users" />
+              <List.Icon name="file" />
               <List.Content>{nodeTypeToText[nodeType] || "0"}</List.Content>
             </List.Item>
             <List.Item>
               <List.Icon name="linkify" />
-              <List.Content>{(sources && sources.length) || "0"} cited sources</List.Content>
+              <List.Content>
+                {(sources && sources.length) || "0"} cited sources
+              </List.Content>
             </List.Item>
             <List.Item>
               <List.Icon name="external alternate" />

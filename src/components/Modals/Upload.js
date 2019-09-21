@@ -78,11 +78,11 @@ export class ModalUpload extends React.Component {
 
       let sources = [];
       if(this.state.sourcesStr.length > 0 ){
-        this.state.sourcesStr.split(",").map(source => {
+        sources = this.state.sourcesStr.split(",").map(source => {
           return Ipfs.getContentHashStrfromCIDStr(source.trim());
         });
       }
-      
+
       console.log(sources);
       await this.createNode(contentHash, this.state.fileType, sources);
 
@@ -125,9 +125,7 @@ export class ModalUpload extends React.Component {
 
     return (
       <Modal open={isOpen} size="tiny" onClose={this.onClose} closeIcon>
-        <Dimmer active={dimmerActive}>
-          {dimmerContent}
-        </Dimmer>
+        <Dimmer active={dimmerActive}>{dimmerContent}</Dimmer>
         <Modal.Header>UploadFile</Modal.Header>
         <Modal.Content>
           <Form>
@@ -137,7 +135,7 @@ export class ModalUpload extends React.Component {
             <Form.Field>
               <Input
                 name="file-type"
-                icon="tag"
+                icon="file text outline"
                 iconPosition="left"
                 placeholder="file type"
                 onChange={this.onChange}
@@ -146,7 +144,7 @@ export class ModalUpload extends React.Component {
             <Form.Field>
               <Input
                 name="sources"
-                icon="tag"
+                icon="arrow left"
                 iconPosition="left"
                 placeholder="sources: e.g. 0x1234, 0x5566"
                 onChange={this.onChange}
