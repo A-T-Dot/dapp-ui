@@ -7,6 +7,7 @@ import axios from '../../api/axios';
 import Ipfs from '../../utils/Ipfs';
 import { nodeTypeToText } from '../../constants/nodeType';
 import chain from '../../api/chain';
+import { pow2_ceil } from 'asmcrypto.js/dist_es8/other/utils';
 
 export function MyContent () {
 
@@ -159,23 +160,25 @@ export function MyContent () {
       <Grid>
         <Grid.Row>
           <Grid.Column width={10}>
-            <Label color="blue">
-              {account.balance || 0}
-              <Label.Detail>CT</Label.Detail>
-            </Label>
-            <Label color="teal">
-              {account.energy || 0}
-              <Label.Detail>CEP</Label.Detail>
-            </Label>
-            <Label color="orange">
-              {account.activity || 0}
-              <Label.Detail>CAP</Label.Detail>
-            </Label>
-            <Label color="yellow">
-              {account.reputation || 0}
-              <Label.Detail>CRP</Label.Detail>
-            </Label>
-            <Progress percent={80} style={{marginTop: '10px'}} indicating progress label={'Energy'}/>
+            <div style={{display: "inline-block"}}>
+              <Label color="blue">
+                {Math.round(account.balance / Math.pow(10, 12)) || 0}
+                <Label.Detail>Tera CT</Label.Detail>
+              </Label>
+              {/* <Label color="teal">
+                {account.energy || 0}
+                <Label.Detail>CEP</Label.Detail>
+              </Label> */}
+              <Label color="orange">
+                {account.activity || 0}
+                <Label.Detail>CAP</Label.Detail>
+              </Label>
+              <Label color="yellow">
+                {account.reputation || 0}
+                <Label.Detail>CRP</Label.Detail>
+              </Label>
+              <Progress percent={80} style={{marginTop: '10px'}} indicating progress label={'Energy'}/>
+            </div>
           </Grid.Column>
           <Grid.Column floated="right" textAlign="right" width={6}>
             <Button

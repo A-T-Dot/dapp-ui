@@ -30,8 +30,8 @@ export default class InvestModalButton extends Component {
 
       // // write to chain
       const keys = chain.getKey();
-      const geStakeRes = await chain.geStake(keys, this.props.geId, this.state.amount)
-      console.log("---geStake return:", geStakeRes)
+      const geInvestRes = await chain.geInvest(keys, this.props.geId, this.state.amount)
+      console.log("---geInvest return:", geInvestRes)
 
       this.setState({ loading: false });
       var that = this;
