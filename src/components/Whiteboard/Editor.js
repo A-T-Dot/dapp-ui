@@ -26,7 +26,7 @@ function DraggableNode(props) {
   } = props;
   
   let { sources, nodeType, referredBy } = node;
-
+  let cid = Ipfs.getCIDv0fromContentHashStr(node.nodeId).toString();
   return (
     <Draggable
       bounds="parent"
@@ -52,7 +52,9 @@ function DraggableNode(props) {
           }`}
         >
           {/* <Button circular icon="close" floated="right" size="mini" /> */}
-          <Header size="small">{Ipfs.getCIDv0fromContentHashStr(node.nodeId).toString()}</Header>
+          <Header size="small">
+            {cid}
+          </Header>
         </Card.Content>
         <Card.Content className={isLinking ? "pointer" : "default-cursor"}>
           <Card.Description>
@@ -114,6 +116,8 @@ function DraggableNode(props) {
                   </Button.Content>
                 </Button>
               }
+              cidStr={cid}
+              nodeType={nodeType}
             />
           </div>
         </Card.Content>
