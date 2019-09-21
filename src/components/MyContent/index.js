@@ -173,7 +173,7 @@ export function MyContent () {
       <Grid>
         <Grid.Row>
           <Grid.Column width={10}>
-            <div style={{display: "inline-block"}}>
+            <div style={{ display: "inline-block" }}>
               <Label color="blue">
                 {Math.round(account.balance / Math.pow(10, 12)) || 0}
                 <Label.Detail>Tera CT</Label.Detail>
@@ -190,7 +190,14 @@ export function MyContent () {
                 {account.reputation || 0}
                 <Label.Detail>CRP</Label.Detail>
               </Label>
-              <Progress percent={80} style={{marginTop: '10px'}} indicating progress label={'Energy'}/>
+              <Progress
+                value={account.energy}
+                total="1000000"
+                style={{ marginTop: "10px" }}
+                indicating
+                progress
+                label={"Energy"}
+              />
             </div>
           </Grid.Column>
           <Grid.Column floated="right" textAlign="right" width={6}>
