@@ -9,6 +9,7 @@ import {
   Dimmer
 } from "semantic-ui-react";
 import chain from "../../api/chain";
+import Ipfs from "../../utils/Ipfs";
 
 export default class GrantModalButton extends Component {
   state = {
@@ -79,14 +80,17 @@ export default class GrantModalButton extends Component {
         <Dimmer active={dimmerActive}>{dimmerContent}</Dimmer>
         <Header icon="leaf" content="Grant" />
         <Modal.Content>
+          You want to grant to{" "}
+          {this.props.nodeId &&
+            Ipfs.getCIDv0fromContentHashStr(this.props.nodeId).toString()}
+        </Modal.Content>
+        <Modal.Actions>
           <Input
             icon="dollar"
             iconPosition="left"
             placeholder="amount"
             onChange={this.handleChange}
           />
-        </Modal.Content>
-        <Modal.Actions>
           <Button primary onClick={this.onClick}>
             <Icon name="checkmark" /> Grant
           </Button>

@@ -229,7 +229,7 @@ const geCreate = async (keys, content_hash) => {
   const api = await getApi();
   return new Promise(async (resolve, reject) => {
     const nonce = await api.query.system.accountNonce(keys.address);
-    api.tx.ge.create(content_hash).sign(keys, { nonce }).send(({ events = [], status }) => {
+    api.tx.ge.create(content_hash, 1000000).sign(keys, { nonce }).send(({ events = [], status }) => {
       _handleEvents(resolve, events, status, "ge")
     }).catch(err => reject(err));
   });

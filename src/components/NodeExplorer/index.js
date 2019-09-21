@@ -248,6 +248,18 @@ export function NodeExplorer (props) {
                       {(state.node && state.node.referredBy.length) || "0"}{" "}
                       nodes
                     </List.Content>
+                    <List.Item>
+                      <List.Icon name="external alternate" />
+                      <List.Content>
+                        {(state.node && state.node.likeCount) || "0"} likes
+                      </List.Content>
+                    </List.Item>
+                    <List.Item>
+                      <List.Icon name="external alternate" />
+                      <List.Content>
+                        {(state.node && state.node.admireCount) || "0"} admired
+                      </List.Content>
+                    </List.Item>
                   </List.Item>
                 </List>
               </div>
