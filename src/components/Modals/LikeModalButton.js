@@ -32,9 +32,11 @@ export default class LikeModalButton extends Component {
         loading: true,
         dimmerActive: true
       });
-
-      // write to chain
      
+      // write to chain
+      const keys = chain.getKey();
+      const interactionLikeRes = await chain.interactionLike(keys, this.props.nodeId);
+      console.log("---interactionLike return:", interactionLikeRes);
 
       this.setState({ loading: false });
       var that = this;

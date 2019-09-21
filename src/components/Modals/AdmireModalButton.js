@@ -34,6 +34,9 @@ export default class AdmireModalButton extends Component {
       });
 
       // write to chain
+      const keys = chain.getKey();
+      const interactionAdmireRes = await chain.interactionAdmire(keys, this.props.nodeId);
+      console.log("---interactionAdmire return:", interactionAdmireRes);
 
       this.setState({ loading: false });
       var that = this;

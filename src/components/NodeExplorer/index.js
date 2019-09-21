@@ -205,9 +205,9 @@ export function NodeExplorer (props) {
           <Grid.Row>
             <Grid.Column>
               <Button.Group floated="right">
-                <LikeModalButton/>
-                <AdmireModalButton/>
-                <GrantModalButton/>
+                <LikeModalButton nodeId={state.node && state.node.nodeId} />
+                <AdmireModalButton nodeId={state.node && state.node.nodeId} />
+                <GrantModalButton nodeId={state.node && state.node.nodeId} />
                 <Button basic color="blue">
                   Report
                 </Button>

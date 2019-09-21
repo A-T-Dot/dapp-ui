@@ -13,7 +13,7 @@ import chain from "../../api/chain";
 export default class GrantModalButton extends Component {
   state = {
     modalOpen: false,
-    metadata: "",
+    amount: "",
     loading: false,
     dimmerActive: false
   };
@@ -23,7 +23,7 @@ export default class GrantModalButton extends Component {
   handleClose = () => this.setState({ modalOpen: false, dimmerActive: false });
 
   handleChange = e => {
-    this.setState({ metadata: e.target.value });
+    this.setState({ amount: e.target.value });
   };
 
   onClick = async () => {
@@ -34,6 +34,9 @@ export default class GrantModalButton extends Component {
       });
 
       // write to chain
+      const keys = chain.getKey();
+      const interactionGrantRes = await chain.interactionGrant(keys, this.props.nodeId, this.state.amount);
+      console.log("---interactionGrant return:", interactionGrantRes);
 
       this.setState({ loading: false });
       var that = this;

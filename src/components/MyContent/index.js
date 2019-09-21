@@ -101,12 +101,17 @@ export function MyContent () {
   }
 
   const cards = nodes.map((node, index) => {
-    let { sources, nodeType, referredBy, nodeId } = node;
+    let { sources, nodeType, referredBy, nodeId, likeCount, admireCount } = node;
     let cidStr = Ipfs.getCIDv0fromContentHashStr(node.nodeId).toString();
     return (
       <Card key={index}>
         <Card.Content>
-          <Header className="break-word" size="small" as={Link} to={`/node/${cidStr}`} >
+          <Header
+            className="break-word"
+            size="small"
+            as={Link}
+            to={`/node/${cidStr}`}
+          >
             {cidStr}
           </Header>
         </Card.Content>
@@ -128,6 +133,14 @@ export function MyContent () {
                 <List.Content>
                   referred by {(referredBy && referredBy.length) || "0"} nodes
                 </List.Content>
+              </List.Item>
+              <List.Item>
+                <List.Icon name="external alternate" />
+                <List.Content>{likeCount || "0"} likes</List.Content>
+              </List.Item>
+              <List.Item>
+                <List.Icon name="external alternate" />
+                <List.Content>{admireCount || "0"} admired</List.Content>
               </List.Item>
             </List>
           </Card.Description>
