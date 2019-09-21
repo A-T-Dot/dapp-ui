@@ -79,10 +79,10 @@ export function TCXDetail (props) {
             Add Content Node
           </Button>
         </Grid.Column>
-        <Grid.Column width={16}>
+        {/* <Grid.Column width={16}>
           Your balance: {balance.atdot}ATDot, {balance.token}GE{current.index}{" "}
           Token
-        </Grid.Column>
+        </Grid.Column> */}
       </Grid>
       <Grid>
         <Grid.Column width={12}>
