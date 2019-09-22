@@ -101,12 +101,17 @@ export function MyContent () {
   }
 
   const cards = nodes.map((node, index) => {
-    let { sources, nodeType, referredBy, nodeId } = node;
+    let { sources, nodeType, referredBy, nodeId, likeCount, admireCount } = node;
     let cidStr = Ipfs.getCIDv0fromContentHashStr(node.nodeId).toString();
     return (
       <Card key={index}>
         <Card.Content>
-          <Header className="break-word" size="small" as={Link} to={`/node/${cidStr}`} >
+          <Header
+            className="break-word"
+            size="small"
+            as={Link}
+            to={`/node/${cidStr}`}
+          >
             {cidStr}
           </Header>
         </Card.Content>
@@ -128,6 +133,14 @@ export function MyContent () {
                 <List.Content>
                   referred by {(referredBy && referredBy.length) || "0"} nodes
                 </List.Content>
+              </List.Item>
+              <List.Item>
+                <List.Icon name="external alternate" />
+                <List.Content>{likeCount || "0"} likes</List.Content>
+              </List.Item>
+              <List.Item>
+                <List.Icon name="external alternate" />
+                <List.Content>{admireCount || "0"} admired</List.Content>
               </List.Item>
             </List>
           </Card.Description>
@@ -160,7 +173,7 @@ export function MyContent () {
       <Grid>
         <Grid.Row>
           <Grid.Column width={10}>
-            <div style={{display: "inline-block"}}>
+            <div style={{ display: "inline-block" }}>
               <Label color="blue">
                 {Math.round(account.balance / Math.pow(10, 12)) || 0}
                 <Label.Detail>Tera CT</Label.Detail>
@@ -177,7 +190,14 @@ export function MyContent () {
                 {account.reputation || 0}
                 <Label.Detail>CRP</Label.Detail>
               </Label>
-              <Progress percent={80} style={{marginTop: '10px'}} indicating progress label={'Energy'}/>
+              <Progress
+                value={account.energy || 0}
+                total="1000000"
+                style={{ marginTop: "10px" }}
+                indicating
+                progress
+                label={"Energy"}
+              />
             </div>
           </Grid.Column>
           <Grid.Column floated="right" textAlign="right" width={6}>

@@ -6,7 +6,7 @@ import Ipfs from "../../utils/Ipfs";
 
 export default function NodeCard(props) {
   let { link, node } = props;
-  let { sources, nodeType, referredBy } = node;
+  let { sources, nodeType, referredBy, likeCount, admireCount } = node;
   return (
     <Card as={Link} to={link}>
       <Card.Content>
@@ -31,6 +31,18 @@ export default function NodeCard(props) {
               <List.Icon name="external alternate" />
               <List.Content>
                 referred by {(referredBy && referredBy.length) || "0"} nodes
+              </List.Content>
+            </List.Item>
+            <List.Item>
+              <List.Icon name="external alternate" />
+              <List.Content>
+                {(likeCount) || "0"} likes
+              </List.Content>
+            </List.Item>
+            <List.Item>
+              <List.Icon name="external alternate" />
+              <List.Content>
+                {(admireCount) || "0"} admired
               </List.Content>
             </List.Item>
           </List>

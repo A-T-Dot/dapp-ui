@@ -9,7 +9,7 @@ const getApi = async () => {
 
   return await ApiPromise.create({
     types: {
-      ContentHash: "Hash",
+      ContentHash: "[u8; 32]",
       NodeType: "u32",
       Node: {
         id: "ContentHash",
@@ -34,7 +34,6 @@ const getApi = async () => {
         owner: "AccountId"
       },
       ChallengeId: "u64",
-      ListingId: "u64",
       Listing: {
         id: "ListingId",
         node_id: "ContentHash",
@@ -44,6 +43,7 @@ const getApi = async () => {
         challenge_id: "ChallengeId",
         owner: "AccountId"
       },
+      ListingId: "u64",
       Poll: {
         votes_for: "Balance",
         votes_against: "Balance",
@@ -57,8 +57,34 @@ const getApi = async () => {
         source: "u32",
         target: "u32"
       },
+      Like: {
+        from: "AccountId",
+        to: "ContentHash"
+      },
+      Admire: {
+        from: "AccountId",
+        to: "ContentHash"
+      },
+      Grant: {
+        from: "AccountId",
+        to: "ContentHash",
+        amount: "Balance"
+      },
+      Report: {
+        from: "AccountId",
+        target: "ContentHash",
+        reason: "ContentHash"
+      },
       VecContentHash: "Vec<ContentHash>",
-      Quota: "Balance"
+      ReasonHash: "ContentHash",
+      AdmireId: "u64",
+      GrantId: "u64",
+      LikeId: "u64",
+      ReportId: "u64",
+      Quota: "u64",
+      ActionPoint: "Balance",
+      Energy: "Balance",
+      Reputation: "Balance"
     },
     provider
   });
@@ -203,7 +229,7 @@ const geCreate = async (keys, content_hash) => {
   const api = await getApi();
   return new Promise(async (resolve, reject) => {
     const nonce = await api.query.system.accountNonce(keys.address);
-    api.tx.ge.create(content_hash).sign(keys, { nonce }).send(({ events = [], status }) => {
+    api.tx.ge.create(content_hash, 1000000).sign(keys, { nonce }).send(({ events = [], status }) => {
       _handleEvents(resolve, events, status, "ge")
     }).catch(err => reject(err));
   });
@@ -371,6 +397,65 @@ const tcxClaim = async (keys, challenge_id) => {
       .catch(err => reject(err));
   });
 }
+
+const interactionLike = async (keys, node_id) => {
+  const api = await getApi();
+  return new Promise(async (resolve, reject) => {
+    const nonce = await api.query.system.accountNonce(keys.address);
+    api.tx.interaction
+      .like(node_id)
+      .sign(keys, { nonce })
+      .send(({ events = [], status }) => {
+        _handleEvents(resolve, events, status, "interaction");
+      })
+      .catch(err => reject(err));
+  });
+};
+
+const interactionAdmire = async (keys, node_id) => {
+  const api = await getApi();
+  return new Promise(async (resolve, reject) => {
+    const nonce = await api.query.system.accountNonce(keys.address);
+    api.tx.interaction
+      .admire(node_id)
+      .sign(keys, { nonce })
+      .send(({ events = [], status }) => {
+        _handleEvents(resolve, events, status, "interaction");
+      })
+      .catch(err => reject(err));
+  });
+};
+
+const interactionGrant = async (keys, node_id, amount) => {
+  const api = await getApi();
+  return new Promise(async (resolve, reject) => {
+    const nonce = await api.query.system.accountNonce(keys.address);
+    api.tx.interaction
+      .grant(node_id, amount)
+      .sign(keys, { nonce })
+      .send(({ events = [], status }) => {
+        _handleEvents(resolve, events, status, "interaction");
+      })
+      .catch(err => reject(err));
+  });
+};
+
+
+const interactionReport = async (keys, node_id, reason_hash) => {
+  const api = await getApi();
+  return new Promise(async (resolve, reject) => {
+    const nonce = await api.query.system.accountNonce(keys.address);
+    api.tx.interaction
+      .report(node_id, reason_hash)
+      .sign(keys, { nonce })
+      .send(({ events = [], status }) => {
+        _handleEvents(resolve, events, status, "interaction");
+      })
+      .catch(err => reject(err));
+  });
+};
+
+
 let key = null;
 
 const setKeyFromUri = (uri) => {
@@ -414,4 +499,8 @@ export default {
   getEnergyAsset,
   getActivityAsset,
   getReputationAsset,
+  interactionLike,
+  interactionAdmire,
+  interactionGrant,
+  interactionReport,
 };
