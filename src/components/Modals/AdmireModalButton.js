@@ -9,6 +9,7 @@ import {
   Dimmer
 } from "semantic-ui-react";
 import chain from "../../api/chain";
+import Ipfs from "../../utils/Ipfs";
 
 export default class AdmireModalButton extends Component {
   state = {
@@ -34,6 +35,9 @@ export default class AdmireModalButton extends Component {
       });
 
       // write to chain
+      const keys = chain.getKey();
+      const interactionAdmireRes = await chain.interactionAdmire(keys, this.props.nodeId);
+      console.log("---interactionAdmire return:", interactionAdmireRes);
 
       this.setState({ loading: false });
       var that = this;
@@ -76,12 +80,10 @@ export default class AdmireModalButton extends Component {
         <Dimmer active={dimmerActive}>{dimmerContent}</Dimmer>
         <Header icon="eye" content="Admire" />
         <Modal.Content>
-          <Input
-            icon="tag"
-            iconPosition="left"
-            placeholder="Few words here"
-            onChange={this.handleChange}
-          />
+          You want to admire {" "}
+          {this.props.nodeId && Ipfs
+            .getCIDv0fromContentHashStr(this.props.nodeId)
+            .toString()}
         </Modal.Content>
         <Modal.Actions>
           <Button primary onClick={this.onClick}>

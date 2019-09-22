@@ -9,7 +9,7 @@ import {
   Dimmer
 } from "semantic-ui-react";
 import chain from "../../api/chain";
-
+import Ipfs from "../../utils/Ipfs";
 export default class LikeModalButton extends Component {
   state = {
     modalOpen: false,
@@ -32,9 +32,11 @@ export default class LikeModalButton extends Component {
         loading: true,
         dimmerActive: true
       });
-
-      // write to chain
      
+      // write to chain
+      const keys = chain.getKey();
+      const interactionLikeRes = await chain.interactionLike(keys, this.props.nodeId);
+      console.log("---interactionLike return:", interactionLikeRes);
 
       this.setState({ loading: false });
       var that = this;
@@ -76,14 +78,7 @@ export default class LikeModalButton extends Component {
       >
         <Dimmer active={dimmerActive}>{dimmerContent}</Dimmer>
         <Header icon="thumbs up" content="Like" />
-        <Modal.Content>
-          <Input
-            icon="tag"
-            iconPosition="left"
-            placeholder="Few words here"
-            onChange={this.handleChange}
-          />
-        </Modal.Content>
+        <Modal.Content>You want to like {this.props.nodeId && Ipfs.getCIDv0fromContentHashStr(this.props.nodeId).toString()}</Modal.Content>
         <Modal.Actions>
           <Button primary onClick={this.onClick}>
             <Icon name="checkmark" /> Like

@@ -205,9 +205,9 @@ export function NodeExplorer (props) {
           <Grid.Row>
             <Grid.Column>
               <Button.Group floated="right">
-                <LikeModalButton/>
-                <AdmireModalButton/>
-                <GrantModalButton/>
+                <LikeModalButton nodeId={state.node && state.node.nodeId} />
+                <AdmireModalButton nodeId={state.node && state.node.nodeId} />
+                <GrantModalButton nodeId={state.node && state.node.nodeId} />
                 <Button basic color="blue">
                   Report
                 </Button>
@@ -247,6 +247,18 @@ export function NodeExplorer (props) {
                       referred by{" "}
                       {(state.node && state.node.referredBy.length) || "0"}{" "}
                       nodes
+                    </List.Content>
+                  </List.Item>
+                  <List.Item>
+                    <List.Icon name="external alternate" />
+                    <List.Content>
+                      {(state.node && state.node.likeCount) || "0"} likes
+                    </List.Content>
+                  </List.Item>
+                  <List.Item>
+                    <List.Icon name="external alternate" />
+                    <List.Content>
+                      {(state.node && state.node.admireCount) || "0"} admired
                     </List.Content>
                   </List.Item>
                 </List>

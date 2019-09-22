@@ -95,6 +95,7 @@ function App () {
   const setKey = async() => {
     await cryptoWaitReady();
     chain.setKeyFromUri('//Alice');
+    console.log("your address:", chain.getKey().address);
     setCryptoReady(true)
   }
 

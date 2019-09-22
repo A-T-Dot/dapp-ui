@@ -100,7 +100,7 @@ export class ModalPropose extends React.Component {
     return (
       <Modal open={isOpen} size="tiny" onClose={this.onClose} closeIcon>
         <Dimmer active={dimmerActive}>{dimmerContent}</Dimmer>
-        <Modal.Header>UploadFile</Modal.Header>
+        <Modal.Header>Propose</Modal.Header>
         <Modal.Content>
           <Form>
             <Form.Field>

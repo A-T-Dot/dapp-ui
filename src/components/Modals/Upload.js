@@ -146,7 +146,7 @@ export class ModalUpload extends React.Component {
                 name="sources"
                 icon="arrow left"
                 iconPosition="left"
-                placeholder="sources: e.g. 0x1234, 0x5566"
+                placeholder="sources: ipfs hashes split with commas "
                 onChange={this.onChange}
               />
             </Form.Field>

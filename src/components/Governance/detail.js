@@ -45,8 +45,8 @@ export function GovernanceDetail (props) {
           metadata: data.contentHash,
           totalStaked: data.totalStaked,
           totalInvested: data.totalInvested,
-          invested: data.members[key.address].invested || 0,
-          staked: data.members[key.address].staked || 0,
+          invested: (data.members[key.address] && data.members[key.address].invested) || 0,
+          staked: (data.members[key.address] && data.members[key.address].staked) || 0,
           memberCount: Object.keys(data.members).length || 0
         });
         setTcxs(data.tcxs);
