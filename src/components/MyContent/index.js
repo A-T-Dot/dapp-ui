@@ -191,7 +191,7 @@ export function MyContent () {
                 <Label.Detail>CRP</Label.Detail>
               </Label>
               <Progress
-                value={account.energy}
+                value={account.energy || 0}
                 total="1000000"
                 style={{ marginTop: "10px" }}
                 indicating
